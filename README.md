@@ -159,9 +159,9 @@ Usamos ferramentas de IA generativa (Claude, da Anthropic) como assistentes de p
 
 | Integrante | Responsabilidade |
 | --- | --- |
-| Moacir Nascimento | Bloco A: dados e motor de análise. Contrato de dados, pesquisa das referências NASA, dados sintéticos e cenários, baselines individuais, regras de alerta, cobertura de dados, persistência e testes |
-| Wederson Ferreira | Bloco B: interface e entrega. Telas, integração com o motor, modo "Minha missão", registro de medições, README e publicação |
-| Vivian Vitoria | Design: identidade visual, design system e paletas dos modos diurno e noturno |
+| Moacir Nascimento | **Ciência de Dados e Regras Clínicas** (Bloco A). Contrato de dados, pesquisa das referências NASA, dados sintéticos e cenários, baselines individuais, regras de alerta, cobertura de dados, persistência e testes |
+| Wederson Ferreira | **Front-end e Entrega** (Bloco B). Telas, integração com o motor, modo "Minha missão", registro de medições, README e publicação |
+| Vivian Vitoria | **Design**. Identidade visual, design system e paletas dos modos diurno e noturno |
 
 **Recursos oficiais do desafio**
 
