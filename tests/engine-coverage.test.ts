@@ -40,26 +40,26 @@ describe('cobertura de dados (ausência de alerta ≠ normal)', () => {
     expect(c.status).toBe('stale');
     expect(c.daysSinceLast).toBe(5);
     expect(c.validDays).toBe(0);
-    expect(c.reason).toContain('há 5 dias');
+    expect(c.reason).toContain('5 days ago');
     expect(s.alerts.some((a) => a.variables.includes('restingHeartRate'))).toBe(false);
   });
 
   it('pressão registrada só depois do pré-voo: no-baseline', () => {
     const s = evaluate(without(buildDays(21), 'bloodPressure', (d) => d >= 10), AST, asOfDay(20));
     expect(s.coverage!.bloodPressure.status).toBe('no-baseline');
-    expect(s.coverage!.bloodPressure.reason).toContain('0 de 7');
+    expect(s.coverage!.bloodPressure.reason).toContain('0 of 7');
   });
 
   it('pré-voo: nada é avaliado ainda', () => {
     const s = evaluate(buildDays(4), AST, asOfDay(3));
     for (const v of VARIABLE_IDS) expect(s.coverage![v].status, v).toBe('no-baseline');
-    expect(s.coverage!.sleep.reason).toContain('dia 4 de 7');
+    expect(s.coverage!.sleep.reason).toContain('day 4 of 7');
   });
 
   it('autorrelato sem a janela anterior: stale', () => {
     const s = evaluate(without(buildDays(21), 'selfReport', (d) => d < 7 || d >= 16), AST, asOfDay(20));
     expect(s.coverage!.selfReport.status).toBe('stale');
-    expect(s.coverage!.selfReport.reason).toContain('Janela anterior');
+    expect(s.coverage!.selfReport.reason).toContain('Previous 5-day window');
   });
 
   it('sem nenhuma medição: tudo no-data', () => {

@@ -24,7 +24,7 @@ describe('FC de repouso: > 1,5 DP por 3 dias consecutivos', () => {
     expect(ids(s)).toEqual(['rhr-deviation']);
     const a = s.alerts[0];
     expect(a.arithmetic).toMatch(/z = /);
-    expect(a.evidence.find((e) => e.label.startsWith('Dias'))?.value).toBe(3);
+    expect(a.evidence.find((e) => e.label.startsWith('Consecutive days'))?.value).toBe(3);
   });
   it('não dispara com só 2 dias', () => {
     expect(ids(run((i) => (i >= DAYS - 2 ? { restingHeartRate: 66 } : {})))).toEqual([]);
@@ -46,7 +46,7 @@ describe('Pressão arterial: desvio do baseline individual por 5 dias', () => {
   it('dispara abaixo do baseline mesmo em faixa clínica normal', () => {
     const s = run((i) => (i >= DAYS - 5 ? { bloodPressure: [108, 70] } : {}));
     expect(ids(s)).toEqual(['bp-deviation']);
-    expect(s.alerts[0].title).toMatch(/abaixo/);
+    expect(s.alerts[0].title).toMatch(/below/);
   });
   it('não dispara com 4 dias', () => {
     expect(ids(run((i) => (i >= DAYS - 4 ? { bloodPressure: [108, 70] } : {})))).toEqual([]);
@@ -57,7 +57,7 @@ describe('Sono: déficit acumulado > 7 h em 7 noites', () => {
   it('dispara com 6 h/noite (déficit 14 h)', () => {
     const s = run((i) => (i >= DAYS - 7 ? { sleep: [6, 3] } : {}));
     expect(ids(s)).toContain('sleep-deficit');
-    expect(s.alerts.find((a) => ruleIdOf(a) === 'sleep-deficit')!.arithmetic).toMatch(/14,0 h/);
+    expect(s.alerts.find((a) => ruleIdOf(a) === 'sleep-deficit')!.arithmetic).toMatch(/14.0 h/);
   });
   it('não dispara com 7,2 h/noite (déficit 5,6 h)', () => {
     expect(ids(run((i) => (i >= DAYS - 7 ? { sleep: [7.2, 4] } : {})))).toEqual([]);
@@ -121,8 +121,8 @@ describe('Associação massa ↔ exercício', () => {
     const a = s.alerts[0];
     expect(a.severity).toBe('attention');
     expect(a.escalate).toBe(false);
-    expect(a.explanation).toMatch(/podem estar relacionados/);
-    expect(a.explanation).not.toMatch(/causou|causa a|devido a/);
+    expect(a.explanation).toMatch(/may be related/);
+    expect(a.explanation).not.toMatch(/caused|causes|due to/);
   });
   it('com pressão arterial também em desvio → crítico com escalonamento', () => {
     const s = run(
@@ -133,7 +133,7 @@ describe('Associação massa ↔ exercício', () => {
     expect(s.overall).toBe('critical');
     expect(s.alerts[0].escalate).toBe(true);
     expect(s.alerts[0].variables).toContain('bloodPressure');
-    expect(s.alerts[0].guidance).toMatch(/oficial médico/);
+    expect(s.alerts[0].guidance).toMatch(/medical officer/);
   });
 });
 

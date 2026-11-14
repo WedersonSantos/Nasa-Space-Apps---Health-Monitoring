@@ -45,9 +45,9 @@ describe('validação e integridade', () => {
     const r = validateMeasurements([ok, { ...ok }, { ...ok, id: 'b' }, bp], AST, asOfDay(1));
     expect(r.valid).toHaveLength(1);
     expect(r.rejected.map((x) => x.reason)).toEqual([
-      'duplicada: id repetido',
-      'duplicada: mesma variável, horário e método',
-      'incoerente: diastólica maior ou igual à sistólica',
+      'duplicate: repeated id',
+      'duplicate: same variable, timestamp and method',
+      'inconsistent: diastolic greater than or equal to systolic',
     ]);
   });
   it('ignora outro astronauta e medições futuras', () => {

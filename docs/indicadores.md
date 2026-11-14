@@ -1,60 +1,60 @@
-# Tabela de indicadores — justificativa científica
+# Indicator table — scientific rationale
 
-Motor de regras: [`src/engine`](../src/engine) · Limiares: [`src/engine/config/thresholds.ts`](../src/engine/config/thresholds.ts) (versão `ENGINE_CONFIG_VERSION`) · Fontes: [`src/engine/config/sources.ts`](../src/engine/config/sources.ts)
+Rule engine: [`src/engine`](../src/engine) · Thresholds: [`src/engine/config/thresholds.ts`](../src/engine/config/thresholds.ts) (version `ENGINE_CONFIG_VERSION`) · Sources: [`src/engine/config/sources.ts`](../src/engine/config/sources.ts)
 
-**Regra de ouro:** nenhum alerta existe sem uma operação aritmética sobre números registrados, e a operação aparece no texto do alerta (`Alert.arithmetic`). Todo alerta declara o baseline usado.
+**Golden rule:** no alert exists without an arithmetic operation on recorded numbers, and that operation appears in the alert text (`Alert.arithmetic`). Every alert states the baseline it used.
 
-**Sobre os limiares:** os valores de **prescrição** (sono e exercício) vêm de fontes da NASA. Os **limiares de alerta** são parâmetros iniciais da equipe, sem validação clínica, e estão marcados como arbitrários: o `sourceRef` de cada alerta começa com `arbitrary-threshold`, seguido da fonte que dá contexto à variável.
+**About the thresholds:** the **prescription** values (sleep and exercise) come from NASA sources. The **alert thresholds** are the team's initial parameters, not clinically validated, and are marked as arbitrary: every alert's `sourceRef` starts with `arbitrary-threshold`, followed by the source that gives context to the variable.
 
-## As três classes de variável
+## The three variable classes
 
-| Classe | Papel no fluxo | Variáveis |
+| Class | Role in the flow | Variables |
 | --- | --- | --- |
-| **Sinal** | Coletar → **interpretar** (gera alerta) | FC de repouso, HRV, pressão arterial, sono, autorrelato |
-| **Acumulador** | Consequência de longo prazo | Massa corporal |
-| **Contramedida** | **Orientar** (fecha o ciclo) | Carga de exercício |
+| **Signal** | Collect → **interpret** (raises alerts) | Resting heart rate, HRV, blood pressure, sleep, self-report |
+| **Accumulator** | Long-term consequence | Body mass |
+| **Countermeasure** | **Guide** (closes the loop) | Exercise load |
 
-## Indicadores
+## Indicators
 
-| # | Variável | Unidade | Classe | Perigo / risco NASA | Origem na demo | Baseline | Regra | Limiar | Fonte do limiar | Fonte de contexto |
+| # | Variable | Unit | Class | NASA hazard / risk | Origin in the demo | Baseline | Rule | Threshold | Threshold source | Context source |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| 1 | FC de repouso | bpm | Sinal | Gravidade alterada → descondicionamento cardiovascular | Sintética (wearable) | Pré-voo (média e DP, 7 dias) | `z = (FC − média) / máx(DP, 2,5)`; \|z\| > limiar por N dias consecutivos | 1,5 DP; 3 dias | Arbitrário (spec §5) | [NASA HRP — Risks](https://www.nasa.gov/hrp/risks/) |
-| 2 | HRV (RMSSD) | ms | Sinal | Isolamento/confinamento → carga autonômica, saúde comportamental | Sintética (wearable) | Pré-voo | `queda = (média − HRV) / média` > limiar por N dias | 20%; 3 dias | Arbitrário (spec §5) | [NASA HRP — Risks](https://www.nasa.gov/hrp/risks/); [NASA HRR — Sleep](https://humanresearchroadmap.nasa.gov/evidence/reports/Sleep.pdf) |
-| 3 | Pressão arterial (sistólica; diastólica exibida) | mmHg | Sinal | Gravidade alterada → deslocamento cefálico de fluidos | Sintética (manguito manual) | Pré-voo **individual** (nunca corte clínico 140/90) | Todos os N dias além de ±1,5·máx(DP, 4) do baseline, mesma direção | 1,5 DP; 5 dias | Arbitrário (spec §5) | [NASA HRP — 5 Hazards](https://www.nasa.gov/hrp/hazards/) |
-| 4 | Sono | h + qualidade 1–5 | Sinal | Ambiente fechado/hostil → ruptura circadiana | Sintética (actigrafia) | Prescrição de 8 h/noite | `déficit = Σ máx(0, 8 − horas)` em 7 noites > limiar | 7 h em 7 noites | Prescrição: [NASA HRR — Sleep](https://humanresearchroadmap.nasa.gov/evidence/reports/Sleep.pdf) (8 h, NASA-STD-3001 Vol. 1). Limiar: arbitrário | [NASA Ames](https://www.nasa.gov/space-science-and-astrobiology-at-ames/interesting-fact-of-the-month-current/interesting-fact-of-the-month-2022/): agenda de ~8,5 h vs. ~6 h dormidas |
-| 5 | Autorrelato | humor, estresse, fadiga 1–5 → índice 1–5 | Sinal | Isolamento e confinamento | Sintética (autorrelato) | Móvel (5 dias anteriores) + pré-voo | `Δ = média 5d − média 5d anteriores` ≤ −0,5 **e** média 5d ≤ pré-voo − 0,5. Índice = (humor + (6 − estresse) + (6 − fadiga)) / 3 | −0,5 ponto | Arbitrário | [NASA HRP — 5 Hazards](https://www.nasa.gov/hrp/hazards/) |
-| 6 | Massa corporal | kg, %Δ | Acumulador | Gravidade alterada → atrofia muscular, perda de fluidos | Sintética (diária pré-voo; a cada 3 dias em voo) | Pré-voo | `%Δ = (média 7d − pré-voo) / pré-voo` ≤ limiar | −2,0% | Arbitrário, dentro da faixa típica de 1–5% | [NASA — Nutritional Biochemistry](https://www.nasa.gov/wp-content/uploads/2023/04/nutritional-biochemistry-of-space-flight.pdf) |
-| 7 | Carga de exercício | min completados / prescritos | Contramedida | Contramedida de 1, 3 e 6 | Sintética (registro de treino) | Prescrição de 150 min/dia, 6 dias/semana | `aderência = Σ completado / Σ prescrito` em 7 dias < limiar | 80% | Prescrição: [NASA/SP-20250000273](https://www.nasa.gov/wp-content/uploads/2025/02/sp-20250000273.pdf) (2,5 h/dia, 6 dias/sem.). Limiar: arbitrário (spec §5) | [NASA — Astronaut Exercise](https://www.nasa.gov/missions/station/iss-research/astronaut-exercise/) (média de ~2 h/dia; ARED, T2, CEVIS) |
-| + | **Composto: sobrecarga** | derivado | Derivado | Sobrecarga multissistema | — | Pré-voo | Média de 5 dias de sono, HRV e FC: `z = (média 5d − pré-voo) / máx(DP, piso)`; ≥ 2 de 3 sinais com z ≥ 1,0 na direção sono ↓, HRV ↓, FC ↑ e nenhum na direção contrária | 1,0 DP; 2 de 3 sinais | Arbitrário | [NASA HRR — Sleep](https://humanresearchroadmap.nasa.gov/evidence/reports/Sleep.pdf) |
-| + | **Associação: massa ↔ exercício** | derivado | Derivado | Acumulador × contramedida | — | Pré-voo + janela de 21 dias | Massa %Δ ≤ −2,0% **e** aderência de 21 dias < 80% → atenção. Com a regra 3 (pressão) também ativa → **crítico + escalonamento** | −2,0%; 80%; 21 dias | Arbitrário | [NASA/SP-20250000273](https://www.nasa.gov/wp-content/uploads/2025/02/sp-20250000273.pdf); [NASA — Nutritional Biochemistry](https://www.nasa.gov/wp-content/uploads/2023/04/nutritional-biochemistry-of-space-flight.pdf) |
+| 1 | Resting heart rate | bpm | Signal | Altered gravity → cardiovascular deconditioning | Synthetic (wearable) | Preflight (mean and SD, 7 days) | `z = (HR − mean) / max(SD, 2.5)`; \|z\| > threshold for N consecutive days | 1.5 SD; 3 days | Arbitrary (spec §5) | [NASA HRP — Risks](https://www.nasa.gov/hrp/risks/) |
+| 2 | HRV (RMSSD) | ms | Signal | Isolation/confinement → autonomic load, behavioral health | Synthetic (wearable) | Preflight | `drop = (mean − HRV) / mean` > threshold for N days | 20%; 3 days | Arbitrary (spec §5) | [NASA HRP — Risks](https://www.nasa.gov/hrp/risks/); [NASA HRR — Sleep](https://humanresearchroadmap.nasa.gov/evidence/reports/Sleep.pdf) |
+| 3 | Blood pressure (systolic; diastolic displayed) | mmHg | Signal | Altered gravity → headward fluid shift | Synthetic (manual cuff) | **Individual** preflight (never the 140/90 clinical cutoff) | All N days beyond ±1.5·max(SD, 4) from baseline, same direction | 1.5 SD; 5 days | Arbitrary (spec §5) | [NASA HRP — 5 Hazards](https://www.nasa.gov/hrp/hazards/) |
+| 4 | Sleep | h + quality 1–5 | Signal | Hostile/closed environment → circadian disruption | Synthetic (actigraphy) | 8 h/night prescription | `deficit = Σ max(0, 8 − hours)` over 7 nights > threshold | 7 h over 7 nights | Prescription: [NASA HRR — Sleep](https://humanresearchroadmap.nasa.gov/evidence/reports/Sleep.pdf) (8 h, NASA-STD-3001 Vol. 1). Threshold: arbitrary | [NASA Ames](https://www.nasa.gov/space-science-and-astrobiology-at-ames/interesting-fact-of-the-month-current/interesting-fact-of-the-month-2022/): ~8.5 h scheduled vs. ~6 h slept |
+| 5 | Self-report | mood, stress, fatigue 1–5 → index 1–5 | Signal | Isolation and confinement | Synthetic (self-report) | Rolling (previous 5 days) + preflight | `Δ = 5-day mean − previous 5-day mean` ≤ −0.5 **and** 5-day mean ≤ preflight − 0.5. Index = (mood + (6 − stress) + (6 − fatigue)) / 3 | −0.5 point | Arbitrary | [NASA HRP — 5 Hazards](https://www.nasa.gov/hrp/hazards/) |
+| 6 | Body mass | kg, %Δ | Accumulator | Altered gravity → muscle atrophy, fluid loss | Synthetic (daily preflight; every 3 days in flight) | Preflight | `%Δ = (7-day mean − preflight) / preflight` ≤ threshold | −2.0% | Arbitrary, within the typical 1–5% range | [NASA — Nutritional Biochemistry](https://www.nasa.gov/wp-content/uploads/2023/04/nutritional-biochemistry-of-space-flight.pdf) |
+| 7 | Exercise load | min completed / prescribed | Countermeasure | Countermeasure for 1, 3 and 6 | Synthetic (training log) | 150 min/day, 6 days/week prescription | `adherence = Σ completed / Σ prescribed` over 7 days < threshold | 80% | Prescription: [NASA/SP-20250000273](https://www.nasa.gov/wp-content/uploads/2025/02/sp-20250000273.pdf) (2.5 h/day, 6 days/week). Threshold: arbitrary (spec §5) | [NASA — Astronaut Exercise](https://www.nasa.gov/missions/station/iss-research/astronaut-exercise/) (~2 h/day on average; ARED, T2, CEVIS) |
+| + | **Composite: overload** | derived | Derived | Multi-system overload | — | Preflight | 5-day mean of sleep, HRV and HR: `z = (5-day mean − preflight) / max(SD, floor)`; ≥ 2 of 3 signals with z ≥ 1.0 in the direction sleep ↓, HRV ↓, HR ↑ and none in the opposite direction | 1.0 SD; 2 of 3 signals | Arbitrary | [NASA HRR — Sleep](https://humanresearchroadmap.nasa.gov/evidence/reports/Sleep.pdf) |
+| + | **Association: mass ↔ exercise** | derived | Derived | Accumulator × countermeasure | — | Preflight + 21-day window | Mass %Δ ≤ −2.0% **and** 21-day adherence < 80% → attention. With rule 3 (blood pressure) also active → **critical + escalation** | −2.0%; 80%; 21 days | Arbitrary | [NASA/SP-20250000273](https://www.nasa.gov/wp-content/uploads/2025/02/sp-20250000273.pdf); [NASA — Nutritional Biochemistry](https://www.nasa.gov/wp-content/uploads/2023/04/nutritional-biochemistry-of-space-flight.pdf) |
 
-### Decisões do motor
+### Engine decisions
 
-- **Associar, nunca modelar.** O motor não calcula perda de massa em função do déficit de exercício. Ele mede os dois sinais separadamente e os **associa** quando desviam na mesma janela, com linguagem de possibilidade ("podem estar relacionados… não afirma causa").
-- **Os alertas compostos absorvem os isolados.** Quando a regra composta ou a associação dispara, os alertas isolados das variáveis que ela explica saem da lista, para não duplicar a mesma informação.
-- **Pisos de DP.** Sete dias de pré-voo dão uma estimativa ruidosa do DP. Um piso mínimo, arbitrário, evita z inflado e falsos positivos. Sem os pisos, o cenário nominal gerava 3 falsos positivos em 113 dias.
-- **Dias faltantes.** As regras de "N dias consecutivos" exigem dado em todos os dias. Sem medição, a sequência não conta, o que é conservador.
-- **Início do alerta.** `raisedAt` é o primeiro dia da sequência contínua em que a regra dispara, e não o dia da avaliação. O `id` do alerta é estável: `astronautId:ruleId:data-de-início`.
-- **Pré-voo.** Nenhuma regra é avaliada antes do 1º dia de voo, porque o baseline ainda está sendo formado.
-- **Ausência de alerta ≠ normal (cobertura de dados).** `AstronautState.coverage` informa, para cada variável, se a regra dela conseguiu avaliar: `ok`, `no-data` (nenhum registro válido), `no-baseline` (pré-voo em formação, ou menos de 3 dias registrados nos 7 primeiros dias) ou `stale` (dados insuficientes na janela da regra, por exemplo FC sem os 3 dias consecutivos até a data de avaliação). Não há limiar novo: cada exigência sai da própria regra (`COVERAGE` em `thresholds.ts`). Sem registro de exercício, `adherenceRatio` continua 1 por compatibilidade, mas a cobertura do exercício não é `ok`. Nos três cenários, a cobertura é `ok` para todas as variáveis em todos os dias de voo.
+- **Associate, never model.** The engine does not compute mass loss as a function of the exercise deficit. It measures both signals separately and **associates** them when they deviate in the same window, using language of possibility ("may be related… does not claim causation").
+- **Composite alerts absorb single alerts.** When the composite rule or the association fires, the single alerts for the variables it explains are removed from the list, so the same information is not shown twice.
+- **SD floors.** Seven preflight days give a noisy SD estimate. A minimum, arbitrary floor prevents an inflated z and false positives. Without the floors, the nominal scenario produced 3 false positives over 113 days.
+- **Missing days.** "N consecutive days" rules require data on every day. Without a measurement the streak does not count, which is conservative.
+- **Alert onset.** `raisedAt` is the first day of the continuous run in which the rule fires, not the evaluation day. The alert `id` is stable: `astronautId:ruleId:onset-date`.
+- **Preflight.** No rule is evaluated before flight day 1, because the baseline is still being formed.
+- **No alert ≠ normal (data coverage).** `AstronautState.coverage` reports, for each variable, whether its rule was able to evaluate: `ok`, `no-data` (no valid record), `no-baseline` (preflight still forming, or fewer than 3 days recorded in the first 7) or `stale` (not enough data in the rule window, e.g. resting HR without the 3 consecutive days up to the evaluation date). There is no new threshold: each requirement comes from the rule itself (`COVERAGE` in `thresholds.ts`). With no exercise record, `adherenceRatio` stays at 1 for compatibility, but exercise coverage is not `ok`. In all three scenarios, coverage is `ok` for every variable on every flight day.
 
-## Variáveis cortadas
+## Variables that were cut
 
-| Variável | Decisão | Motivo |
+| Variable | Decision | Reason |
 | --- | --- | --- |
-| Densidade óssea / marcador de reabsorção | Cortada | Perda de 1–1,5%/mês sem contramedida e 0,3–0,5%/mês com ARED ([NASA HRR — Osteo](https://humanresearchroadmap.nasa.gov/evidence/reports/Osteo.pdf)): invisível numa janela de demo |
-| Acuidade visual / pressão intraocular (SANS) | Cortada | Sem base sintética defensável nem dataset acessível no prazo |
-| Dose de radiação acumulada | Fora do motor | Cresce de forma monotônica e não indica mudança de estado de saúde. No máximo, contexto de missão ([CSA](https://www.asc-csa.gc.ca/eng/news/articles/2026/2026-02-26-monitoring-radiation-astronaut-health.asp)) |
-| Temperatura corporal, SpO2 | Cortadas | Pouco informativas na ISS sem evento agudo |
+| Bone density / resorption marker | Cut | Loss of 1–1.5%/month without countermeasure and 0.3–0.5%/month with ARED ([NASA HRR — Osteo](https://humanresearchroadmap.nasa.gov/evidence/reports/Osteo.pdf)): invisible within a demo window |
+| Visual acuity / intraocular pressure (SANS) | Cut | No defensible synthetic basis and no accessible dataset within the deadline |
+| Cumulative radiation dose | Outside the engine | Grows monotonically and does not indicate a change in health state. At most, mission context ([CSA](https://www.asc-csa.gc.ca/eng/news/articles/2026/2026-02-26-monitoring-radiation-astronaut-health.asp)) |
+| Body temperature, SpO2 | Cut | Not very informative on the ISS without an acute event |
 
-## Cenários de teste e resultados observados
+## Test scenarios and observed results
 
-Gerados por `npm run generate` (seeds fixas) e verificados por `npm test` ([`tests/scenarios.test.ts`](../tests/scenarios.test.ts)). Missão: 7 dias de pré-voo + 113 dias de voo. As histórias ocorrem nos últimos 21 dias (dias de missão 93–113).
+Generated by `npm run generate` (fixed seeds) and checked by `npm test` ([`tests/scenarios.test.ts`](../tests/scenarios.test.ts)). Mission: 7 preflight days + 113 flight days. The storylines take place in the last 21 days (mission days 93–113).
 
-| Cenário | Esperado | Observado (avaliação dia a dia) |
+| Scenario | Expected | Observed (day-by-day evaluation) |
 | --- | --- | --- |
-| 1 — Nominal | `normal` | `normal` em **todos** os 113 dias de missão, sem nenhum falso positivo. Aderência > 90% |
-| 2 — Degradação gradual | `attention` pela regra composta | `normal` até o dia 101. **Dia 102** (10º dia da degradação): `fast-cluster-overload` com sono ↓, HRV ↓ e FC ↑. **Dia 113**: soma-se `selfreport-decline`. Pressão e massa nunca alarmam |
-| 3 — Crítico com contramedida | `critical` com `escalate: true` | **Dia 95**: `exercise-adherence` (atenção). **Dia 110**: soma-se `bp-deviation`. **Dia 111**: `mass-exercise-association` **crítico** (massa −2,3% vs. pré-voo e −2,0% em 3 semanas; aderência de 59% em 21 dias; sistólica −12 mmHg vs. baseline) com escalonamento ao oficial médico |
+| 1 — Nominal | `normal` | `normal` on **all** 113 mission days, with zero false positives. Adherence > 90% |
+| 2 — Gradual degradation | `attention` from the composite rule | `normal` through day 101. **Day 102** (10th day of degradation): `fast-cluster-overload` with sleep ↓, HRV ↓ and HR ↑. **Day 113**: `selfreport-decline` is added. Blood pressure and mass never alarm |
+| 3 — Critical with countermeasure | `critical` with `escalate: true` | **Day 95**: `exercise-adherence` (attention). **Day 110**: `bp-deviation` is added. **Day 111**: `mass-exercise-association` **critical** (mass −2.3% vs. preflight and −2.0% over 3 weeks; 59% adherence over 21 days; systolic −12 mmHg vs. baseline) with escalation to the medical officer |
 
-Suíte completa: 71 testes. Há um teste por regra (dispara e não dispara), um por cenário, além de testes de pureza de `evaluate()`, validação de dados, autorrelato, persistência e cobertura de dados (sem dados, dados parados, sem baseline, pré-voo).
+Full suite: 71 tests. There is one test per rule (fires and does not fire), one per scenario, plus tests for `evaluate()` purity, data validation, self-report, persistence and data coverage (no data, stale data, no baseline, preflight).

@@ -47,7 +47,7 @@ export type Rule = (ctx: RuleContext) => RuleHit | null;
 
 /** '[baseline pré-voo 01/07–07/07]' — todo alerta declara o baseline usado. */
 function baselineTag(b: Baseline): string {
-  return `[baseline pré-voo ${dayToShort(dayNumber(b.windowStart))}–${dayToShort(dayNumber(b.windowEnd))}]`;
+  return `[preflight baseline ${dayToShort(dayNumber(b.windowStart))}–${dayToShort(dayNumber(b.windowEnd))}]`;
 }
 
 const last = <T>(xs: T[]): T => xs[xs.length - 1];
@@ -69,23 +69,23 @@ export const restingHeartRateRule: Rule = (ctx) => {
 
   const streak = streakLength(s, ctx.day, (p) => dir * z(p) > cfg.zThreshold);
   const cur = last(pts);
-  const word = dir > 0 ? 'acima' : 'abaixo';
+  const word = dir > 0 ? 'above' : 'below';
   return {
     ruleId: 'rhr-deviation',
     severity: 'attention',
     variables: ['restingHeartRate'],
-    title: `FC de repouso ${word} da sua linha de base`,
+    title: `Resting heart rate ${word} your baseline`,
     explanation:
-      `Sua FC de repouso está ${word} da sua linha de base pré-voo há ${streak} dias consecutivos ` +
-      `(${fmt(cur.value, 0)} bpm hoje vs. média de ${fmt(b.mean)} bpm). Isso pode estar relacionado a ` +
+      `Your resting heart rate has been ${word} your preflight baseline for ${streak} consecutive days ` +
+      `(${fmt(cur.value, 0)} bpm today vs. a mean of ${fmt(b.mean)} bpm). This may be related to ` +
       `${dir > 0 ? GUIDANCE.restingHeartRate.possibleCauseUp : GUIDANCE.restingHeartRate.possibleCauseDown}.`,
     arithmetic:
-      `z = (FC − média) / DP = (${fmt(cur.value, 0)} − ${fmt(b.mean)}) / ${fmt(sd)} = ${signed(z(cur))}; ` +
-      `|z| > ${fmt(cfg.zThreshold)} em ${streak} dias consecutivos (mínimo ${cfg.consecutiveDays}) ${baselineTag(b)}`,
+      `z = (HR − mean) / SD = (${fmt(cur.value, 0)} − ${fmt(b.mean)}) / ${fmt(sd)} = ${signed(z(cur))}; ` +
+      `|z| > ${fmt(cfg.zThreshold)} on ${streak} consecutive days (minimum ${cfg.consecutiveDays}) ${baselineTag(b)}`,
     evidence: [
-      { label: 'FC de repouso atual', value: round(cur.value), unit: 'bpm', comparedTo: round(b.mean) },
-      { label: 'Desvio (z)', value: round(z(cur), 2), unit: 'DP', comparedTo: dir * cfg.zThreshold },
-      { label: 'Dias consecutivos em desvio', value: streak, unit: 'dias', comparedTo: cfg.consecutiveDays },
+      { label: 'Current resting HR', value: round(cur.value), unit: 'bpm', comparedTo: round(b.mean) },
+      { label: 'Deviation (z)', value: round(z(cur), 2), unit: 'SD', comparedTo: dir * cfg.zThreshold },
+      { label: 'Consecutive days deviating', value: streak, unit: 'days', comparedTo: cfg.consecutiveDays },
     ],
     guidance: GUIDANCE.restingHeartRate.guidance,
     sourceRef: sourceRefFor(['NASA_HRP_RISKS'], true),
@@ -112,17 +112,17 @@ export const hrvRule: Rule = (ctx) => {
     ruleId: 'hrv-drop',
     severity: 'attention',
     variables: ['hrv'],
-    title: 'HRV abaixo da sua linha de base',
+    title: 'HRV below your baseline',
     explanation:
-      `Sua variabilidade da frequência cardíaca (RMSSD) está ${pct(drop(cur))} abaixo da média pré-voo ` +
-      `há ${streak} dias consecutivos. Isso pode indicar ${GUIDANCE.hrv.possibleCause}.`,
+      `Your heart rate variability (RMSSD) has been ${pct(drop(cur))} below your preflight mean ` +
+      `for ${streak} consecutive days. This may indicate ${GUIDANCE.hrv.possibleCause}.`,
     arithmetic:
-      `queda = (média − HRV) / média = (${fmt(b.mean)} − ${fmt(cur.value)}) / ${fmt(b.mean)} = ${pct(drop(cur), 1)}; ` +
-      `> ${pct(cfg.dropFraction)} em ${streak} dias consecutivos (mínimo ${cfg.consecutiveDays}) ${baselineTag(b)}`,
+      `drop = (mean − HRV) / mean = (${fmt(b.mean)} − ${fmt(cur.value)}) / ${fmt(b.mean)} = ${pct(drop(cur), 1)}; ` +
+      `> ${pct(cfg.dropFraction)} on ${streak} consecutive days (minimum ${cfg.consecutiveDays}) ${baselineTag(b)}`,
     evidence: [
-      { label: 'HRV atual', value: round(cur.value), unit: 'ms', comparedTo: round(b.mean) },
-      { label: 'Queda vs. pré-voo', value: round(drop(cur) * 100), unit: '%', comparedTo: cfg.dropFraction * 100 },
-      { label: 'Dias consecutivos em queda', value: streak, unit: 'dias', comparedTo: cfg.consecutiveDays },
+      { label: 'Current HRV', value: round(cur.value), unit: 'ms', comparedTo: round(b.mean) },
+      { label: 'Drop vs. preflight', value: round(drop(cur) * 100), unit: '%', comparedTo: cfg.dropFraction * 100 },
+      { label: 'Consecutive days below', value: streak, unit: 'days', comparedTo: cfg.consecutiveDays },
     ],
     guidance: GUIDANCE.hrv.guidance,
     sourceRef: sourceRefFor(['NASA_HRP_RISKS', 'NASA_HRR_SLEEP'], true),
@@ -149,26 +149,26 @@ export const bloodPressureRule: Rule = (ctx) => {
   const streak = streakLength(s, ctx.day, (p) => dir * dev(p) > limit);
   const meanDev = mean(pts.map(dev));
   const cur = last(pts);
-  const word = dir > 0 ? 'acima' : 'abaixo';
+  const word = dir > 0 ? 'above' : 'below';
   return {
     ruleId: 'bp-deviation',
     severity: 'attention',
     variables: ['bloodPressure'],
-    title: `Pressão arterial ${word} do seu padrão individual`,
+    title: `Blood pressure ${word} your individual pattern`,
     explanation:
-      `Sua pressão sistólica está sistematicamente ${word} da sua linha de base pré-voo há ${streak} dias ` +
-      `(${fmt(cur.value, 0)}/${fmt(cur.secondaryValue ?? 0, 0)} mmHg hoje vs. média de ${fmt(b.mean)} mmHg). ` +
-      `O valor ainda pode estar em faixa clínica normal; o que importa é o afastamento do seu próprio padrão, ` +
-      `que pode estar relacionado a ${GUIDANCE.bloodPressure.possibleCause}.`,
+      `Your systolic pressure has been consistently ${word} your preflight baseline for ${streak} days ` +
+      `(${fmt(cur.value, 0)}/${fmt(cur.secondaryValue ?? 0, 0)} mmHg today vs. a mean of ${fmt(b.mean)} mmHg). ` +
+      `The value may still be within the normal clinical range; what matters is the shift away from your own pattern, ` +
+      `which may be related to ${GUIDANCE.bloodPressure.possibleCause}.`,
     arithmetic:
-      `Δ sistólica média (${cfg.consecutiveDays} dias) = ${fmt(mean(pts.map((p) => p.value)))} − ${fmt(b.mean)} = ` +
-      `${signed(meanDev)} mmHg; todos os ${cfg.consecutiveDays} dias além de ${dir > 0 ? '+' : '−'}${fmt(cfg.zThreshold)} DP ` +
+      `mean systolic Δ (${cfg.consecutiveDays} days) = ${fmt(mean(pts.map((p) => p.value)))} − ${fmt(b.mean)} = ` +
+      `${signed(meanDev)} mmHg; all ${cfg.consecutiveDays} days beyond ${dir > 0 ? '+' : '−'}${fmt(cfg.zThreshold)} SD ` +
       `(${dir > 0 ? '+' : '−'}${fmt(limit)} mmHg) ${baselineTag(b)}`,
     evidence: [
-      { label: 'Sistólica atual', value: round(cur.value), unit: 'mmHg', comparedTo: round(b.mean) },
-      { label: 'Diastólica atual', value: round(cur.secondaryValue ?? 0), unit: 'mmHg' },
-      { label: `Desvio médio (${cfg.consecutiveDays} dias)`, value: round(meanDev), unit: 'mmHg', comparedTo: round(dir * limit) },
-      { label: 'Dias consecutivos em desvio', value: streak, unit: 'dias', comparedTo: cfg.consecutiveDays },
+      { label: 'Current systolic', value: round(cur.value), unit: 'mmHg', comparedTo: round(b.mean) },
+      { label: 'Current diastolic', value: round(cur.secondaryValue ?? 0), unit: 'mmHg' },
+      { label: `Mean deviation (${cfg.consecutiveDays} days)`, value: round(meanDev), unit: 'mmHg', comparedTo: round(dir * limit) },
+      { label: 'Consecutive days deviating', value: streak, unit: 'days', comparedTo: cfg.consecutiveDays },
     ],
     guidance: GUIDANCE.bloodPressure.guidance,
     sourceRef: sourceRefFor(['NASA_HRP_HAZARDS', 'NASA_HRP_RISKS'], true),
@@ -193,21 +193,21 @@ export const sleepRule: Rule = (ctx) => {
   const d = sleepDeficit(ctx);
   if (!d || d.deficit <= cfg.maxCumulativeDeficitHours) return null;
   const evidence: Evidence[] = [
-    { label: 'Sono médio por noite', value: round(d.meanHours), unit: 'h', comparedTo: cfg.prescribedHours },
-    { label: `Déficit acumulado (${d.pts.length} noites)`, value: round(d.deficit), unit: 'h', comparedTo: cfg.maxCumulativeDeficitHours },
+    { label: 'Average sleep per night', value: round(d.meanHours), unit: 'h', comparedTo: cfg.prescribedHours },
+    { label: `Cumulative deficit (${d.pts.length} nights)`, value: round(d.deficit), unit: 'h', comparedTo: cfg.maxCumulativeDeficitHours },
   ];
-  if (d.meanQuality !== null) evidence.push({ label: 'Qualidade média do sono', value: round(d.meanQuality), unit: '1–5' });
+  if (d.meanQuality !== null) evidence.push({ label: 'Average sleep quality', value: round(d.meanQuality), unit: '1–5' });
   return {
     ruleId: 'sleep-deficit',
     severity: 'attention',
     variables: ['sleep'],
-    title: 'Déficit de sono acumulado',
+    title: 'Cumulative sleep deficit',
     explanation:
-      `Nas últimas ${d.pts.length} noites você dormiu em média ${fmt(d.meanHours)} h, contra ${fmt(cfg.prescribedHours)} h ` +
-      `recomendadas, acumulando ${fmt(d.deficit)} h de déficit. Isso pode estar relacionado a ${GUIDANCE.sleep.possibleCause}.`,
+      `Over the last ${d.pts.length} nights you slept an average of ${fmt(d.meanHours)} h, against ${fmt(cfg.prescribedHours)} h ` +
+      `recommended, building up a ${fmt(d.deficit)} h deficit. This may be related to ${GUIDANCE.sleep.possibleCause}.`,
     arithmetic:
-      `déficit = Σ máx(0, ${fmt(cfg.prescribedHours)} − horas) em ${d.pts.length} noites = ${fmt(d.deficit)} h ` +
-      `> limite de ${fmt(cfg.maxCumulativeDeficitHours)} h [referência: prescrição de ${fmt(cfg.prescribedHours)} h/noite]`,
+      `deficit = Σ max(0, ${fmt(cfg.prescribedHours)} − hours) over ${d.pts.length} nights = ${fmt(d.deficit)} h ` +
+      `> limit of ${fmt(cfg.maxCumulativeDeficitHours)} h [reference: ${fmt(cfg.prescribedHours)} h/night prescription]`,
     evidence,
     guidance: GUIDANCE.sleep.guidance,
     sourceRef: sourceRefFor(['NASA_HRR_SLEEP', 'NASA_AMES_SLEEP_FACT'], true),
@@ -231,22 +231,22 @@ export const selfReportRule: Rule = (ctx) => {
   const b = ctx.preflight.selfReport;
   if (!b || b.mean - mCur < cfg.minBelowPreflight) return null;
   const evidence: Evidence[] = [
-    { label: `Bem-estar médio (últimos ${cfg.windowDays} dias)`, value: round(mCur, 2), unit: '1–5', comparedTo: round(mPrev, 2) },
-    { label: 'Variação entre janelas', value: round(delta, 2), unit: 'pontos', comparedTo: -cfg.minDrop },
+    { label: `Mean well-being (last ${cfg.windowDays} days)`, value: round(mCur, 2), unit: '1–5', comparedTo: round(mPrev, 2) },
+    { label: 'Change between windows', value: round(delta, 2), unit: 'points', comparedTo: -cfg.minDrop },
   ];
-  evidence.push({ label: 'Bem-estar médio pré-voo', value: round(b.mean, 2), unit: '1–5', comparedTo: round(b.mean - cfg.minBelowPreflight, 2) });
+  evidence.push({ label: 'Preflight mean well-being', value: round(b.mean, 2), unit: '1–5', comparedTo: round(b.mean - cfg.minBelowPreflight, 2) });
   return {
     ruleId: 'selfreport-decline',
     severity: 'attention',
     variables: ['selfReport'],
-    title: 'Queda no bem-estar autorrelatado',
+    title: 'Decline in self-reported well-being',
     explanation:
-      `Seu índice de bem-estar (humor, estresse e fadiga) caiu de ${fmt(mPrev, 2)} para ${fmt(mCur, 2)} entre os dois ` +
-      `últimos períodos de ${cfg.windowDays} dias. Isso pode refletir ${GUIDANCE.selfReport.possibleCause}.`,
+      `Your well-being index (mood, stress and fatigue) fell from ${fmt(mPrev, 2)} to ${fmt(mCur, 2)} between the last two ` +
+      `${cfg.windowDays}-day periods. This may reflect ${GUIDANCE.selfReport.possibleCause}.`,
     arithmetic:
-      `Δ = média(${cfg.windowDays} dias atuais) − média(${cfg.windowDays} dias anteriores) = ${fmt(mCur, 2)} − ${fmt(mPrev, 2)} = ` +
-      `${signed(delta, 2)} ≤ −${fmt(cfg.minDrop)} e média atual ${fmt(mCur, 2)} ≤ pré-voo ${fmt(b.mean, 2)} − ${fmt(cfg.minBelowPreflight)} ` +
-      `[baseline móvel + pré-voo; índice = (humor + (6 − estresse) + (6 − fadiga)) / 3]`,
+      `Δ = mean(current ${cfg.windowDays} days) − mean(previous ${cfg.windowDays} days) = ${fmt(mCur, 2)} − ${fmt(mPrev, 2)} = ` +
+      `${signed(delta, 2)} ≤ −${fmt(cfg.minDrop)} and current mean ${fmt(mCur, 2)} ≤ preflight ${fmt(b.mean, 2)} − ${fmt(cfg.minBelowPreflight)} ` +
+      `[rolling + preflight baseline; index = (mood + (6 − stress) + (6 − fatigue)) / 3]`,
     evidence,
     guidance: GUIDANCE.selfReport.guidance,
     sourceRef: sourceRefFor(['NASA_HRP_HAZARDS'], true),
@@ -277,11 +277,11 @@ export function massChange(ctx: RuleContext) {
 
 function massEvidence(m: NonNullable<ReturnType<typeof massChange>>): Evidence[] {
   const ev: Evidence[] = [
-    { label: 'Massa atual (média 7 dias)', value: round(m.current, 2), unit: 'kg', comparedTo: round(m.baseline.mean, 2) },
-    { label: 'Variação vs. pré-voo', value: round(m.pctChange, 2), unit: '%', comparedTo: RULES.bodyMass.lossThresholdPct },
+    { label: 'Current mass (7-day mean)', value: round(m.current, 2), unit: 'kg', comparedTo: round(m.baseline.mean, 2) },
+    { label: 'Change vs. preflight', value: round(m.pctChange, 2), unit: '%', comparedTo: RULES.bodyMass.lossThresholdPct },
   ];
   if (m.pctChangeVsEarlier !== null)
-    ev.push({ label: `Variação em ${RULES.bodyMass.comparisonDays / 7} semanas`, value: round(m.pctChangeVsEarlier, 2), unit: '%' });
+    ev.push({ label: `Change over ${RULES.bodyMass.comparisonDays / 7} weeks`, value: round(m.pctChangeVsEarlier, 2), unit: '%' });
   return ev;
 }
 
@@ -293,12 +293,12 @@ export const bodyMassRule: Rule = (ctx) => {
     ruleId: 'mass-loss',
     severity: 'attention',
     variables: ['bodyMass'],
-    title: 'Perda de massa corporal',
+    title: 'Body mass loss',
     explanation:
-      `Sua massa corporal está ${fmt(Math.abs(m.pctChange))}% abaixo da média pré-voo ` +
-      `(${fmt(m.current, 1)} kg vs. ${fmt(m.baseline.mean, 1)} kg). Isso pode estar relacionado a ${GUIDANCE.bodyMass.possibleCause}.`,
+      `Your body mass is ${fmt(Math.abs(m.pctChange))}% below your preflight mean ` +
+      `(${fmt(m.current, 1)} kg vs. ${fmt(m.baseline.mean, 1)} kg). This may be related to ${GUIDANCE.bodyMass.possibleCause}.`,
     arithmetic:
-      `%Δ = (massa atual − pré-voo) / pré-voo = (${fmt(m.current, 2)} − ${fmt(m.baseline.mean, 2)}) / ${fmt(m.baseline.mean, 2)} = ` +
+      `%Δ = (current mass − preflight) / preflight = (${fmt(m.current, 2)} − ${fmt(m.baseline.mean, 2)}) / ${fmt(m.baseline.mean, 2)} = ` +
       `${signed(m.pctChange, 2)}% ≤ ${fmt(cfg.lossThresholdPct)}% ${baselineTag(m.baseline)}`,
     evidence: massEvidence(m),
     guidance: GUIDANCE.bodyMass.guidance,
@@ -325,17 +325,17 @@ export const exerciseRule: Rule = (ctx) => {
     ruleId: 'exercise-adherence',
     severity: 'attention',
     variables: ['exerciseLoad'],
-    title: 'Aderência ao exercício abaixo da prescrição',
+    title: 'Exercise adherence below prescription',
     explanation:
-      `Nos últimos ${cfg.windowDays} dias você completou ${pct(a.ratio)} da carga de exercício prescrita ` +
-      `(faltaram ${fmt(a.prescribed - a.completed, 0)} min). Motivos comuns: ${GUIDANCE.exerciseLoad.possibleCause}.`,
+      `Over the last ${cfg.windowDays} days you completed ${pct(a.ratio)} of the prescribed exercise load ` +
+      `(${fmt(a.prescribed - a.completed, 0)} min missing). Common reasons: ${GUIDANCE.exerciseLoad.possibleCause}.`,
     arithmetic:
-      `aderência = completado / prescrito = ${fmt(a.completed, 0)} / ${fmt(a.prescribed, 0)} min = ${pct(a.ratio, 1)} ` +
-      `< ${pct(cfg.minAdherence)} em ${cfg.windowDays} dias [prescrição: ${cfg.prescribedMinutesPerDay} min/dia, ${cfg.trainingDaysPerWeek} dias/semana]`,
+      `adherence = completed / prescribed = ${fmt(a.completed, 0)} / ${fmt(a.prescribed, 0)} min = ${pct(a.ratio, 1)} ` +
+      `< ${pct(cfg.minAdherence)} over ${cfg.windowDays} days [prescription: ${cfg.prescribedMinutesPerDay} min/day, ${cfg.trainingDaysPerWeek} days/week]`,
     evidence: [
-      { label: `Aderência (${cfg.windowDays} dias)`, value: round(a.ratio * 100), unit: '%', comparedTo: cfg.minAdherence * 100 },
-      { label: 'Minutos completados', value: a.completed, unit: 'min', comparedTo: a.prescribed },
-      { label: 'Minutos faltantes', value: a.prescribed - a.completed, unit: 'min' },
+      { label: `Adherence (${cfg.windowDays} days)`, value: round(a.ratio * 100), unit: '%', comparedTo: cfg.minAdherence * 100 },
+      { label: 'Minutes completed', value: a.completed, unit: 'min', comparedTo: a.prescribed },
+      { label: 'Minutes missing', value: a.prescribed - a.completed, unit: 'min' },
     ],
     guidance: GUIDANCE.exerciseLoad.guidance,
     sourceRef: sourceRefFor(['NASA_SP_2025_DECONDITIONING', 'NASA_ASTRONAUT_EXERCISE'], true),
@@ -348,9 +348,9 @@ export const exerciseRule: Rule = (ctx) => {
 // ---------------------------------------------------------------------------
 type FastSignal = 'sleep' | 'hrv' | 'restingHeartRate';
 const FAST: { id: FastSignal; dir: 1 | -1; label: string; unit: string }[] = [
-  { id: 'sleep', dir: -1, label: 'Sono', unit: 'h' },
+  { id: 'sleep', dir: -1, label: 'Sleep', unit: 'h' },
   { id: 'hrv', dir: -1, label: 'HRV', unit: 'ms' },
-  { id: 'restingHeartRate', dir: 1, label: 'FC de repouso', unit: 'bpm' },
+  { id: 'restingHeartRate', dir: 1, label: 'Resting HR', unit: 'bpm' },
 ];
 
 export const compositeRule: Rule = (ctx) => {
@@ -369,22 +369,22 @@ export const compositeRule: Rule = (ctx) => {
 
   const arrow = (r: (typeof rows)[number]) => (r.sig.dir < 0 ? '↓' : '↑');
   const list = rows
-    .map((r) => `${r.sig.label} ${fmt(r.m)} ${r.sig.unit} (base ${fmt(r.b.mean)} ${r.sig.unit})`)
+    .map((r) => `${r.sig.label} ${fmt(r.m)} ${r.sig.unit} (baseline ${fmt(r.b.mean)} ${r.sig.unit})`)
     .join('; ');
   return {
     ruleId: 'fast-cluster-overload',
     severity: 'attention',
     variables: flagged.map((r) => r.sig.id),
-    title: `Padrão de ${GUIDANCE.composite.patternName}: ${flagged.map((r) => `${r.sig.label} ${arrow(r)}`).join(', ')}`,
+    title: `${GUIDANCE.composite.patternName[0].toUpperCase()}${GUIDANCE.composite.patternName.slice(1)} pattern: ${flagged.map((r) => `${r.sig.label} ${arrow(r)}`).join(', ')}`,
     explanation:
-      `${flagged.length} de 3 sinais rápidos desviaram juntos, na direção esperada, nos últimos ${cfg.windowDays} dias: ${list}. ` +
-      `Nenhum deles isoladamente justificaria um alerta forte; o padrão conjunto é compatível com ${GUIDANCE.composite.patternName}, não com uma noite ruim.`,
+      `${flagged.length} of 3 fast signals shifted together, in the expected direction, over the last ${cfg.windowDays} days: ${list}. ` +
+      `None of them alone would justify a strong alert; the combined pattern is consistent with ${GUIDANCE.composite.patternName}, not a single bad night.`,
     arithmetic:
-      `z(${cfg.windowDays}d) = (média ${cfg.windowDays} dias − média pré-voo) / DP: ` +
+      `z(${cfg.windowDays}d) = (${cfg.windowDays}-day mean − preflight mean) / SD: ` +
       rows.map((r) => `${r.sig.label} ${signed(r.z, 2)}`).join('; ') +
-      ` → ${flagged.length} sinais com |z| ≥ ${fmt(cfg.zThreshold)} na direção de sobrecarga (mínimo ${cfg.minSignals}) ${baselineTag(rows[0].b)}`,
+      ` → ${flagged.length} signals with |z| ≥ ${fmt(cfg.zThreshold)} in the overload direction (minimum ${cfg.minSignals}) ${baselineTag(rows[0].b)}`,
     evidence: rows.map((r) => ({
-      label: `${r.sig.label} (média ${cfg.windowDays} dias)`,
+      label: `${r.sig.label} (${cfg.windowDays}-day mean)`,
       value: round(r.m),
       unit: r.sig.unit,
       comparedTo: round(r.b.mean),
@@ -408,31 +408,31 @@ export const associationRule: Rule = (ctx) => {
   const critical = bp !== null;
   const weeks = cfg.windowDays / 7;
   const massText =
-    `Massa corporal ${signed(m.pctChange)}% em relação ao pré-voo (${fmt(m.baseline.mean)} → ${fmt(m.current)} kg)` +
-    (m.pctChangeVsEarlier !== null ? `, ${signed(m.pctChangeVsEarlier)}% nas últimas ${weeks} semanas` : '');
-  const adhText = `No mesmo período de ${weeks} semanas, ${pct(a.ratio)} da carga de exercício prescrita foi completada (${fmt(a.completed, 0)} de ${fmt(a.prescribed, 0)} min).`;
+    `Body mass ${signed(m.pctChange)}% relative to preflight (${fmt(m.baseline.mean)} → ${fmt(m.current)} kg)` +
+    (m.pctChangeVsEarlier !== null ? `, ${signed(m.pctChangeVsEarlier)}% over the last ${weeks} weeks` : '');
+  const adhText = `Over the same ${weeks}-week period, ${pct(a.ratio)} of the prescribed exercise load was completed (${fmt(a.completed, 0)} of ${fmt(a.prescribed, 0)} min).`;
 
   return {
     ruleId: 'mass-exercise-association',
     severity: critical ? 'critical' : 'attention',
     variables: critical ? ['bodyMass', 'exerciseLoad', 'bloodPressure'] : ['bodyMass', 'exerciseLoad'],
     title: critical
-      ? 'Descondicionamento em múltiplos sistemas com contramedida abaixo da prescrição'
-      : 'Perda de massa associada à baixa aderência ao exercício',
+      ? 'Multi-system deconditioning with countermeasure below prescription'
+      : 'Body mass loss associated with low exercise adherence',
     explanation:
-      `${massText}. ${adhText} Os dois podem estar relacionados — o sistema associa os sinais na mesma janela, não afirma causa.` +
+      `${massText}. ${adhText} The two may be related — the system associates signals in the same window; it does not claim causation.` +
       (critical
-        ? ` Ao mesmo tempo, a pressão arterial se afasta do seu padrão individual: sistólica ${fmt(bp!.evidence[0].value, 0)} mmHg vs. base ${fmt(bp!.evidence[0].comparedTo ?? 0)} mmHg. ` +
-          `Três sinais de sistemas diferentes (musculoesquelético, cardiovascular e contramedida) justificam avaliação médica.`
+        ? ` At the same time, blood pressure is drifting from your individual pattern: systolic ${fmt(bp!.evidence[0].value, 0)} mmHg vs. baseline ${fmt(bp!.evidence[0].comparedTo ?? 0)} mmHg. ` +
+          `Three signals from different systems (musculoskeletal, cardiovascular and countermeasure) warrant a medical evaluation.`
         : ''),
     arithmetic:
-      `massa: %Δ = (${fmt(m.current, 2)} − ${fmt(m.baseline.mean, 2)}) / ${fmt(m.baseline.mean, 2)} = ${signed(m.pctChange, 2)}% ≤ ${fmt(cfg.massLossThresholdPct)}%; ` +
-      `aderência ${cfg.windowDays}d = ${fmt(a.completed, 0)} / ${fmt(a.prescribed, 0)} = ${pct(a.ratio, 1)} < ${pct(cfg.minAdherence)}` +
-      (critical ? `; pressão: ${bp!.arithmetic}` : ` ${baselineTag(m.baseline)}`),
+      `mass: %Δ = (${fmt(m.current, 2)} − ${fmt(m.baseline.mean, 2)}) / ${fmt(m.baseline.mean, 2)} = ${signed(m.pctChange, 2)}% ≤ ${fmt(cfg.massLossThresholdPct)}%; ` +
+      `${cfg.windowDays}d adherence = ${fmt(a.completed, 0)} / ${fmt(a.prescribed, 0)} = ${pct(a.ratio, 1)} < ${pct(cfg.minAdherence)}` +
+      (critical ? `; blood pressure: ${bp!.arithmetic}` : ` ${baselineTag(m.baseline)}`),
     evidence: [
       ...massEvidence(m),
-      { label: `Aderência ao exercício (${cfg.windowDays} dias)`, value: round(a.ratio * 100), unit: '%', comparedTo: cfg.minAdherence * 100 },
-      { label: `Minutos completados (${cfg.windowDays} dias)`, value: a.completed, unit: 'min', comparedTo: a.prescribed },
+      { label: `Exercise adherence (${cfg.windowDays} days)`, value: round(a.ratio * 100), unit: '%', comparedTo: cfg.minAdherence * 100 },
+      { label: `Minutes completed (${cfg.windowDays} days)`, value: a.completed, unit: 'min', comparedTo: a.prescribed },
       ...(critical ? bp!.evidence.slice(0, 1) : []),
     ],
     guidance: critical ? GUIDANCE.association.guidanceCritical : GUIDANCE.association.guidance,

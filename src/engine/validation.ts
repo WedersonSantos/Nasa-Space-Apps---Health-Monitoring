@@ -19,34 +19,34 @@ const ORIGINS = new Set(['synthetic', 'measured', 'estimated']);
 
 /** Motivo de rejeição de uma medição isolada, ou null se for válida. */
 export function checkMeasurement(m: Measurement): string | null {
-  if (!m || typeof m !== 'object') return 'registro vazio';
-  if (!m.id) return 'sem id';
-  if (!m.astronautId) return 'sem astronautId';
-  if (!VARIABLE_IDS.includes(m.variable)) return `variável desconhecida: ${String(m.variable)}`;
-  if (!ORIGINS.has(m.origin)) return `origem inválida: ${String(m.origin)}`;
-  if (!m.method) return 'sem método de obtenção';
-  if (!m.timestamp || Number.isNaN(Date.parse(m.timestamp))) return 'horário ausente ou inválido';
+  if (!m || typeof m !== 'object') return 'empty record';
+  if (!m.id) return 'missing id';
+  if (!m.astronautId) return 'missing astronautId';
+  if (!VARIABLE_IDS.includes(m.variable)) return `unknown variable: ${String(m.variable)}`;
+  if (!ORIGINS.has(m.origin)) return `invalid origin: ${String(m.origin)}`;
+  if (!m.method) return 'missing acquisition method';
+  if (!m.timestamp || Number.isNaN(Date.parse(m.timestamp))) return 'missing or invalid timestamp';
   if (m.unit !== EXPECTED_UNITS[m.variable])
-    return `unidade '${m.unit}' diferente da esperada '${EXPECTED_UNITS[m.variable]}'`;
-  if (typeof m.value !== 'number' || !Number.isFinite(m.value)) return 'valor ausente ou não numérico';
+    return `unit '${m.unit}' differs from the expected '${EXPECTED_UNITS[m.variable]}'`;
+  if (typeof m.value !== 'number' || !Number.isFinite(m.value)) return 'missing or non-numeric value';
 
   const range = PLAUSIBLE_RANGES[m.variable];
   if (m.value < range.min || m.value > range.max)
-    return `valor ${m.value} fora da faixa plausível ${range.min}–${range.max}`;
+    return `value ${m.value} outside the plausible range ${range.min}–${range.max}`;
 
   if (range.secondary) {
     const s = m.secondaryValue;
     if (s === undefined || s === null) {
-      if (range.secondary.required) return 'valor secundário obrigatório ausente';
+      if (range.secondary.required) return 'required secondary value is missing';
     } else if (typeof s !== 'number' || !Number.isFinite(s)) {
-      return 'valor secundário não numérico';
+      return 'non-numeric secondary value';
     } else if (s < range.secondary.min || s > range.secondary.max) {
-      return `valor secundário ${s} fora da faixa plausível ${range.secondary.min}–${range.secondary.max}`;
+      return `secondary value ${s} outside the plausible range ${range.secondary.min}–${range.secondary.max}`;
     }
   }
 
   if (m.variable === 'bloodPressure' && m.secondaryValue !== undefined && m.secondaryValue >= m.value)
-    return 'incoerente: diastólica maior ou igual à sistólica';
+    return 'inconsistent: diastolic greater than or equal to systolic';
 
   return null;
 }
@@ -78,11 +78,11 @@ export function validateMeasurements(
 
     const key = `${m.variable}|${Date.parse(m.timestamp)}|${m.method}`;
     if (seenIds.has(m.id)) {
-      rejected.push({ measurement: m, reason: 'duplicada: id repetido' });
+      rejected.push({ measurement: m, reason: 'duplicate: repeated id' });
       continue;
     }
     if (seenKeys.has(key)) {
-      rejected.push({ measurement: m, reason: 'duplicada: mesma variável, horário e método' });
+      rejected.push({ measurement: m, reason: 'duplicate: same variable, timestamp and method' });
       continue;
     }
     seenIds.add(m.id);

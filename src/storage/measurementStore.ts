@@ -99,7 +99,7 @@ export class MeasurementStore {
     const current = this.load(m.astronautId) ?? [];
     if (!error && current.some((x) => x.id === m.id)) {
       this.logEvent({ type: 'measurement-rejected', at: now, detail: `${m.id}: id repetido` });
-      return { ok: false, error: 'medição duplicada' };
+      return { ok: false, error: 'duplicate measurement' };
     }
     if (error) {
       this.logEvent({ type: 'measurement-rejected', at: now, detail: `${m.variable}: ${error}` });

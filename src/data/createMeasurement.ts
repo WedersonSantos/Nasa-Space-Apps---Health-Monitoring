@@ -40,7 +40,7 @@ function toNumber(x: unknown): number | undefined {
 
 export function createMeasurement(input: MeasurementInput): CreateResult {
   const value = toNumber(input.value);
-  if (value === undefined) return { ok: false, error: 'Preencha o valor.' };
+  if (value === undefined) return { ok: false, error: 'Fill in the value.' };
   const secondaryValue = toNumber(input.secondaryValue);
   const method = input.method ?? DEFAULT_METHOD[input.variable];
   const m: Measurement = {
@@ -71,7 +71,7 @@ export function createSelfReport(
   for (const c of ['mood', 'stress', 'fatigue'] as const) {
     const r = createMeasurement({ astronautId, variable: 'selfReport', value: scores[c], timestamp, method: `self-report:${c}` });
     if (!r.ok) return { ok: false, error: `${c}: ${r.error}` };
-    if (!Number.isInteger(r.measurement.value)) return { ok: false, error: `${c}: use um inteiro de 1 a 5` };
+    if (!Number.isInteger(r.measurement.value)) return { ok: false, error: `${c}: use a whole number from 1 to 5` };
     out.push(r.measurement);
   }
   return { ok: true, measurements: out };

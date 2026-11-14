@@ -83,16 +83,16 @@ describe('Cenário 3 — Crítico com contramedida', () => {
     expect(assoc.variables).toEqual(['bodyMass', 'exerciseLoad', 'bloodPressure']);
   });
   it('números do roteiro: massa ≈ −2% e aderência ≈ 61% em 21 dias', () => {
-    const mass = assoc.evidence.find((e) => e.label === 'Variação vs. pré-voo')!.value;
-    const adh = assoc.evidence.find((e) => e.label.startsWith('Aderência'))!.value;
+    const mass = assoc.evidence.find((e) => e.label === 'Change vs. preflight')!.value;
+    const adh = assoc.evidence.find((e) => e.label.startsWith('Exercise adherence'))!.value;
     expect(mass).toBeLessThanOrEqual(-2);
     expect(mass).toBeGreaterThan(-3);
     expect(adh).toBeGreaterThan(50);
     expect(adh).toBeLessThan(70);
   });
   it('linguagem de possibilidade, não de causa', () => {
-    expect(assoc.explanation).toMatch(/podem estar relacionados/);
-    expect(assoc.explanation).toMatch(/não afirma causa/);
+    expect(assoc.explanation).toMatch(/may be related/);
+    expect(assoc.explanation).toMatch(/does not claim causation/);
   });
   it('alerta de aderência aparece antes do crítico', () => {
     expect(evalAt(s, 100).alerts.map(ruleIdOf)).toContain('exercise-adherence');

@@ -21,6 +21,7 @@ export interface CoverageInput {
 }
 
 const plural = (n: number, one: string, many: string) => `${n} ${n === 1 ? one : many}`;
+const days = (n: number) => plural(n, 'day', 'days');
 
 export function computeCoverage(input: CoverageInput): Record<VariableId, VariableCoverage> {
   const { series, preflight, valid, asOfDay, firstDay, launchDay } = input;
@@ -37,10 +38,10 @@ export function computeCoverage(input: CoverageInput): Record<VariableId, Variab
     // Exercício: só conta dia com minutos prescritos (sem prescrição não há aderência).
     const validDays = variable === 'exerciseLoad' ? pts.filter((p) => (p.secondaryValue ?? 0) > 0).length : pts.length;
     const base = { variable, lastAt: last, daysSinceLast, validDays };
-    const since = daysSinceLast === null ? '' : daysSinceLast === 0 ? 'último registro hoje' : `último registro há ${plural(daysSinceLast, 'dia', 'dias')}`;
+    const since = daysSinceLast === null ? '' : daysSinceLast === 0 ? 'last record today' : `last record ${days(daysSinceLast)} ago`;
 
     if (last === null) {
-      out[variable] = { ...base, status: 'no-data', reason: 'Nenhum registro válido até a data de avaliação' };
+      out[variable] = { ...base, status: 'no-data', reason: 'No valid record up to the evaluation date' };
       continue;
     }
 
@@ -49,7 +50,7 @@ export function computeCoverage(input: CoverageInput): Record<VariableId, Variab
       out[variable] = {
         ...base,
         status: 'no-baseline',
-        reason: `Linha de base pré-voo em formação (dia ${day} de ${BASELINE.preflightDays}); as regras começam no 1º dia de voo`,
+        reason: `Preflight baseline still forming (day ${day} of ${BASELINE.preflightDays}); rules start on flight day 1`,
       };
       continue;
     }
@@ -59,7 +60,7 @@ export function computeCoverage(input: CoverageInput): Record<VariableId, Variab
       out[variable] = {
         ...base,
         status: 'no-baseline',
-        reason: `Sem linha de base pré-voo: ${preDays} de ${BASELINE.preflightDays} dias registrados (mínimo ${BASELINE.minDays})`,
+        reason: `No preflight baseline: ${preDays} of ${BASELINE.preflightDays} days recorded (minimum ${BASELINE.minDays})`,
       };
       continue;
     }
@@ -67,7 +68,7 @@ export function computeCoverage(input: CoverageInput): Record<VariableId, Variab
     const stale = staleReason(variable, series, asOfDay, validDays, since);
     out[variable] = stale
       ? { ...base, status: 'stale', reason: stale }
-      : { ...base, status: 'ok', reason: `Avaliado: ${validDays} de ${req.windowDays} dias com registro na janela da regra` };
+      : { ...base, status: 'ok', reason: `Evaluated: ${validDays} of ${req.windowDays} days recorded in the rule window` };
   }
   return out;
 }
@@ -79,18 +80,18 @@ function staleReason(variable: VariableId, series: DailySeries, asOfDay: number,
 
   if (validDays < req.minValidDays) {
     if (variable === 'exerciseLoad')
-      return `Sem registro de exercício nos últimos ${req.windowDays} dias (${since}); aderência não calculada`;
-    if (req.minValidDays === 1) return `Sem registro nos últimos ${req.windowDays} dias (${since})`;
+      return `No exercise record in the last ${days(req.windowDays)} (${since}); adherence not computed`;
+    if (req.minValidDays === 1) return `No record in the last ${days(req.windowDays)} (${since})`;
     if (consecutive)
-      return `${validDays} de ${req.windowDays} dias registrados; a regra exige ${req.windowDays} dias consecutivos até a data de avaliação (${since})`;
-    return `${validDays} de ${req.windowDays} dias registrados na janela (mínimo ${req.minValidDays}; ${since})`;
+      return `${validDays} of ${req.windowDays} days recorded; the rule needs ${req.windowDays} consecutive days up to the evaluation date (${since})`;
+    return `${validDays} of ${req.windowDays} days recorded in the window (minimum ${req.minValidDays}; ${since})`;
   }
 
   if (variable === 'selfReport') {
     const cfg = RULES.selfReport;
     const prev = pointsInWindow(series.selfReport, asOfDay - cfg.windowDays, cfg.windowDays).length;
     if (prev < cfg.minDays)
-      return `Janela anterior de ${cfg.windowDays} dias com ${prev} dias registrados (mínimo ${cfg.minDays}); tendência não calculada`;
+      return `Previous ${cfg.windowDays}-day window has ${days(prev)} recorded (minimum ${cfg.minDays}); trend not computed`;
   }
   return null;
 }
