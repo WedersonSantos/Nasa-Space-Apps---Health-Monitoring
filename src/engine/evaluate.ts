@@ -2,7 +2,7 @@
  * Função de fronteira entre os blocos (spec §8). PURA: mesmas entradas, mesma
  * saída; sem storage, sem relógio do sistema, sem mutar a entrada.
  */
-import { VARIABLE_IDS, type Alert, type AstronautState, type Measurement, type Severity, type VariableId } from '../types/contract';
+import { VARIABLE_IDS, type Alert, type AstronautState, type Locale, type Measurement, type Severity, type VariableId } from '../types/contract';
 import type { AstronautProfile } from '../types/scenario';
 import { preflightBaselines, rollingBaselines } from './baseline';
 import { BASELINE, RULES } from './config/thresholds';
@@ -24,12 +24,19 @@ export function ruleIdOf(alert: Alert): RuleId {
   return parts[parts.length - 2] as RuleId;
 }
 
+export interface EvaluateOptions {
+  /** Idioma do texto emitido (alertas e motivos de cobertura). Padrão 'en'. */
+  locale?: Locale;
+}
+
 export function evaluate(
   measurements: Measurement[],
   astronautId: string,
   asOf: string,
   profile?: AstronautProfile,
+  options: EvaluateOptions = {},
 ): AstronautState {
+  const locale = options.locale ?? 'en';
   const asOfDay = dayNumber(asOf);
   const { valid } = validateMeasurements(measurements, astronautId, asOf);
   const series = buildDailySeries(valid);
@@ -39,7 +46,7 @@ export function evaluate(
   const preflight = preflightBaselines(series, firstDay, asOfDay);
   const rolling = rollingBaselines(series, asOfDay);
 
-  const ctx = (day: number): RuleContext => ({ series, preflight, day });
+  const ctx = (day: number): RuleContext => ({ series, preflight, day, locale });
   const alerts: Alert[] = [];
 
   // Regras só avaliam em voo: durante o pré-voo o baseline ainda está sendo formado.
@@ -98,7 +105,7 @@ export function evaluate(
       windowDays: RULES.exerciseLoad.windowDays,
     },
     latest,
-    coverage: computeCoverage({ series, preflight, valid, asOfDay, firstDay, launchDay }),
+    coverage: computeCoverage({ series, preflight, valid, asOfDay, firstDay, launchDay, locale }),
   };
 }
 

@@ -3,7 +3,7 @@
  * armazenamento vira fallback em memória, nunca erro para o usuário.
  * Volume: ~1.000 medições por cenário (~200 KB) — cabe em localStorage.
  */
-import type { Measurement } from '../types/contract';
+import type { Locale, Measurement } from '../types/contract';
 import type { ScenarioFile } from '../types/scenario';
 import { checkMeasurement } from '../engine/validation';
 
@@ -94,12 +94,12 @@ export class MeasurementStore {
   }
 
   /** Valida e acrescenta uma medição. Devolve a lista atualizada ou o motivo da rejeição. */
-  append(m: Measurement, now: string): { ok: true; measurements: Measurement[] } | { ok: false; error: string } {
-    const error = checkMeasurement(m);
+  append(m: Measurement, now: string, locale: Locale = 'en'): { ok: true; measurements: Measurement[] } | { ok: false; error: string } {
+    const error = checkMeasurement(m, locale);
     const current = this.load(m.astronautId) ?? [];
     if (!error && current.some((x) => x.id === m.id)) {
-      this.logEvent({ type: 'measurement-rejected', at: now, detail: `${m.id}: id repetido` });
-      return { ok: false, error: 'duplicate measurement' };
+      this.logEvent({ type: 'measurement-rejected', at: now, detail: `${m.id}: repeated id` });
+      return { ok: false, error: locale === 'pt' ? 'medição duplicada' : 'duplicate measurement' };
     }
     if (error) {
       this.logEvent({ type: 'measurement-rejected', at: now, detail: `${m.variable}: ${error}` });

@@ -17,6 +17,9 @@ export type DataOrigin = 'synthetic' | 'measured' | 'estimated';
 
 export type Severity = 'normal' | 'attention' | 'critical';
 
+/** ADIÇÃO (acordo Bloco A + B): idioma do texto emitido pelo motor. Padrão 'en'. */
+export type Locale = 'en' | 'pt';
+
 export interface Measurement {
   id: string;
   astronautId: string;

@@ -1,4 +1,5 @@
-/** Utilitários puros: datas (UTC, em número de dia) e formatação de texto (inglês). */
+/** Utilitários puros: datas (UTC, em número de dia) e formatação de texto por idioma. */
+import type { Locale } from '../types/contract';
 
 export const DAY_MS = 86_400_000;
 
@@ -21,8 +22,12 @@ export function dayToIso(day: number): string {
 
 const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
-/** 'Jul 1' para texto de interface. */
-export function dayToShort(day: number): string {
+/** Data curta para texto de interface: 'Jul 1' (en) ou '01/07' (pt). */
+export function dayToShort(day: number, locale: Locale = 'en'): string {
+  if (locale === 'pt') {
+    const d = dayToDate(day);
+    return `${d.slice(8, 10)}/${d.slice(5, 7)}`;
+  }
   const d = new Date(day * DAY_MS);
   return `${MONTHS[d.getUTCMonth()]} ${d.getUTCDate()}`;
 }
@@ -43,19 +48,22 @@ export function round(n: number, decimals = 1): number {
   return Math.round(n * f) / f;
 }
 
-/** Número com ponto decimal e sinal de menos tipográfico: fmt(-2.14, 1) → '−2.1'. */
-export function fmt(n: number, decimals = 1): string {
+/**
+ * Número com sinal de menos tipográfico; separador decimal pelo idioma:
+ * fmt(-2.14, 1) → '−2.1' (en) / '−2,1' (pt).
+ */
+export function fmt(n: number, decimals = 1, locale: Locale = 'en'): string {
   const r = round(n, decimals);
   const s = (Object.is(r, -0) ? 0 : r).toFixed(decimals);
-  return s.replace('-', '−');
+  return (locale === 'pt' ? s.replace('.', ',') : s).replace('-', '−');
 }
 
 /** Com sinal explícito: signed(1.5) → '+1.5'. */
-export function signed(n: number, decimals = 1): string {
-  return (round(n, decimals) > 0 ? '+' : '') + fmt(n, decimals);
+export function signed(n: number, decimals = 1, locale: Locale = 'en'): string {
+  return (round(n, decimals) > 0 ? '+' : '') + fmt(n, decimals, locale);
 }
 
 /** Fração → porcentagem: pct(0.613) → '61%'. */
-export function pct(fraction: number, decimals = 0): string {
-  return `${fmt(fraction * 100, decimals)}%`;
+export function pct(fraction: number, decimals = 0, locale: Locale = 'en'): string {
+  return `${fmt(fraction * 100, decimals, locale)}%`;
 }

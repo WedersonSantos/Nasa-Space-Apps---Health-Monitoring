@@ -10,7 +10,7 @@
  */
 import type { VariableId } from '../../types/contract';
 
-export const ENGINE_CONFIG_VERSION = '1.1.0';
+export const ENGINE_CONFIG_VERSION = '1.2.0';
 
 export const BASELINE = {
   /** Spec §5: baseline pré-voo = primeiros 7 dias de registro, congelados. */
