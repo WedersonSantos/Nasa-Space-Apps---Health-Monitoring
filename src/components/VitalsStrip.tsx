@@ -7,10 +7,10 @@ import { fmt, fmtPct, fmtSigned } from '../lib/format';
 import { OriginIcon, StatusIcon } from './Icons';
 import { coverageOf, displayStatus } from '../lib/coverage';
 
-/** As sete variáveis num relance: valor atual, desvio do próprio baseline, estado e origem. Sem escore composto. */
+/** The seven variables at a glance: current value, deviation from own baseline, status and origin. No composite score. */
 export function VitalsStrip({ state, measurements }: { state: AstronautState; measurements: Measurement[] }) {
   return (
-    <nav className="vitals" aria-label="Sinais vitais — resumo das sete variáveis">
+    <nav className="vitals" aria-label="Vital signs — summary of the seven variables">
       <ul>
         {VARIABLE_IDS.map((v) => {
           const meta = VARIABLES[v];
@@ -21,16 +21,16 @@ export function VitalsStrip({ state, measurements }: { state: AstronautState; me
           let value = '—';
           let delta = '';
           if (m && v === 'exerciseLoad') {
-            // Sem registros na janela o motor mantém a razão em 1: não exibir 100% inventado.
+            // With no entries in the window the engine keeps the ratio at 1: do not show an invented 100%.
             value = !cov || cov.status === 'ok' ? fmtPct(state.adherence.adherenceRatio) : '—';
-            delta = `aderência ${state.adherence.windowDays} d`;
+            delta = `adherence ${state.adherence.windowDays} d`;
           } else if (m && v === 'selfReport') {
             const sr = latestSelfReport(measurements);
             value = sr.index != null ? fmt(sr.index, 1) : '—';
             delta =
               sr.index != null && b
-                ? `bem-estar ${fmtSigned(sr.index - b.mean, 1)} vs. baseline`
-                : 'índice de bem-estar';
+                ? `wellbeing ${fmtSigned(sr.index - b.mean, 1)} vs. baseline`
+                : 'wellbeing index';
           } else if (m) {
             value =
               v === 'bloodPressure' && m.secondaryValue != null
@@ -56,7 +56,7 @@ export function VitalsStrip({ state, measurements }: { state: AstronautState; me
                 <span className="vital__delta">{delta}</span>
                 <span className="vital__state">
                   <StatusIcon status={sev} size={13} />
-                  {sev === 'unassessed' ? 'Não avaliado' : SEVERITY_META[sev].label}
+                  {sev === 'unassessed' ? 'Not assessed' : SEVERITY_META[sev].label}
                 </span>
                 {m && (
                   <span className={`vital__origin origin-${m.origin}`} title={ORIGIN_META[m.origin].description}>

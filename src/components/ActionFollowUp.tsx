@@ -12,16 +12,16 @@ interface Props {
 
 const KINDS: ActionKind[] = ['repeated-measurement', 'cmo-contacted', 'action-done'];
 
-/** Fecha o ciclo: o astronauta registra o que fez com a orientação e acompanha a evolução do alerta. */
+/** Closes the loop: the astronaut logs what they did with the guidance and follows how the alert evolves. */
 export function ActionFollowUp({ alert, entries, onLog, onRemove }: Props) {
   const own = entries.filter((e) => e.alertId === alert.id).sort((a, b) => a.at.localeCompare(b.at));
   const done = own.some((e) => e.kind === 'action-done');
   const cmo = own.some((e) => e.kind === 'cmo-contacted');
 
   return (
-    <section className="follow" aria-label="Acompanhamento da ação">
-      <h4>Acompanhamento</h4>
-      <div className="follow__buttons" role="group" aria-label="Registrar o que foi feito">
+    <section className="follow" aria-label="Action follow-up">
+      <h4>Follow-up</h4>
+      <div className="follow__buttons" role="group" aria-label="Log what was done">
         {KINDS.map((k) => (
           <button
             key={k}
@@ -35,8 +35,8 @@ export function ActionFollowUp({ alert, entries, onLog, onRemove }: Props) {
       </div>
       {own.length === 0 ? (
         <p className="follow__empty">
-          Nenhuma ação registrada para este alerta.
-          {alert.escalate && ' Este alerta pede acionar o oficial médico.'}
+          No actions logged for this alert.
+          {alert.escalate && ' This alert calls for contacting the medical officer.'}
         </p>
       ) : (
         <ol className="follow__list">
@@ -44,10 +44,10 @@ export function ActionFollowUp({ alert, entries, onLog, onRemove }: Props) {
             <li key={e.id}>
               <CheckCircle size={14} />
               <span>
-                <strong>{ACTION_LABEL[e.kind]}</strong> · dia {e.missionDay} · {fmtDateTime(e.at)}
+                <strong>{ACTION_LABEL[e.kind]}</strong> · day {e.missionDay} · {fmtDateTime(e.at)}
               </span>
-              <button type="button" className="link-btn" onClick={() => onRemove(e.id)} aria-label={`Desfazer registro: ${ACTION_LABEL[e.kind]}, dia ${e.missionDay}`}>
-                desfazer
+              <button type="button" className="link-btn" onClick={() => onRemove(e.id)} aria-label={`Undo entry: ${ACTION_LABEL[e.kind]}, day ${e.missionDay}`}>
+                undo
               </button>
             </li>
           ))}
@@ -55,7 +55,7 @@ export function ActionFollowUp({ alert, entries, onLog, onRemove }: Props) {
       )}
       {done && (
         <p className="follow__status">
-          Ação concluída e o alerta continua ativo: siga as medições. Ele sai sozinho quando os sinais voltarem ao baseline.
+          Action completed and the alert is still active: keep measuring. It clears on its own when the signals return to baseline.
         </p>
       )}
     </section>

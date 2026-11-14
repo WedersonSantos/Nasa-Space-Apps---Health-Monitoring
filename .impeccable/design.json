@@ -351,7 +351,7 @@
       },
       "attention": {
         "role": "severity",
-        "displayName": "Atenção",
+        "displayName": "Attention",
         "canonical": "#995700",
         "tonalRamp": [
           "#160700",
@@ -366,7 +366,7 @@
       },
       "attention-bg": {
         "role": "severity",
-        "displayName": "Atenção Tint",
+        "displayName": "Attention Tint",
         "canonical": "#fbeed6",
         "tonalRamp": [
           "#0d0b06",
@@ -381,7 +381,7 @@
       },
       "critical": {
         "role": "severity",
-        "displayName": "Crítico",
+        "displayName": "Critical",
         "canonical": "#b3261e",
         "tonalRamp": [
           "#1e0100",
@@ -396,7 +396,7 @@
       },
       "critical-bg": {
         "role": "severity",
-        "displayName": "Crítico Tint",
+        "displayName": "Critical Tint",
         "canonical": "#fbe5e2",
         "tonalRamp": [
           "#0e0a09",
@@ -786,7 +786,7 @@
       },
       "night-attention": {
         "role": "severity",
-        "displayName": "Night Atenção",
+        "displayName": "Night Attention",
         "canonical": "#e0ac5c",
         "tonalRamp": [
           "#130900",
@@ -801,7 +801,7 @@
       },
       "night-attention-bg": {
         "role": "severity",
-        "displayName": "Night Atenção Tint",
+        "displayName": "Night Attention Tint",
         "canonical": "rgba(224, 172, 92, 0.13)",
         "tonalRamp": [
           "#130900",
@@ -816,7 +816,7 @@
       },
       "night-critical": {
         "role": "severity",
-        "displayName": "Night Crítico",
+        "displayName": "Night Critical",
         "canonical": "#ec8579",
         "tonalRamp": [
           "#1b0302",
@@ -831,7 +831,7 @@
       },
       "night-critical-bg": {
         "role": "severity",
-        "displayName": "Night Crítico Tint",
+        "displayName": "Night Critical Tint",
         "canonical": "rgba(236, 133, 121, 0.13)",
         "tonalRamp": [
           "#1b0302",
@@ -965,7 +965,7 @@
       "kind": "button",
       "refersTo": "button-primary",
       "description": "Main form action, indigo by day, soft periwinkle at night.",
-      "html": "<button class=\"ds-btn-primary\">Registrar</button>",
+      "html": "<button class=\"ds-btn-primary\">Log data</button>",
       "css": ".ds-btn-primary{display:inline-flex;align-items:center;gap:6px;font-family:var(--font);font-weight:600;font-size:16px;padding:9px 16px;min-height:40px;border-radius:var(--radius,6px);border:1px solid var(--series-1,#5b55d6);background:var(--series-1,#5b55d6);color:var(--surface,#f7f7fb);cursor:pointer}.ds-btn-primary:hover{filter:brightness(1.08)}.ds-btn-primary:focus-visible{outline:2px solid var(--focus,#5b55d6);outline-offset:2px}"
     },
     {
@@ -989,29 +989,29 @@
       "kind": "custom",
       "refersTo": "annunciator-attention",
       "description": "Overall state in the mission bar: icon + label + colour, one ring pulse per state change.",
-      "html": "<div class=\"ds-shell\"><a href=\"#\" class=\"ds-ann\"><svg width=\"26\" height=\"26\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M12 3.5 2.5 20h19L12 3.5Z\"/><path d=\"M12 10v4.5M12 17.2v.1\"/></svg><span class=\"ds-ann__t\"><span class=\"ds-ann__l\">Atenção</span><span class=\"ds-ann__s\">2 alertas ativos · ver o que fazer</span></span></a></div>",
+      "html": "<div class=\"ds-shell\"><a href=\"#\" class=\"ds-ann\"><svg width=\"26\" height=\"26\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M12 3.5 2.5 20h19L12 3.5Z\"/><path d=\"M12 10v4.5M12 17.2v.1\"/></svg><span class=\"ds-ann__t\"><span class=\"ds-ann__l\">Attention</span><span class=\"ds-ann__s\">2 alertas ativos · see what to do</span></span></a></div>",
       "css": ".ds-shell{background:var(--shell,#e4e3fa);padding:16px}.ds-ann{display:inline-flex;align-items:center;gap:12px;padding:8px 18px 8px 14px;border-radius:6px;background:var(--shell-attention,#b06200);color:var(--on-annunciator,#fff);text-decoration:none;font-family:var(--font);animation:ds-annunciate .9s cubic-bezier(.16,1,.3,1) both}.ds-ann__t{display:grid;line-height:1.15}.ds-ann__l{font-size:1.3rem;font-weight:800;font-stretch:115%;text-transform:uppercase;letter-spacing:.03em}.ds-ann__s{font-size:.82rem;font-weight:600}.ds-ann:hover{filter:brightness(1.06)}.ds-ann:focus-visible{outline:2px solid var(--shell-ink,#23204a);outline-offset:3px}@keyframes ds-annunciate{from{box-shadow:0 0 0 0 rgba(245,181,74,.6)}to{box-shadow:0 0 0 16px transparent}}@media (prefers-reduced-motion:reduce){.ds-ann{animation:none}}"
     },
     {
       "name": "Mission Track Lane",
       "kind": "custom",
       "description": "Signature flight-day lane: hatched pre-flight block, severity-height day bars, onset marker, day cursor.",
-      "html": "<div class=\"ds-shell\"><div class=\"ds-lane\"><div class=\"ds-pre\"></div><i class=\"ds-d\" style=\"left:30%\"></i><i class=\"ds-d\" style=\"left:36%\"></i><i class=\"ds-d ds-d--a\" style=\"left:42%\"></i><i class=\"ds-d ds-d--a\" style=\"left:48%\"></i><i class=\"ds-d ds-d--c\" style=\"left:54%\"></i><i class=\"ds-d ds-d--f\" style=\"left:66%\"></i><i class=\"ds-d ds-d--f\" style=\"left:72%\"></i><button class=\"ds-onset\" style=\"left:43%\" aria-label=\"Ir ao dia 9: início de atenção\"><svg width=\"12\" height=\"12\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M12 3.5 2.5 20h19L12 3.5Z\"/><path d=\"M12 10v4.5M12 17.2v.1\"/></svg></button><span class=\"ds-cur\" style=\"left:57%\"></span></div></div>",
+      "html": "<div class=\"ds-shell\"><div class=\"ds-lane\"><div class=\"ds-pre\"></div><i class=\"ds-d\" style=\"left:30%\"></i><i class=\"ds-d\" style=\"left:36%\"></i><i class=\"ds-d ds-d--a\" style=\"left:42%\"></i><i class=\"ds-d ds-d--a\" style=\"left:48%\"></i><i class=\"ds-d ds-d--c\" style=\"left:54%\"></i><i class=\"ds-d ds-d--f\" style=\"left:66%\"></i><i class=\"ds-d ds-d--f\" style=\"left:72%\"></i><button class=\"ds-onset\" style=\"left:43%\" aria-label=\"Ir ao dia 9: onset de atenção\"><svg width=\"12\" height=\"12\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M12 3.5 2.5 20h19L12 3.5Z\"/><path d=\"M12 10v4.5M12 17.2v.1\"/></svg></button><span class=\"ds-cur\" style=\"left:57%\"></span></div></div>",
       "css": ".ds-shell{background:var(--shell,#e4e3fa);padding:16px 20px 24px}.ds-lane{position:relative;height:72px;border-bottom:1px solid var(--shell-line,#c0bfeb)}.ds-pre{position:absolute;bottom:0;left:0;width:24%;height:10px;background:repeating-linear-gradient(135deg,var(--shell-line,#c0bfeb) 0 3px,transparent 3px 7px);border-left:1px solid var(--shell-line,#c0bfeb);border-right:1px solid var(--shell-line,#c0bfeb)}.ds-d{position:absolute;bottom:0;width:4%;transform:scaleX(.72);border-radius:1px 1px 0 0;height:6px;background:var(--shell-normal,#1d8754);opacity:.55}.ds-d--a{height:16px;background:var(--shell-attention,#b06200);opacity:1}.ds-d--c{height:26px;background:var(--shell-critical,#c2342a);opacity:1}.ds-d--f{opacity:.18}.ds-onset{position:absolute;top:0;transform:translateX(-50%);width:22px;height:22px;padding:0;border-radius:50%;border:1.5px solid currentColor;color:var(--shell-attention,#b06200);background:var(--shell,#e4e3fa);display:grid;place-items:center;cursor:pointer}.ds-onset:hover{background:var(--shell-2,#d5d4f5)}.ds-onset:focus-visible{outline:2px solid var(--shell-ink,#23204a);outline-offset:2px}.ds-cur{position:absolute;top:6px;bottom:-6px;width:2px;margin-left:-1px;background:var(--shell-ink,#23204a)}.ds-cur::after{content:'';position:absolute;bottom:-2px;left:-5px;width:12px;height:12px;border-radius:50%;background:var(--shell-ink,#23204a);box-shadow:0 0 0 3px var(--shell,#e4e3fa)}"
     },
     {
       "name": "Severity Badges",
       "kind": "chip",
       "refersTo": "severity-badge-attention",
-      "description": "State as icon + label + colour, never colour alone; missing coverage is a dashed muted \"Não avaliado\".",
-      "html": "<span class=\"ds-sev ds-sev--n\"><svg width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><circle cx=\"12\" cy=\"12\" r=\"9.5\"/><path d=\"m7.5 12.5 3 3 6-6.5\"/></svg>Normal</span> <span class=\"ds-sev ds-sev--a\"><svg width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M12 3.5 2.5 20h19L12 3.5Z\"/><path d=\"M12 10v4.5M12 17.2v.1\"/></svg>Atenção</span> <span class=\"ds-sev ds-sev--c\"><svg width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M8.3 2.5h7.4l5.3 5.3v7.4l-5.3 5.3H8.3L3 15.2V7.8z\"/><path d=\"M12 8v4.5M12 15.8v.1\"/></svg>Crítico</span> <span class=\"ds-sev ds-sev--u\" title=\"Sem medição recente\"><svg width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><circle cx=\"12\" cy=\"12\" r=\"9.5\" stroke-dasharray=\"3 3\"/><path d=\"M9.6 9.4a2.5 2.5 0 1 1 3.4 2.3c-.6.3-1 .8-1 1.5v.3M12 16.6v.1\"/></svg>Não avaliado</span>",
+      "description": "State as icon + label + colour, never colour alone; missing coverage is a dashed muted \"Not assessed\".",
+      "html": "<span class=\"ds-sev ds-sev--n\"><svg width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><circle cx=\"12\" cy=\"12\" r=\"9.5\"/><path d=\"m7.5 12.5 3 3 6-6.5\"/></svg>Normal</span> <span class=\"ds-sev ds-sev--a\"><svg width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M12 3.5 2.5 20h19L12 3.5Z\"/><path d=\"M12 10v4.5M12 17.2v.1\"/></svg>Attention</span> <span class=\"ds-sev ds-sev--c\"><svg width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M8.3 2.5h7.4l5.3 5.3v7.4l-5.3 5.3H8.3L3 15.2V7.8z\"/><path d=\"M12 8v4.5M12 15.8v.1\"/></svg>Critical</span> <span class=\"ds-sev ds-sev--u\" title=\"Sem medição recente\"><svg width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><circle cx=\"12\" cy=\"12\" r=\"9.5\" stroke-dasharray=\"3 3\"/><path d=\"M9.6 9.4a2.5 2.5 0 1 1 3.4 2.3c-.6.3-1 .8-1 1.5v.3M12 16.6v.1\"/></svg>Not assessed</span>",
       "css": ".ds-sev{display:inline-flex;align-items:center;gap:6px;padding:3px 10px 3px 7px;border-radius:6px;font-family:var(--font);font-weight:700;font-size:.82rem;border:1px solid currentColor;white-space:nowrap}.ds-sev--n{color:var(--normal,#17784a);background:var(--normal-bg,#e1f1e7)}.ds-sev--a{color:var(--attention,#995700);background:var(--attention-bg,#fbeed6)}.ds-sev--c{color:var(--critical,#b3261e);background:var(--critical-bg,#fbe5e2)}.ds-sev--u{color:var(--muted,#55557a);background:var(--surface-2,#eeeff8);border-style:dashed}"
     },
     {
       "name": "Origin Badges",
       "kind": "chip",
       "description": "Data origin on every value; stroke style encodes the origin.",
-      "html": "<span class=\"ds-org ds-org--m\">Medido</span> <span class=\"ds-org ds-org--s\">Sintético</span> <span class=\"ds-org ds-org--e\">Estimado</span>",
+      "html": "<span class=\"ds-org ds-org--m\">Measured</span> <span class=\"ds-org ds-org--s\">Synthetic</span> <span class=\"ds-org ds-org--e\">Estimated</span>",
       "css": ".ds-org{display:inline-flex;align-items:center;gap:4px;padding:1px 7px;border-radius:3px;font-family:var(--font);font-size:.7rem;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:var(--muted,#55557a);border:1.5px solid var(--border,#d1d3ea)}.ds-org--m{border-style:solid;color:var(--ink,#1e1b3a);border-color:var(--ink,#1e1b3a)}.ds-org--s{border-style:dashed;border-color:var(--muted,#55557a)}.ds-org--e{border-style:dotted;border-color:var(--muted,#55557a)}"
     },
     {
@@ -1027,25 +1027,25 @@
       "kind": "nav",
       "refersTo": "tab",
       "description": "Section tabs with a solid severity count pill.",
-      "html": "<div class=\"ds-tabs\" role=\"tablist\"><button role=\"tab\" aria-selected=\"true\" class=\"ds-tab\">Alertas <span class=\"ds-count\">2</span></button><button role=\"tab\" aria-selected=\"false\" class=\"ds-tab\">Indicadores</button><button role=\"tab\" aria-selected=\"false\" class=\"ds-tab\">Contramedida</button></div>",
+      "html": "<div class=\"ds-tabs\" role=\"tablist\"><button role=\"tab\" aria-selected=\"true\" class=\"ds-tab\">Alertas <span class=\"ds-count\">2</span></button><button role=\"tab\" aria-selected=\"false\" class=\"ds-tab\">Indicadores</button><button role=\"tab\" aria-selected=\"false\" class=\"ds-tab\">Countermeasure</button></div>",
       "css": ".ds-tabs{display:flex;gap:2px;border-bottom:1px solid var(--border,#d1d3ea)}.ds-tab{display:inline-flex;align-items:center;gap:8px;padding:10px 16px;font-family:var(--font);font-size:16px;font-weight:600;font-stretch:105%;color:var(--muted,#55557a);background:none;border:none;border-bottom:3px solid transparent;margin-bottom:-1px;cursor:pointer}.ds-tab:hover{color:var(--ink,#1e1b3a)}.ds-tab[aria-selected=true]{color:var(--ink,#1e1b3a);border-bottom-color:var(--series-1,#5b55d6)}.ds-tab:focus-visible{outline:2px solid var(--focus,#5b55d6);outline-offset:2px}.ds-count{padding:1px 7px;border-radius:999px;font-size:.75rem;font-weight:700;background:var(--attention,#995700);color:var(--on-sev,#fff)}"
     },
     {
       "name": "Vital Cell",
       "kind": "card",
       "description": "One cell of the seven-cell vitals strip: condensed value, delta vs baseline, state line.",
-      "html": "<a href=\"#\" class=\"ds-vital\"><span class=\"ds-vital__n\">VFC (RMSSD)</span><span class=\"ds-vital__v\">38<small>ms</small></span><span class=\"ds-vital__d\">−22% vs baseline</span><span class=\"ds-vital__s\"><svg width=\"14\" height=\"14\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M12 3.5 2.5 20h19L12 3.5Z\"/><path d=\"M12 10v4.5M12 17.2v.1\"/></svg>Atenção</span></a>",
+      "html": "<a href=\"#\" class=\"ds-vital\"><span class=\"ds-vital__n\">VFC (RMSSD)</span><span class=\"ds-vital__v\">38<small>ms</small></span><span class=\"ds-vital__d\">−22% vs baseline</span><span class=\"ds-vital__s\"><svg width=\"14\" height=\"14\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M12 3.5 2.5 20h19L12 3.5Z\"/><path d=\"M12 10v4.5M12 17.2v.1\"/></svg>Attention</span></a>",
       "css": ".ds-vital{display:flex;flex-direction:column;gap:2px;width:160px;padding:10px 12px 12px;font-family:var(--font);color:var(--ink,#1e1b3a);text-decoration:none;background:var(--attention-bg,#fbeed6);border:1px solid var(--border,#d1d3ea);border-radius:6px}.ds-vital__n{font-size:.78rem;font-weight:600;color:var(--muted,#55557a)}.ds-vital:hover .ds-vital__n{color:var(--series-1,#5b55d6)}.ds-vital:focus-visible{outline:2px solid var(--focus,#5b55d6);outline-offset:2px}.ds-vital__v{font-size:1.6rem;font-weight:700;font-stretch:75%;font-variant-numeric:tabular-nums;line-height:1.1}.ds-vital__v small{font-size:.8rem;font-weight:500;font-stretch:100%;color:var(--muted,#55557a);margin-left:3px}.ds-vital__d{font-size:.78rem;font-stretch:82%;font-variant-numeric:tabular-nums;color:var(--muted,#55557a)}.ds-vital__s{display:inline-flex;align-items:center;gap:5px;font-size:.78rem;font-weight:700;color:var(--attention,#995700);padding-top:6px}"
     }
   ],
   "narrative": {
     "northStar": "The Mission Clock",
-    "overview": "Vigília looks like a station console, not a SaaS dashboard. Mission time is the spine: a pale lavender shell carries the wordmark, the MET clock (`D+113 · GMT`), the crew and the master annunciator, and directly under it the mission track lays every flight day on one horizontal lane. Everything below (vitals strip, alerts, indicator clusters) is read against that clock and against the crew member's own baseline.\n\nThe world has one palette under two lighting conditions. **Day mode** is the module's general illumination, read in light tones between purple and blue: a periwinkle-tinted ground, soft off-white work surfaces, a lavender shell inked in deep indigo, indigo-violet data ink. **Night mode, \"Modo noturno\"**, is the same indigo-lavender world for low light, dark and desaturated: indigo-black grounds, lavender-white ink, soft periwinkle data ink, and severity lamps softened to carry dark text. Density is operational: compact cells, tabular figures, hairline dividers, and one loud element (the annunciator) per screen.\n\nType is a single variable family stretched across its width axis: expanded bold for things you name, condensed tabular figures for things you measure. Severity colour is reserved for state; it never decorates.",
+    "overview": "Vigília looks like a station console, not a SaaS dashboard. Mission time is the spine: a pale lavender shell carries the wordmark, the MET clock (`D+113 · GMT`), the crew and the master annunciator, and directly under it the mission track lays every flight day on one horizontal lane. Everything below (vitals strip, alerts, indicator clusters) is read against that clock and against the crew member's own baseline.\n\nThe world has one palette under two lighting conditions. **Day mode** is the module's general illumination, read in light tones between purple and blue: a periwinkle-tinted ground, soft off-white work surfaces, a lavender shell inked in deep indigo, indigo-violet data ink. **Night mode, \"Night mode\"**, is the same indigo-lavender world for low light, dark and desaturated: indigo-black grounds, lavender-white ink, soft periwinkle data ink, and severity lamps softened to carry dark text. Density is operational: compact cells, tabular figures, hairline dividers, and one loud element (the annunciator) per screen.\n\nType is a single variable family stretched across its width axis: expanded bold for things you name, condensed tabular figures for things you measure. Severity colour is reserved for state; it never decorates.",
     "keyCharacteristics": [
       "Lavender mission shell (deep indigo-black shell at night) with MET clock and master annunciator, full width, above everything.",
       "The mission track (flight-day lane with onset markers and a day cursor) as the signature move.",
       "Archivo Variable only, used along its width axis: 115–125% for headings, 75–82% for telemetry.",
-      "State is always icon + label + colour, including the honest fourth state, \"Não avaliado\", when the engine lacks data.",
+      "State is always icon + label + colour, including the honest fourth state, \"Not assessed\", when the engine lacks data.",
       "One identity, two lightings: light periwinkle-and-lavender by day, the same indigo-lavender dark and desaturated by night."
     ],
     "rules": [
@@ -1076,10 +1076,10 @@
       }
     ],
     "dos": [
-      "**Do** show every state as icon + label + colour (badges, annunciator, vital state lines, tab counts, track onsets, field errors), and show missing coverage as dashed, muted \"Não avaliado\" with the Unknown icon, never as normal.",
+      "**Do** show every state as icon + label + colour (badges, annunciator, vital state lines, tab counts, track onsets, field errors), and show missing coverage as dashed, muted \"Not assessed\" with the Unknown icon, never as normal.",
       "**Do** set every measured value in Archivo at width 75% or 82% with tabular numerals, and every heading at width 115%.",
       "**Do** place time-based readings on the mission track's day axis and against the individual baseline band.",
-      "**Do** carry the data origin (Medido / Sintético / Estimado) with its own icon and stroke style next to every value.",
+      "**Do** carry the data origin (Measured / Synthetic / Estimated) with its own icon and stroke style next to every value.",
       "**Do** build night mode as the day world dimmed: every indigo role (links, focus, series 1, selection, primary button, brand mark) moves to soft periwinkle, series 2 and 3 to dusk blue and dusk lilac, and text on solid severity fills flips to dark.",
       "**Do** keep the annunciator pulse a single replay on state change, and honour `prefers-reduced-motion` (all animation and transitions off).",
       "**Do** keep focus visible: 2px outline at 2px offset in `--focus`, `shell-ink` inside the shell, on the whole track lane when its range input is focused. Keep the skip link, the polite live region for state changes, and 34–42px minimum control heights."

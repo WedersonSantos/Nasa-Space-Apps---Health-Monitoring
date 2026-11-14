@@ -1,17 +1,17 @@
-// Leitura da cobertura de dados do motor (AstronautState.coverage).
-// Ausência de alerta não é "normal": uma variável só é "Normal" quando o motor conseguiu avaliá-la.
+// Reads the engine's data coverage (AstronautState.coverage).
+// No alert is not "normal": a variable is only "Normal" when the engine was able to assess it.
 
 import type { AstronautState, DataStatus, Severity, VariableCoverage, VariableId } from '../types/contract';
 import { VARIABLE_IDS } from '../types/contract';
 
-/** Estado exibido por variável: a gravidade dos alertas, ou "não avaliado" quando faltam dados. */
+/** Displayed status per variable: the alert severity, or "not assessed" when data is missing. */
 export type DisplayStatus = Severity | 'unassessed';
 
 export const DATA_STATUS_LABEL: Record<DataStatus, string> = {
-  ok: 'Dados suficientes',
-  'no-data': 'Sem dados',
-  'no-baseline': 'Baseline em formação',
-  stale: 'Dados insuficientes',
+  ok: 'Enough data',
+  'no-data': 'No data',
+  'no-baseline': 'Baseline forming',
+  stale: 'Not enough data',
 };
 
 export function coverageOf(state: AstronautState, v: VariableId): VariableCoverage | null {
@@ -25,7 +25,7 @@ export function severityOfVariable(state: AstronautState, v: VariableId): Severi
   return 'normal';
 }
 
-/** Alertas sempre vencem; sem alerta, a variável só é "normal" se o motor a avaliou. */
+/** Alerts always win; with no alert, the variable is only "normal" if the engine assessed it. */
 export function displayStatus(state: AstronautState, v: VariableId): DisplayStatus {
   const sev = severityOfVariable(state, v);
   if (sev !== 'normal') return sev;
@@ -34,9 +34,9 @@ export function displayStatus(state: AstronautState, v: VariableId): DisplayStat
 }
 
 export interface AssessmentSummary {
-  /** Variáveis que o motor não conseguiu avaliar. */
+  /** Variables the engine could not assess. */
   unassessed: VariableCoverage[];
-  /** Nenhuma variável pôde ser avaliada. */
+  /** No variable could be assessed. */
   none: boolean;
 }
 

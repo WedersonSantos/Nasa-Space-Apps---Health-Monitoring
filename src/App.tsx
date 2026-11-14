@@ -46,19 +46,19 @@ import { VitalsStrip } from './components/VitalsStrip';
 type Tab = 'overview' | 'countermeasure' | 'entry' | 'about';
 
 const TABS: { id: Tab; label: string }[] = [
-  { id: 'overview', label: 'Visão geral' },
-  { id: 'countermeasure', label: 'Contramedida' },
-  { id: 'entry', label: 'Registrar' },
-  { id: 'about', label: 'Sobre e fontes' },
+  { id: 'overview', label: 'Overview' },
+  { id: 'countermeasure', label: 'Countermeasure' },
+  { id: 'entry', label: 'Log data' },
+  { id: 'about', label: 'About & sources' },
 ];
 
-/** Os três sinais rápidos lidos juntos pela regra composta: empilhados no mesmo eixo de tempo. */
+/** The three fast signals read together by the composite rule: stacked on the same time axis. */
 const FAST_CLUSTER: VariableId[] = ['sleep', 'hrv', 'restingHeartRate'];
 const SLOW_SIGNALS: VariableId[] = ['bloodPressure', 'selfReport'];
 
-/** Janela "6 semanas" dos gráficos (apenas visual). */
+/** "6 weeks" chart window (visual only). */
 const RECENT_WINDOW_DAYS = 42;
-/** O relógio da missão própria anda com o relógio real; atualiza a cada minuto. */
+/** The own-mission clock follows the real clock; it updates every minute. */
 const CLOCK_TICK_MS = 60_000;
 
 const nowIso = () => new Date().toISOString();
@@ -67,7 +67,7 @@ export default function App() {
   const [theme, setTheme] = useTheme();
   const [colors, setColors] = useState<ChartColors | null>(null);
 
-  // ---------- modo: demonstração ou missão própria ----------
+  // ---------- mode: demo or own mission ----------
   const [mode, setModeState] = useState<AppMode>(loadMode);
   const [ownProfile, setOwnProfile] = useState<OwnProfile | null>(loadOwnProfile);
   const setMode = useCallback((m: AppMode) => {
@@ -107,7 +107,7 @@ export default function App() {
   const astronautId = mission.profile.astronautId;
   const clockIso = isOwn ? clock : scenario.asOf;
 
-  const [selectedDay, setSelectedDay] = useState<number | null>(null); // null = mais recente
+  const [selectedDay, setSelectedDay] = useState<number | null>(null); // null = most recent
   const [tab, setTab] = useState<Tab>(() => (loadMode() === 'own' ? 'entry' : 'overview'));
   const [chartWindow, setChartWindow] = useState<ChartWindow>('recent');
   const tabRefs = useRef<Record<Tab, HTMLButtonElement | null>>({ overview: null, countermeasure: null, entry: null, about: null });
@@ -125,7 +125,7 @@ export default function App() {
       const manual = demoMeasurements.filter((m) => m.origin !== 'synthetic').length;
       if (
         (manual > 0 || actionLog.entries.length > 0) &&
-        !window.confirm('Trocar de cenário apaga os registros manuais e as ações registradas na demonstração. Continuar?')
+        !window.confirm('Switching scenario erases the manual entries and logged actions in the demo. Continue?')
       )
         return;
       setDemoMeasurements(store.reset(scenarioFile(id), nowIso()));
@@ -159,7 +159,7 @@ export default function App() {
   );
   const eraseOwn = useCallback(() => {
     if (!ownProfile) return;
-    if (!window.confirm(`Apagar a missão de ${ownProfile.name} e todos os registros e ações deste dispositivo? Não dá para desfazer.`)) return;
+    if (!window.confirm(`Erase ${ownProfile.name}’s mission and all entries and actions on this device? This cannot be undone.`)) return;
     store.clear(ownProfile.astronautId, nowIso());
     actionLog.clear();
     saveOwnProfile(null);
@@ -167,7 +167,7 @@ export default function App() {
     setOwnMeasurements([]);
   }, [ownProfile, actionLog]);
 
-  // ---------- relógio da missão ----------
+  // ---------- mission clock ----------
   const maxDay = useMemo(() => {
     let last = missionDayOf(clockIso, launch);
     for (const m of measurements) last = Math.max(last, missionDayOf(m.timestamp, launch));
@@ -178,12 +178,12 @@ export default function App() {
   const day = selectedDay == null ? maxDay : Math.min(Math.max(minDay, selectedDay), maxDay);
   const asOf = endOfMissionDay(day, launch);
   const goToDay = useCallback((d: number) => setSelectedDay(d), []);
-  /** Hora padrão de um novo registro: o fim do dia avaliado, nunca depois de agora. */
+  /** Default time for a new entry: the end of the assessed day, never later than now. */
   const entryNow = isOwn && asOf > clock ? clock : asOf;
-  /** "dia 113" em voo; "dia 2 de 7 do pré-voo" antes do lançamento. */
-  const dayText = inFlight ? `dia ${day}` : `dia ${day + BASELINE.preflightDays} de ${BASELINE.preflightDays} do pré-voo`;
+  /** "day 113" in flight; "pre-flight day 2 of 7" before launch. */
+  const dayText = inFlight ? `day ${day}` : `pre-flight day ${day + BASELINE.preflightDays} of ${BASELINE.preflightDays}`;
 
-  // Atalhos: 1/2/3 trocam o cenário (só na demonstração); ← → movem um dia.
+  // Shortcuts: 1/2/3 switch scenario (demo only); ← → move one day.
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       const t = e.target as HTMLElement;
@@ -197,7 +197,7 @@ export default function App() {
     return () => window.removeEventListener('keydown', onKey);
   }, [switchScenario, day, minDay, maxDay, isOwn]);
 
-  // ---------- avaliação (função pura do motor) ----------
+  // ---------- evaluation (pure engine function) ----------
   const state = useMemo(() => evaluateState(measurements, mission, asOf), [measurements, mission, asOf]);
   const deferredMeasurements = useDeferredValue(measurements);
   const history = useMemo(
@@ -223,7 +223,7 @@ export default function App() {
     return days.size;
   }, [measurements, launch]);
 
-  // ---------- acompanhamento das ações ----------
+  // ---------- action follow-up ----------
   const logAction = useCallback(
     (alert: Alert, kind: ActionKind) => actionLog.add({ alertId: alert.id, alertTitle: alert.title, kind, at: entryNow, missionDay: day }),
     [actionLog, entryNow, day],
@@ -232,7 +232,7 @@ export default function App() {
     <ActionFollowUp alert={a} entries={actionLog.entries} onLog={(k) => logAction(a, k)} onRemove={actionLog.remove} />
   );
 
-  // ---------- registros manuais (persistidos no dispositivo) ----------
+  // ---------- manual entries (persisted on the device) ----------
   const addEntries = useCallback(
     (ms: Measurement[]): string | null => {
       let latest: Measurement[] | null = null;
@@ -258,7 +258,7 @@ export default function App() {
     [astronautId, setMeasurements],
   );
 
-  // Anunciador -> ação do alerta mais grave, na Visão geral.
+  // Annunciator -> action of the most severe alert, in the Overview.
   const [focusAction, setFocusAction] = useState(0);
   const showAlerts = useCallback(() => {
     setTab('overview');
@@ -271,7 +271,7 @@ export default function App() {
     el?.focus({ preventScroll: true });
   }, [focusAction]);
 
-  // Abas no padrão do teclado: setas, Home e End movem a seleção.
+  // Tabs follow the keyboard pattern: arrows, Home and End move the selection.
   const onTabKey = (e: ReactKeyboardEvent) => {
     const i = TABS.findIndex((t) => t.id === tab);
     let next = -1;
@@ -309,7 +309,7 @@ export default function App() {
   return (
     <ChartColorsContext.Provider value={colors}>
       <a className="skip-link" href="#main">
-        Pular para o conteúdo
+        Skip to content
       </a>
 
       <div className="shell">
@@ -336,11 +336,11 @@ export default function App() {
                 onWindowChange={setChartWindow}
               />
             ) : (
-              <section className="track preflight-track" aria-label="Pré-voo">
-                <h2 className="track__title">Pré-voo</h2>
+              <section className="track preflight-track" aria-label="Pre-flight">
+                <h2 className="track__title">Pre-flight</h2>
                 <p className="track__now">
-                  Dia <strong>{day + BASELINE.preflightDays}</strong> de {BASELINE.preflightDays} · {preflightDaysLogged} dia(s)
-                  com registro. O baseline se forma com esses dias; a avaliação começa no dia 1 de voo.
+                  Day <strong>{day + BASELINE.preflightDays}</strong> of {BASELINE.preflightDays} · {preflightDaysLogged} day(s)
+                  with data. The baseline forms from these days; assessment starts on flight day 1.
                 </p>
                 <ol className="preflight-steps" aria-hidden="true">
                   {Array.from({ length: BASELINE.preflightDays }, (_, i) => (
@@ -376,7 +376,7 @@ export default function App() {
           <>
             <VitalsStrip state={state} measurements={visible} />
 
-            <div className="tabs" role="tablist" aria-label="Seções" onKeyDown={onTabKey}>
+            <div className="tabs" role="tablist" aria-label="Sections" onKeyDown={onTabKey}>
               {TABS.map((t) => (
                 <button
                   key={t.id}
@@ -409,15 +409,15 @@ export default function App() {
                   <div className="stack">
                     <section aria-labelledby="alerts-title">
                       <h2 id="alerts-title" className="section-title">
-                        Alertas ativos
+                        Active alerts
                       </h2>
                       {alerts.length === 0 ? (
                         assessment.unassessed.length === 0 ? (
                           <div className="all-clear">
                             <CheckCircle size={28} />
                             <div>
-                              <strong>Nenhum alerta ativo no {dayText}.</strong>
-                              <span>Os sete sinais foram avaliados e estão dentro do baseline individual.</span>
+                              <strong>No active alerts on {dayText}.</strong>
+                              <span>All seven signals were assessed and are within the individual baseline.</span>
                             </div>
                           </div>
                         ) : (
@@ -426,10 +426,10 @@ export default function App() {
                             <div>
                               <strong>
                                 {assessment.none
-                                  ? `Sem dados suficientes para avaliar o ${dayText}.`
-                                  : `Nenhum alerta, mas ${assessment.unassessed.length} de 7 sinais não puderam ser avaliados no ${dayText}.`}
+                                  ? `Not enough data to assess ${dayText}.`
+                                  : `No alerts, but ${assessment.unassessed.length} of 7 signals could not be assessed on ${dayText}.`}
                               </strong>
-                              <span>Ausência de alerta não significa que está tudo normal. Faltam dados para:</span>
+                              <span>No alert does not mean everything is normal. Data is missing for:</span>
                               <ul>
                                 {assessment.unassessed.map((c) => (
                                   <li key={c.variable}>
@@ -438,7 +438,7 @@ export default function App() {
                                 ))}
                               </ul>
                               <button type="button" className="btn btn--small" onClick={() => setTab('entry')}>
-                                Registrar medição
+                                Log a measurement
                               </button>
                             </div>
                           </div>
@@ -460,12 +460,12 @@ export default function App() {
 
                     <section aria-labelledby="group-signal" className="group">
                       <h2 id="group-signal" className="section-title">
-                        Sinais <ClassChip varClass="signal" /> <span className="section-sub">{CLASS_ROLE.signal}</span>
+                        Signals <ClassChip varClass="signal" /> <span className="section-sub">{CLASS_ROLE.signal}</span>
                       </h2>
                       <div className="cluster" role="group" aria-labelledby="cluster-title">
                         <div className="cluster__head">
-                          <h3 id="cluster-title">Cluster rápido: sono, HRV e FC de repouso</h3>
-                          <p>Mesmo eixo de tempo. A regra composta lê os três juntos: dois ou mais em desvio na mesma janela indicam sobrecarga.</p>
+                          <h3 id="cluster-title">Fast cluster: sleep, HRV and resting HR</h3>
+                          <p>Same time axis. The composite rule reads all three together: two or more deviating in the same window suggest overload.</p>
                         </div>
                         {FAST_CLUSTER.map((v) => card(v, 'row'))}
                       </div>
@@ -474,7 +474,7 @@ export default function App() {
 
                     <section aria-labelledby="group-accum" className="group">
                       <h2 id="group-accum" className="section-title">
-                        Acumulador e contramedida <span className="section-sub">consequência de longo prazo e a ação que fecha o ciclo</span>
+                        Accumulator and countermeasure <span className="section-sub">long-term consequence and the action that closes the loop</span>
                       </h2>
                       <div className="grid-2">
                         {card('bodyMass')}
@@ -514,15 +514,15 @@ export default function App() {
         )}
 
         <footer className="app-foot">
-          <p>{DISCLAIMER} Em caso de dúvida, acione o oficial médico da tripulação ou o controle em Terra.</p>
+          <p>{DISCLAIMER} If in doubt, contact the crew medical officer or ground control.</p>
           <p className="muted small">
-            NASA Space Apps Challenge 2026 · Desafio 05 · Formandos UDI ·{' '}
+            NASA Space Apps Challenge 2026 · Challenge 05 · Formandos UDI ·{' '}
             <a href={LICENSE_URL} target="_blank" rel="noreferrer">
-              Licença Apache-2.0
+              Apache-2.0 license
             </a>{' '}
             ·{' '}
             <a href={REPO_URL} target="_blank" rel="noreferrer">
-              Código-fonte
+              Source code
             </a>
           </p>
         </footer>

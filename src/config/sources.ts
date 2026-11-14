@@ -1,5 +1,5 @@
-// Referências oficiais do desafio (aba Resources) para a tela "Sobre", e o leitor de Alert.sourceRef.
-// As fontes citadas pelo motor vivem em src/engine/config/sources.ts (Bloco A).
+// Official challenge references (Resources tab) for the "About" screen, and the Alert.sourceRef reader.
+// Sources cited by the engine live in src/engine/config/sources.ts (Bloco A).
 
 import { ARBITRARY, SOURCES as ENGINE_SOURCES } from '../engine/config/sources';
 
@@ -40,7 +40,7 @@ export interface ResolvedSourceRef {
   raw: string;
 }
 
-/** Interpreta o texto livre de Alert.sourceRef: marca de limiar arbitrário + links das fontes reconhecidas. */
+/** Parses the free text of Alert.sourceRef: arbitrary-threshold marker + links to recognised sources. */
 export function resolveSourceRef(ref: string): ResolvedSourceRef {
   const arbitrary = ref.startsWith(ARBITRARY);
   const links = Object.values(ENGINE_SOURCES)

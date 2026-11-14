@@ -1,14 +1,14 @@
-// Registro de acompanhamento das ações recomendadas pelos alertas.
-// Fica no dispositivo (localStorage com reserva em memória), separado das medições: não altera a avaliação do motor.
+// Follow-up log of the actions recommended by alerts.
+// Stays on the device (localStorage with in-memory fallback), separate from measurements: it does not change the engine's evaluation.
 
 import { useCallback, useEffect, useState } from 'react';
 
 export type ActionKind = 'repeated-measurement' | 'cmo-contacted' | 'action-done';
 
 export const ACTION_LABEL: Record<ActionKind, string> = {
-  'repeated-measurement': 'Medição repetida',
-  'cmo-contacted': 'Oficial médico acionado',
-  'action-done': 'Ação concluída',
+  'repeated-measurement': 'Measurement repeated',
+  'cmo-contacted': 'CMO contacted',
+  'action-done': 'Action completed',
 };
 
 export interface ActionEntry {
@@ -17,7 +17,7 @@ export interface ActionEntry {
   alertId: string;
   alertTitle: string;
   kind: ActionKind;
-  /** Instante no relógio da missão (fim do dia avaliado ou o horário escolhido). */
+  /** Instant on the mission clock (end of the assessed day or the chosen time). */
   at: string;
   missionDay: number;
 }
@@ -42,7 +42,7 @@ function write(key: string, entries: ActionEntry[]) {
   try {
     localStorage.setItem(key, raw);
   } catch {
-    /* sem armazenamento persistente: segue em memória */
+    /* no persistent storage: keep in memory */
   }
 }
 

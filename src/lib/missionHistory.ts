@@ -1,5 +1,5 @@
-// Histórico da missão para a trilha: o estado geral de cada dia e o início de cada alerta.
-// Reavalia o motor (função pura) no fim de cada dia de missão; nenhuma regra mora aqui.
+// Mission history for the track: each day's overall status and when each alert began.
+// Re-runs the engine (pure function) at the end of each mission day; no rule lives here.
 
 import type { Measurement, Severity } from '../types/contract';
 import { endOfMissionDay, evaluateState, missionDayOf, type MissionContext } from '../integration/dataSource';

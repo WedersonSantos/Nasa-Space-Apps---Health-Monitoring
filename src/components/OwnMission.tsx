@@ -3,7 +3,7 @@ import { BASELINE } from '../engine';
 import type { OwnProfile } from '../lib/ownMission';
 import { OriginBadge } from './Badges';
 
-/** Barra do modo "Minha missão": quem é, como está o baseline e a saída para a demonstração. */
+/** "My mission" mode bar: who it is, how the baseline stands and the way back to the demo. */
 export function OwnMissionBar({
   profile,
   preflightDaysLogged,
@@ -19,29 +19,29 @@ export function OwnMissionBar({
 }) {
   const total = BASELINE.preflightDays;
   return (
-    <section className="demo-bar own-bar" aria-label="Minha missão">
-      <span className="demo-bar__label">Minha missão</span>
+    <section className="demo-bar own-bar" aria-label="My mission">
+      <span className="demo-bar__label">My mission</span>
       <strong>{profile.name}</strong>
       <span className="own-bar__id">{profile.astronautId}</span>
       <OriginBadge origin="measured" />
       <span className="own-bar__baseline">
         {inFlight
-          ? `Baseline formado com ${Math.min(preflightDaysLogged, total)} de ${total} dias de pré-voo`
-          : `Pré-voo: ${preflightDaysLogged} de ${total} dias registrados — o baseline se forma ao fim do pré-voo`}
+          ? `Baseline formed from ${Math.min(preflightDaysLogged, total)} of ${total} pre-flight days`
+          : `Pre-flight: ${preflightDaysLogged} of ${total} days logged — the baseline forms at the end of pre-flight`}
       </span>
       <div className="own-bar__actions">
         <button type="button" className="console-btn" onClick={onDemo}>
-          Ir para a demonstração
+          Go to the demo
         </button>
         <button type="button" className="console-btn console-btn--danger" onClick={onErase}>
-          Apagar meus dados
+          Erase my data
         </button>
       </div>
     </section>
   );
 }
 
-/** Criação da missão própria: só um apelido; dados pessoais não são pedidos nem guardados. */
+/** Creates the own mission: just a nickname; personal data is neither requested nor stored. */
 export function OwnMissionSetup({ onCreate, onDemo }: { onCreate: (name: string) => void; onDemo: () => void }) {
   const id = useId();
   const [name, setName] = useState('');
@@ -50,7 +50,7 @@ export function OwnMissionSetup({ onCreate, onDemo }: { onCreate: (name: string)
   function submit(e: FormEvent) {
     e.preventDefault();
     if (name.trim().length < 2) {
-      setError('Escreva um apelido com pelo menos 2 letras.');
+      setError('Enter a nickname of at least 2 letters.');
       return;
     }
     onCreate(name);
@@ -58,27 +58,27 @@ export function OwnMissionSetup({ onCreate, onDemo }: { onCreate: (name: string)
 
   return (
     <section className="panel setup" aria-labelledby={`${id}-title`}>
-      <h2 id={`${id}-title`}>Criar minha missão</h2>
+      <h2 id={`${id}-title`}>Create my mission</h2>
       <p>
-        Use o Vigília com os seus próprios registros, separados da demonstração. Funciona sem internet e os dados ficam só
-        neste dispositivo.
+        Use Vigília with your own entries, separate from the demo. It works offline and the data stays only on this
+        device.
       </p>
       <ol className="setup__steps">
         <li>
-          <strong>Pré-voo, {BASELINE.preflightDays} dias.</strong> Registre as medições todos os dias. Elas formam o seu
-          baseline individual; nada é avaliado ainda.
+          <strong>Pre-flight, {BASELINE.preflightDays} days.</strong> Log your measurements every day. They form your
+          individual baseline; nothing is assessed yet.
         </li>
         <li>
-          <strong>Em voo.</strong> A partir do dia 1, o motor compara cada registro com o seu baseline e mostra alertas,
-          ou “Não avaliado” quando faltam dados.
+          <strong>In flight.</strong> From day 1, the engine compares each entry with your baseline and shows alerts, or
+          “Not assessed” when data is missing.
         </li>
         <li>
-          <strong>Acompanhe.</strong> Registre o que fez com cada orientação e veja a evolução na trilha da missão.
+          <strong>Follow up.</strong> Log what you did with each piece of guidance and see how things evolve on the mission track.
         </li>
       </ol>
       <form className="form setup__form" onSubmit={submit} noValidate>
         <label className="field">
-          <span>Apelido ou identificação fictícia</span>
+          <span>Nickname or fictitious ID</span>
           <input
             value={name}
             onChange={(e) => setName(e.target.value)}
@@ -87,7 +87,7 @@ export function OwnMissionSetup({ onCreate, onDemo }: { onCreate: (name: string)
             aria-describedby={`${id}-hint${error ? ` ${id}-err` : ''}`}
           />
           <span id={`${id}-hint`} className="muted small">
-            Não use nome completo nem dados pessoais.
+            Do not use your full name or personal data.
           </span>
           {error && (
             <span id={`${id}-err`} className="field-error">
@@ -97,10 +97,10 @@ export function OwnMissionSetup({ onCreate, onDemo }: { onCreate: (name: string)
         </label>
         <div className="setup__buttons">
           <button type="submit" className="btn btn--primary">
-            Criar e começar o pré-voo
+            Create and start pre-flight
           </button>
           <button type="button" className="btn" onClick={onDemo}>
-            Voltar à demonstração
+            Back to the demo
           </button>
         </div>
       </form>

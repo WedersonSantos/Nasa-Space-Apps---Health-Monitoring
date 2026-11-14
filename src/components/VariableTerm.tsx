@@ -7,8 +7,8 @@ const GAP = 8;
 const MARGIN = 12;
 
 /**
- * Nome de um parâmetro com explicação ao passar o mouse, ao focar pelo teclado ou ao tocar.
- * Esc fecha. O texto vem de config/variables.ts — o mesmo do "O que mede e por que importa".
+ * A parameter name with an explanation on hover, keyboard focus or tap.
+ * Esc closes it. The text comes from config/variables.ts — the same as "What it measures and why it matters".
  */
 export function VariableTerm({ variable, children }: { variable: VariableId; children?: React.ReactNode }) {
   const meta = VARIABLES[variable];
@@ -77,18 +77,18 @@ export function VariableTerm({ variable, children }: { variable: VariableId; chi
           onMouseLeave={closeSoon}
         >
           <p className="term-pop__title">
-            {meta.label} <span className="term-pop__unit">{meta.unit === '/5' ? 'escala 1–5' : meta.unit}</span>
+            {meta.label} <span className="term-pop__unit">{meta.unit === '/5' ? '1–5 scale' : meta.unit}</span>
           </p>
           <p className="term-pop__kicker">
             {CLASS_LABEL[meta.varClass]} · {HAZARD_LABEL[meta.hazards[0]]}
           </p>
           <p>
-            <strong>O que mede:</strong> {meta.whatItMeasures}
+            <strong>What it measures:</strong> {meta.whatItMeasures}
           </p>
           <p>
-            <strong>Por que importa no espaço:</strong> {meta.whyItMatters}
+            <strong>Why it matters in space:</strong> {meta.whyItMatters}
           </p>
-          <p className="term-pop__foot">Alerta quando: {meta.ruleSummary}</p>
+          <p className="term-pop__foot">Alerts when: {meta.ruleSummary}</p>
         </div>
       )}
     </>

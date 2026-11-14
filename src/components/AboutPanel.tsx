@@ -11,12 +11,12 @@ export function AboutPanel() {
   return (
     <div className="stack">
       <section className="panel prose">
-        <h2>O que este sistema faz</h2>
+        <h2>What this system does</h2>
         <p>
-          Em missões longas, a tripulação precisa perceber mudanças na própria saúde e saber o que fazer, mesmo com
-          comunicação e recursos médicos limitados. A Vigília não é um painel de números: ela compara cada medição com o{' '}
-          <strong>baseline individual</strong> do astronauta, reconhece padrões entre sinais e explica a conta por trás de
-          cada alerta.
+          On long missions, the crew needs to notice changes in their own health and know what to do, even with limited
+          communication and medical resources. Vigília is not a dashboard of numbers: it compares each measurement with the
+          astronaut’s <strong>individual baseline</strong>, recognises patterns across signals and explains the math behind
+          each alert.
         </p>
         <ol className="classes">
           {(['signal', 'accumulator', 'countermeasure'] as const).map((c) => (
@@ -26,24 +26,24 @@ export function AboutPanel() {
           ))}
         </ol>
         <p>
-          As regras são determinísticas e auditáveis; nenhuma IA decide se há alerta. O app roda inteiro no dispositivo e
-          continua funcionando sem link com a Terra.
+          The rules are deterministic and auditable; no AI decides whether there is an alert. The app runs entirely on the
+          device and keeps working without a link to Earth.
         </p>
       </section>
 
       <section className="panel" aria-labelledby="ind-table">
-        <h2 id="ind-table">Tabela de indicadores</h2>
+        <h2 id="ind-table">Indicator table</h2>
         <div className="table-scroll">
           <table className="evidence indicators-table">
             <thead>
               <tr>
-                <th scope="col">Variável</th>
-                <th scope="col">Unidade</th>
-                <th scope="col">Classe</th>
-                <th scope="col">Perigo NASA</th>
-                <th scope="col">Risco associado</th>
-                <th scope="col">Constante de tempo</th>
-                <th scope="col">Regra</th>
+                <th scope="col">Variable</th>
+                <th scope="col">Unit</th>
+                <th scope="col">Class</th>
+                <th scope="col">NASA hazard</th>
+                <th scope="col">Associated risk</th>
+                <th scope="col">Time constant</th>
+                <th scope="col">Rule</th>
               </tr>
             </thead>
             <tbody>
@@ -67,26 +67,26 @@ export function AboutPanel() {
           </table>
         </div>
         <p className="muted small">
-          Composto (derivado): dois ou mais de sono ↓, HRV ↓ e FC de repouso ↑ em desvio na mesma janela de 5 dias. Limiares
-          sem fonte publicada aparecem marcados como arbitrários nos alertas.
+          Composite (derived): two or more of sleep ↓, HRV ↓ and resting HR ↑ deviating in the same 5-day window. Thresholds
+          without a published source are marked as arbitrary in the alerts.
         </p>
       </section>
 
       <section className="panel prose">
-        <h2>Limitações</h2>
+        <h2>Limitations</h2>
         <ul>
-          <li>Os dados da demonstração são sintéticos, com faixas plausíveis. Não há telemetria real de astronauta.</li>
-          <li>Limiares de alerta são parâmetros iniciais, sujeitos a validação clínica.</li>
-          <li>O sistema associa variáveis na mesma janela de tempo; não modela causalidade nem prevê desfecho clínico.</li>
-          <li>Não substitui avaliação médica: indica quando escalonar, nunca diagnostica.</li>
-          <li>Perda óssea e SANS ficaram fora: constantes de tempo longas demais para a janela da demo e falta de dados.</li>
-          <li>O baseline individual exige período pré-voo de registro; sem ele, a sensibilidade cai.</li>
+          <li>Demo data is synthetic, within plausible ranges. There is no real astronaut telemetry.</li>
+          <li>Alert thresholds are initial parameters, subject to clinical validation.</li>
+          <li>The system associates variables within the same time window; it does not model causality or predict clinical outcomes.</li>
+          <li>It does not replace medical assessment: it indicates when to escalate, never diagnoses.</li>
+          <li>Bone loss and SANS are out of scope: time constants too long for the demo window, and a lack of data.</li>
+          <li>The individual baseline requires a pre-flight logging period; without it, sensitivity drops.</li>
         </ul>
       </section>
 
       <section className="panel prose">
-        <h2>Referências</h2>
-        <h3>Recursos oficiais do desafio</h3>
+        <h2>References</h2>
+        <h3>Official challenge resources</h3>
         <ul className="refs">
           {OFFICIAL_RESOURCES.map((s) => (
             <li key={s.id}>
@@ -96,7 +96,7 @@ export function AboutPanel() {
             </li>
           ))}
         </ul>
-        <h3>Fontes citadas pelo motor de regras</h3>
+        <h3>Sources cited by the rule engine</h3>
         <ul className="refs">
           {Object.values(ENGINE_SOURCES).map((s) => (
             <li key={s.url}>
@@ -108,33 +108,33 @@ export function AboutPanel() {
           ))}
         </ul>
         <p className="muted small">
-          A NASA não endossa entidades não governamentais. Projeto desenvolvido para o NASA Space Apps Challenge 2026.
+          NASA does not endorse non-government entities. Project developed for the NASA Space Apps Challenge 2026.
         </p>
       </section>
 
       <section className="panel prose" aria-labelledby="license-title">
-        <h2 id="license-title">Licença e código-fonte</h2>
+        <h2 id="license-title">License and source code</h2>
         <p>
-          Projeto de código aberto sob a{' '}
+          Open-source project under the{' '}
           <a href={LICENSE_URL} target="_blank" rel="noreferrer">
             Apache License 2.0 (Apache-2.0)
           </a>
-          , licença aprovada pela OSI. Código-fonte, dados de demonstração e testes:{' '}
+          , an OSI-approved license. Source code, demo data and tests:{' '}
           <a href={REPO_URL} target="_blank" rel="noreferrer">
             github.com/WedersonSantos/Nasa-Space-Apps---Health-Monitoring
           </a>
           .
         </p>
         <p className="muted small">
-          Bibliotecas de terceiros: React, Recharts e Vite (MIT); TypeScript (Apache-2.0).
+          Third-party libraries: React, Recharts and Vite (MIT); TypeScript (Apache-2.0).
         </p>
       </section>
 
       <section className="panel prose">
-        <h2>Uso de IA</h2>
+        <h2>Use of AI</h2>
         <p>
-          Ferramentas de IA generativa foram usadas como assistentes de programação e redação. A IA não participa do motor
-          de alertas: toda decisão sai de regras determinísticas, com a fórmula visível no próprio alerta.
+          Generative AI tools were used as programming and writing assistants. AI plays no part in the alert engine: every
+          decision comes from deterministic rules, with the formula visible in the alert itself.
         </p>
       </section>
     </div>

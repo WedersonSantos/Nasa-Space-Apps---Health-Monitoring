@@ -39,17 +39,17 @@ function EvidenceRow({ e }: { e: Evidence }) {
 interface Props {
   alert: Alert;
   missionDay?: number;
-  /** compact: título, ação, cálculo e fonte — usado ao lado dos gráficos da contramedida. */
+  /** compact: title, action, calculation and source — used next to the countermeasure charts. */
   variant?: 'full' | 'compact';
-  /** id do bloco de ação, alvo do link do anunciador. */
+  /** id of the action block, target of the annunciator link. */
   actionId?: string;
-  /** Registro do que foi feito com a orientação. */
+  /** Log of what was done with the guidance. */
   followUp?: ReactNode;
 }
 
 /**
- * Card de alerta, na ordem do desafio: o que fazer primeiro, depois por que e como foi calculado.
- * Todos os campos do contrato aparecem; nenhum fica escondido.
+ * Alert card, in the challenge's order: what to do first, then why and how it was calculated.
+ * Every contract field is shown; none is hidden.
  */
 export function AlertCard({ alert, missionDay, variant = 'full', actionId, followUp }: Props) {
   const composite = alert.variables.length > 1;
@@ -59,9 +59,9 @@ export function AlertCard({ alert, missionDay, variant = 'full', actionId, follo
     <article className={`alert alert--${alert.severity} alert--${variant}`} aria-labelledby={titleId}>
       <header className="alert__head">
         <SeverityBadge severity={alert.severity} />
-        {composite && <span className="tag tag--strong">Alerta composto · {alert.variables.length} sinais</span>}
+        {composite && <span className="tag tag--strong">Composite alert · {alert.variables.length} signals</span>}
         {variant === 'full' && (
-          <ul className="alert__vars" aria-label="Variáveis envolvidas">
+          <ul className="alert__vars" aria-label="Variables involved">
             {alert.variables.map((v) => (
               <li key={v} className="tag">
                 <VariableTerm variable={v} />
@@ -70,7 +70,7 @@ export function AlertCard({ alert, missionDay, variant = 'full', actionId, follo
           </ul>
         )}
         <span className="alert__when">
-          Início do padrão: {missionDay != null ? `dia ${missionDay} · ` : ''}
+          Pattern began: {missionDay != null ? `day ${missionDay} · ` : ''}
           {fmtDate(alert.raisedAt)}
         </span>
       </header>
@@ -78,14 +78,13 @@ export function AlertCard({ alert, missionDay, variant = 'full', actionId, follo
       <h3 id={titleId} className="alert__title">
         {alert.title}
       </h3>
-      <section className="alert__action" aria-label="O que fazer agora" id={actionId} tabIndex={actionId ? -1 : undefined}>
-        <h4>O que fazer agora</h4>
+      <section className="alert__action" aria-label="What to do now" id={actionId} tabIndex={actionId ? -1 : undefined}>
+        <h4>What to do now</h4>
         {alert.escalate && (
           <p className="escalate">
             <Phone size={20} />
             <span>
-              <strong>Acione o oficial médico da tripulação</strong> e comunique o controle em Terra na próxima janela de
-              comunicação.
+              <strong>Contact the crew medical officer</strong> and inform ground control at the next communication window.
             </span>
           </p>
         )}
@@ -96,26 +95,26 @@ export function AlertCard({ alert, missionDay, variant = 'full', actionId, follo
       {variant === 'full' ? (
         <div className="alert__why">
           <section>
-            <h4>Por que</h4>
+            <h4>Why</h4>
             <p className="alert__explanation">{alert.explanation}</p>
           </section>
           <section>
-            <h4>Como foi calculado</h4>
+            <h4>How it was calculated</h4>
             <p className="arithmetic">{alert.arithmetic}</p>
             <div className="table-scroll">
               <table className="data-table">
-                <caption className="visually-hidden">Evidências do alerta</caption>
+                <caption className="visually-hidden">Alert evidence</caption>
                 <thead>
                   <tr>
-                    <th scope="col">Medida</th>
+                    <th scope="col">Measure</th>
                     <th scope="col" className="num">
-                      Atual
+                      Current
                     </th>
                     <th scope="col" className="num">
-                      Referência
+                      Reference
                     </th>
                     <th scope="col" className="num">
-                      Desvio
+                      Deviation
                     </th>
                   </tr>
                 </thead>
@@ -130,14 +129,14 @@ export function AlertCard({ alert, missionDay, variant = 'full', actionId, follo
         </div>
       ) : (
         <section className="alert__compact-calc">
-          <h4>Como foi calculado</h4>
+          <h4>How it was calculated</h4>
           <p className="arithmetic">{alert.arithmetic}</p>
         </section>
       )}
 
       <footer className="alert__foot">
         <SourceRef refText={alert.sourceRef} />
-        <span className="muted">Orientação de apoio, não diagnóstico.</span>
+        <span className="muted">Supporting guidance, not a diagnosis.</span>
       </footer>
     </article>
   );

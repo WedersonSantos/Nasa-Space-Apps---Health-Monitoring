@@ -36,7 +36,7 @@ Vigília monitors astronaut health over a mission: **Coletar → Interpretar →
 - Thresholds live in the engine (`src/engine/config/thresholds.ts`); thresholds without a source are flagged as arbitrary in the UI. No magic numbers in UI components.
 - AI never decides alerts.
 - Must work offline (service worker); any font or asset must be self-hosted.
-- UI text in Portuguese (pt-BR); code identifiers in English.
+- UI text in English (Space Apps 2026 requires English submissions; decided by the team on 2026-11-14); code identifiers in English.
 - Not a diagnostic tool: possibility language, never certainty.
 
 ## Brand Commitments

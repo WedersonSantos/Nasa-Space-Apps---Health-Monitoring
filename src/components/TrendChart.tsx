@@ -62,8 +62,8 @@ function seriesFor(variable: VariableId, c: ChartColors): SeriesDef[] {
   const meta = VARIABLES[variable];
   if (variable === 'bloodPressure') {
     return [
-      { key: 'value', name: 'Sistólica', color: c.accent, unit: 'mmHg' },
-      { key: 'secondary', name: 'Diastólica', color: c.secondary, dash: '5 3', unit: 'mmHg' },
+      { key: 'value', name: 'Systolic', color: c.accent, unit: 'mmHg' },
+      { key: 'secondary', name: 'Diastolic', color: c.secondary, dash: '5 3', unit: 'mmHg' },
     ];
   }
   if (variable === 'selfReport') {
@@ -75,8 +75,8 @@ function seriesFor(variable: VariableId, c: ChartColors): SeriesDef[] {
 }
 
 /**
- * Ponto conforme a origem: medido = círculo cheio, estimado = losango.
- * Sintético fica só na linha (a série inteira é sintética e já vem rotulada; o tooltip confirma a origem).
+ * Point by origin: measured = filled circle, estimated = diamond.
+ * Synthetic stays on the line only (the whole series is synthetic and already labelled; the tooltip confirms the origin).
  */
 function OriginDot(props: { cx?: number; cy?: number; payload?: Row; stroke?: string; value?: unknown }) {
   const { cx, cy, payload, stroke } = props;
@@ -92,7 +92,7 @@ function OriginDot(props: { cx?: number; cy?: number; payload?: Row; stroke?: st
 
 function dayLabel(x: number): string {
   const d = Math.floor(x);
-  return d <= 0 ? `Pré-voo (${d})` : `Dia ${d}`;
+  return d <= 0 ? `Pre-flight (${d})` : `Day ${d}`;
 }
 
 function ChartTooltip({
@@ -125,14 +125,14 @@ function ChartTooltip({
       )}
       {extra?.(row) && <div className="chart-tip__row">{extra(row)}</div>}
       <div className="chart-tip__origin">
-        Origem: {ORIGIN_META[row.origin].label} · {row.method}
+        Origin: {ORIGIN_META[row.origin].label} · {row.method}
       </div>
     </div>
   );
 }
 
-// Recharts só enxerga ReferenceLine como filho direto do gráfico: por isso são funções, não componentes.
-// Todo gráfico mostra o início de todos os alertas ativos (forte quando envolve esta variável) e o dia avaliado.
+// Recharts only sees ReferenceLine as a direct child of the chart: that is why these are functions, not components.
+// Every chart shows the onset of all active alerts (strong when it involves this variable) and the assessed day.
 function alertMarkers(alerts: Alert[], relatedIds: Set<string>, launch: string, c: ChartColors, minX: number) {
   return alerts
     .filter((a) => missionPos(a.raisedAt, launch) >= minX)
@@ -148,7 +148,7 @@ function alertMarkers(alerts: Alert[], relatedIds: Set<string>, launch: string, 
           strokeOpacity={own ? 1 : 0.6}
           strokeDasharray={own ? '4 3' : '2 4'}
           ifOverflow="extendDomain"
-          label={own ? { value: 'início', position: 'insideTopRight', fill: color, fontSize: 11, fontWeight: 700 } : undefined}
+          label={own ? { value: 'onset', position: 'insideTopRight', fill: color, fontSize: 11, fontWeight: 700 } : undefined}
         />
       );
     });
@@ -159,7 +159,7 @@ function dayCursor(cursorIso: string | undefined, launch: string, c: ChartColors
   return <ReferenceLine x={missionPos(cursorIso, launch)} stroke={c.text} strokeWidth={1} strokeOpacity={0.55} ifOverflow="extendDomain" />;
 }
 
-/** Marcas do eixo X em dias de missão, semanais, ancoradas no último dia. */
+/** X-axis ticks in mission days, weekly, anchored on the last day. */
 function weekTicks(rows: Row[]): number[] {
   if (!rows.length) return [];
   const min = Math.ceil(rows[0].x);
@@ -178,9 +178,9 @@ interface TrendChartProps {
   baseline?: Baseline;
   alerts: Alert[];
   launchDate: string;
-  /** Primeiro dia de missão exibido; null = série inteira, incluindo o pré-voo. */
+  /** First mission day shown; null = whole series, including pre-flight. */
   fromDay: number | null;
-  /** Fim do dia avaliado: desenha o cursor da trilha no eixo de tempo. */
+  /** End of the assessed day: draws the track cursor on the time axis. */
   cursorIso?: string;
   height?: number;
 }
@@ -210,7 +210,7 @@ export function TrendChart({ variable, measurements, baseline, alerts, launchDat
               x2={preflightEnd}
               fill={c.preflight}
               fillOpacity={1}
-              label={{ value: 'pré-voo', position: 'insideTopLeft', fill: c.muted, fontSize: 11 }}
+              label={{ value: 'pre-flight', position: 'insideTopLeft', fill: c.muted, fontSize: 11 }}
             />
           )}
           {showBand && (
@@ -245,7 +245,7 @@ export function TrendChart({ variable, measurements, baseline, alerts, launchDat
               <ChartTooltip
                 series={series}
                 decimals={meta.decimals}
-                extra={variable === 'sleep' ? (r) => (typeof r.secondary === 'number' ? `Qualidade: ${r.secondary}/5` : null) : undefined}
+                extra={variable === 'sleep' ? (r) => (typeof r.secondary === 'number' ? `Quality: ${r.secondary}/5` : null) : undefined}
               />
             }
           />
@@ -285,8 +285,8 @@ export function TrendChart({ variable, measurements, baseline, alerts, launchDat
 
 function chartLabel(label: string, n: number, baseline: Baseline | undefined, alertCount: number) {
   const b = baseline ? `, baseline ${fmt(baseline.mean, 1)} ± ${fmt(baseline.stdDev, 1)}` : '';
-  const a = alertCount ? `, ${alertCount} alerta(s) marcado(s)` : '';
-  return `Gráfico de ${label}: ${n} medições${b}${a}.`;
+  const a = alertCount ? `, ${alertCount} alert(s) marked` : '';
+  return `${label} chart: ${n} measurements${b}${a}.`;
 }
 
 export function ExerciseChart({
@@ -309,11 +309,11 @@ export function ExerciseChart({
   const minX = rows.length ? rows[0].x : 0;
   const related = alerts.filter((a) => a.variables.includes('exerciseLoad'));
   const series: SeriesDef[] = [
-    { key: 'value', name: 'Completado', color: c.accent, unit: 'min' },
-    { key: 'secondary', name: 'Prescrito', color: c.muted, dash: '4 3', unit: 'min' },
+    { key: 'value', name: 'Completed', color: c.accent, unit: 'min' },
+    { key: 'secondary', name: 'Prescribed', color: c.muted, dash: '4 3', unit: 'min' },
   ];
   return (
-    <div className="chart" role="img" aria-label={`Gráfico de exercício: minutos completados versus prescritos em ${rows.length} dias.`}>
+    <div className="chart" role="img" aria-label={`Exercise chart: minutes completed versus prescribed over ${rows.length} days.`}>
       <ResponsiveContainer width="100%" height={height}>
         <ComposedChart data={rows} margin={{ top: 16, right: 12, bottom: 0, left: -12 }}>
           <CartesianGrid stroke={c.grid} vertical={false} />
@@ -328,8 +328,8 @@ export function ExerciseChart({
           />
           <YAxis tick={{ fill: c.muted, fontSize: 11 }} stroke={c.grid} width={48} domain={[0, 'auto']} />
           <Tooltip content={<ChartTooltip series={series} decimals={0} />} />
-          <Bar dataKey="value" name="Completado" fill={c.accent} maxBarSize={8} isAnimationActive={false} />
-          <Line dataKey="secondary" name="Prescrito" type="stepAfter" stroke={c.text} strokeWidth={1.5} strokeDasharray="4 3" dot={false} isAnimationActive={false} />
+          <Bar dataKey="value" name="Completed" fill={c.accent} maxBarSize={8} isAnimationActive={false} />
+          <Line dataKey="secondary" name="Prescribed" type="stepAfter" stroke={c.text} strokeWidth={1.5} strokeDasharray="4 3" dot={false} isAnimationActive={false} />
           {alertMarkers(alerts, new Set(related.map((a) => a.id)), launchDate, c, minX)}
           {dayCursor(cursorIso, launchDate, c)}
         </ComposedChart>
@@ -339,13 +339,13 @@ export function ExerciseChart({
           <svg width="12" height="10" aria-hidden="true">
             <rect width="12" height="10" fill={c.accent} />
           </svg>
-          Completado
+          Completed
         </li>
         <li>
           <svg width="22" height="8" aria-hidden="true">
             <line x1="0" y1="4" x2="22" y2="4" stroke={c.text} strokeWidth="1.5" strokeDasharray="4 3" />
           </svg>
-          Prescrito
+          Prescribed
         </li>
       </ul>
     </div>

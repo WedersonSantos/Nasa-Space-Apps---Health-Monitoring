@@ -9,7 +9,7 @@ function initialTheme(): Theme {
     const saved = localStorage.getItem(KEY);
     if (saved === 'light' || saved === 'dark') return saved;
   } catch {
-    /* armazenamento indisponível: segue o sistema */
+    /* storage unavailable: follow the system */
   }
   return window.matchMedia?.('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
 }
@@ -21,13 +21,13 @@ export function useTheme() {
     try {
       localStorage.setItem(KEY, theme);
     } catch {
-      /* ignora */
+      /* ignore */
     }
   }, [theme]);
   return [theme, setTheme] as const;
 }
 
-/** Cores dos gráficos lidas dos tokens CSS (SVG do Recharts precisa de valores concretos). */
+/** Chart colors read from CSS tokens (Recharts SVG needs concrete values). */
 export interface ChartColors {
   text: string;
   muted: string;
@@ -66,7 +66,7 @@ export const ChartColorsContext = createContext<ChartColors | null>(null);
 
 export function useChartColors(): ChartColors {
   const c = useContext(ChartColorsContext);
-  if (!c) throw new Error('ChartColorsContext ausente');
+  if (!c) throw new Error('ChartColorsContext missing');
   return c;
 }
 

@@ -1,5 +1,5 @@
-// Autorrelato: o baseline do motor é o índice de bem-estar (humor, estresse e fadiga combinados).
-// Para comparar com ele, o índice atual também vem da função do motor — nenhuma fórmula é refeita aqui.
+// Self-report: the engine's baseline is the wellbeing index (mood, stress and fatigue combined).
+// To compare against it, the current index also comes from the engine's function — no formula is redone here.
 
 import type { Measurement } from '../types/contract';
 import { wellbeingIndex } from '../engine';

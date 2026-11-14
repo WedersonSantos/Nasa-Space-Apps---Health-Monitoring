@@ -36,8 +36,8 @@ export function CountermeasurePanel({ state, measurements, launchDate, fromDay, 
       <section className="panel" aria-labelledby="adh-title">
         <header className="panel__head">
           <div>
-            <h2 id="adh-title">Aderência ao exercício</h2>
-            <p className="muted">Contramedida prescrita — completado ÷ prescrito nos últimos {adherence.windowDays} dias.</p>
+            <h2 id="adh-title">Exercise adherence</h2>
+            <p className="muted">Prescribed countermeasure — completed ÷ prescribed over the last {adherence.windowDays} days.</p>
           </div>
           <SeverityBadge severity={status} />
         </header>
@@ -45,7 +45,7 @@ export function CountermeasurePanel({ state, measurements, launchDate, fromDay, 
         <div className="adherence">
           <div className="adherence__big">
             <span className="big">{adherenceKnown ? fmtPct(adherence.adherenceRatio) : '—'}</span>
-            <span className="muted">{adherenceKnown ? 'de aderência' : 'sem registros suficientes'}</span>
+            <span className="muted">{adherenceKnown ? 'adherence' : 'not enough entries'}</span>
           </div>
           <div className="adherence__bar-wrap">
             <div
@@ -54,21 +54,21 @@ export function CountermeasurePanel({ state, measurements, launchDate, fromDay, 
               aria-valuemin={0}
               aria-valuemax={100}
               aria-valuenow={Math.round(pct * 100)}
-              aria-valuetext={`${fmtPct(adherence.adherenceRatio)} da carga prescrita completada`}
+              aria-valuetext={`${fmtPct(adherence.adherenceRatio)} of prescribed load completed`}
             >
               <span style={{ width: `${pct * 100}%` }} />
             </div>
             <dl className="adherence__nums">
               <div>
-                <dt>Prescrito</dt>
+                <dt>Prescribed</dt>
                 <dd>{fmt(adherence.prescribedMinutes, 0)} min</dd>
               </div>
               <div>
-                <dt>Completado</dt>
+                <dt>Completed</dt>
                 <dd>{fmt(adherence.completedMinutes, 0)} min</dd>
               </div>
               <div>
-                <dt>Faltante</dt>
+                <dt>Remaining</dt>
                 <dd>{fmt(missing, 0)} min</dd>
               </div>
             </dl>
@@ -81,10 +81,10 @@ export function CountermeasurePanel({ state, measurements, launchDate, fromDay, 
       <section className="panel" aria-labelledby="assoc-title">
         <header className="panel__head">
           <div>
-            <h2 id="assoc-title">Acumulador × contramedida</h2>
+            <h2 id="assoc-title">Accumulator × countermeasure</h2>
             <p className="muted">
-              Massa corporal (acumulador) ao lado da carga de exercício (contramedida), na mesma janela de tempo. O sistema{' '}
-              <strong>associa</strong> as duas medidas; não modela causa.
+              Body mass (accumulator) next to exercise load (countermeasure), in the same time window. The system{' '}
+              <strong>associates</strong> the two measures; it does not model cause.
             </p>
           </div>
         </header>
@@ -97,7 +97,7 @@ export function CountermeasurePanel({ state, measurements, launchDate, fromDay, 
           </div>
           <div>
             <h3 className="side-title">
-              <VariableTerm variable="exerciseLoad">Exercício completado</VariableTerm> <ClassChip varClass="countermeasure" />
+              <VariableTerm variable="exerciseLoad">Exercise completed</VariableTerm> <ClassChip varClass="countermeasure" />
             </h3>
             <ExerciseChart measurements={measurements} alerts={state.alerts} launchDate={launchDate} fromDay={fromDay} cursorIso={cursorIso} height={200} />
           </div>
@@ -105,7 +105,7 @@ export function CountermeasurePanel({ state, measurements, launchDate, fromDay, 
         {association ? (
           <AlertCard alert={association} missionDay={missionDayOfAlert(association)} variant="compact" />
         ) : (
-          <p className="all-clear-inline">Nenhuma associação ativa entre variação de massa e queda de aderência.</p>
+          <p className="all-clear-inline">No active association between mass change and falling adherence.</p>
         )}
       </section>
     </div>

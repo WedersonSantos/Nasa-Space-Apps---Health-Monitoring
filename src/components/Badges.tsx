@@ -3,7 +3,7 @@ import { ORIGIN_META, SEVERITY_META } from '../config/display';
 import { CLASS_LABEL, type VariableClass } from '../config/variables';
 import { OriginIcon, SeverityIcon, StatusIcon } from './Icons';
 
-/** Estado sempre com ícone + rótulo + cor — nunca só cor (regra 7). */
+/** Status always shown with icon + label + color — never color alone (rule 7). */
 export function SeverityBadge({ severity, size = 'md' }: { severity: Severity; size?: 'md' | 'lg' }) {
   return (
     <span className={`sev-badge sev-${severity} sev-badge--${size}`}>
@@ -13,18 +13,18 @@ export function SeverityBadge({ severity, size = 'md' }: { severity: Severity; s
   );
 }
 
-/** Estado de uma variável: gravidade do alerta ou "Não avaliado" quando faltam dados para o motor avaliar. */
+/** A variable's status: alert severity, or "Not assessed" when the engine lacks the data to assess it. */
 export function StatusBadge({ status, reason }: { status: Severity | 'unassessed'; reason?: string }) {
   if (status !== 'unassessed') return <SeverityBadge severity={status} />;
   return (
     <span className="sev-badge sev-unassessed" title={reason}>
       <StatusIcon status="unassessed" size={16} />
-      <span>Não avaliado</span>
+      <span>Not assessed</span>
     </span>
   );
 }
 
-/** Origem do dado sempre visível (regra 5). Cada origem tem ícone e estilo de borda próprios. */
+/** Data origin always visible (rule 5). Each origin has its own icon and border style. */
 export function OriginBadge({ origin }: { origin: DataOrigin }) {
   const meta = ORIGIN_META[origin];
   return (

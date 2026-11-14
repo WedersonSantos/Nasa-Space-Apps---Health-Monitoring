@@ -5,19 +5,19 @@ import { ChevronLeft, ChevronRight } from './Icons';
 interface Props {
   current: ScenarioId;
   onChange: (id: ScenarioId) => void;
-  /** Muda para o uso próprio, separado da demonstração. */
+  /** Switches to personal use, separate from the demo. */
   onOwn: () => void;
 }
 
-/** Controles da demonstração numa linha: dados sintéticos sempre rotulados, cenário e atalhos de teclado. */
+/** Demo controls in one row: synthetic data always labelled, scenario and keyboard shortcuts. */
 export function DemoBar({ current, onChange, onOwn }: Props) {
   const selected = SCENARIOS.find((s) => s.id === current);
   return (
-    <section className="demo-bar" aria-label="Demonstração">
-      <span className="demo-bar__label">Demonstração</span>
+    <section className="demo-bar" aria-label="Demo">
+      <span className="demo-bar__label">Demo</span>
       <OriginBadge origin="synthetic" />
-      <span className="demo-bar__note">sem telemetria real de astronauta</span>
-      <div className="demo-bar__scenarios" role="group" aria-label="Cenário de demonstração">
+      <span className="demo-bar__note">no real astronaut telemetry</span>
+      <div className="demo-bar__scenarios" role="group" aria-label="Demo scenario">
         {SCENARIOS.map((s) => (
           <button
             key={s.id}
@@ -34,19 +34,19 @@ export function DemoBar({ current, onChange, onOwn }: Props) {
         ))}
       </div>
       <button type="button" className="console-btn console-btn--own" onClick={onOwn}>
-        Minha missão
+        My mission
       </button>
       <span className="demo-bar__keys">
         <kbd>1</kbd>
         <kbd>2</kbd>
-        <kbd>3</kbd> cenário ·{' '}
-        <kbd aria-label="seta para a esquerda">
+        <kbd>3</kbd> scenario ·{' '}
+        <kbd aria-label="left arrow">
           <ChevronLeft size={11} />
         </kbd>
-        <kbd aria-label="seta para a direita">
+        <kbd aria-label="right arrow">
           <ChevronRight size={11} />
         </kbd>{' '}
-        dia
+        day
       </span>
       {selected && (
         <span id="demo-desc" className="visually-hidden">

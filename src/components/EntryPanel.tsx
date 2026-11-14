@@ -11,17 +11,17 @@ import { VariableTerm } from './VariableTerm';
 
 const MANUAL_VARIABLES: VariableId[] = ['restingHeartRate', 'hrv', 'bloodPressure', 'sleep', 'bodyMass', 'exerciseLoad'];
 
-/** ISO -> valor de <input type="datetime-local">, em UTC (horário de bordo da ISS). */
+/** ISO -> <input type="datetime-local"> value, in UTC (ISS onboard time). */
 function toLocalInput(iso: string): string {
   return iso.slice(0, 16);
 }
 
 interface Props {
   astronautId: string;
-  /** Relógio da missão: dia sendo avaliado. Novos registros entram nesse instante por padrão. */
+  /** Mission clock: the day being assessed. New entries default to this instant. */
   nowIso: string;
   entries: Measurement[];
-  /** Grava no armazenamento local; devolve mensagem de erro ou null. */
+  /** Writes to local storage; returns an error message or null. */
   onAdd: (ms: Measurement[]) => string | null;
   onRemove: (id: string) => void;
 }
@@ -32,8 +32,8 @@ export function EntryPanel({ astronautId, nowIso, entries, onAdd, onRemove }: Pr
   return (
     <div className="stack">
       <p className="note">
-        Entradas manuais são marcadas como <OriginBadge origin="measured" />, gravadas neste dispositivo e reavaliadas na hora
-        pelo motor de regras. Não dependem de conexão com a Terra.
+        Manual entries are marked as <OriginBadge origin="measured" />, saved on this device and re-evaluated immediately by
+        the rule engine. They do not depend on a connection to Earth.
       </p>
       <div className="entry-grid">
         <MeasurementForm astronautId={astronautId} nowIso={nowIso} onAdd={onAdd} announce={setStatus} />
@@ -43,22 +43,22 @@ export function EntryPanel({ astronautId, nowIso, entries, onAdd, onRemove }: Pr
         {status}
       </p>
       <section className="panel" aria-labelledby="entries-title">
-        <h2 id="entries-title">Registros manuais</h2>
+        <h2 id="entries-title">Manual entries</h2>
         {entries.length === 0 ? (
-          <p className="muted">Nenhum registro manual neste cenário.</p>
+          <p className="muted">No manual entries in this scenario.</p>
         ) : (
           <div className="table-scroll">
             <table className="evidence">
               <thead>
                 <tr>
-                  <th scope="col">Quando</th>
-                  <th scope="col">Variável</th>
+                  <th scope="col">When</th>
+                  <th scope="col">Variable</th>
                   <th scope="col" className="num">
-                    Valor
+                    Value
                   </th>
-                  <th scope="col">Origem</th>
+                  <th scope="col">Origin</th>
                   <th scope="col">
-                    <span className="visually-hidden">Ações</span>
+                    <span className="visually-hidden">Actions</span>
                   </th>
                 </tr>
               </thead>
@@ -79,7 +79,7 @@ export function EntryPanel({ astronautId, nowIso, entries, onAdd, onRemove }: Pr
                     </td>
                     <td>
                       <button type="button" className="btn btn--small" onClick={() => onRemove(m.id)}>
-                        Remover
+                        Remove
                       </button>
                     </td>
                   </tr>
@@ -117,14 +117,14 @@ function MeasurementForm({
   function submit(e: FormEvent) {
     e.preventDefault();
     const errs: Record<string, string> = {};
-    if (value.trim() === '') errs.value = 'Informe um valor.';
+    if (value.trim() === '') errs.value = 'Enter a value.';
     if (meta.secondaryLabel && secondaryRequired && secondary.trim() === '')
-      errs.secondary = `Informe ${meta.secondaryLabel.toLowerCase()}.`;
+      errs.secondary = `Enter ${meta.secondaryLabel.toLowerCase()}.`;
     const ts = when ? new Date(`${when}:00Z`) : null;
-    if (!ts || Number.isNaN(ts.getTime())) errs.when = 'Informe data e hora.';
+    if (!ts || Number.isNaN(ts.getTime())) errs.when = 'Enter date and time.';
 
     if (!Object.keys(errs).length && ts) {
-      // Validação de faixa, unidade e coerência: regra única do motor (Bloco A).
+      // Range, unit and consistency validation: single engine rule (Bloco A).
       const r = createMeasurement({
         astronautId,
         variable,
@@ -134,19 +134,19 @@ function MeasurementForm({
         origin: 'measured',
       });
       if (!r.ok) {
-        errs.value = `${r.error} Faixa plausível: ${range.min}–${range.max} ${meta.unit}.`;
+        errs.value = `${r.error} Plausible range: ${range.min}–${range.max} ${meta.unit}.`;
       } else {
         const storeError = onAdd([r.measurement]);
-        if (storeError) errs.when = `Não gravado: ${storeError}.`;
+        if (storeError) errs.when = `Not saved: ${storeError}.`;
         else {
-          announce(`Registrado: ${meta.label} ${fmt(r.measurement.value, meta.decimals)} ${meta.unit}. Estado reavaliado.`);
+          announce(`Logged: ${meta.label} ${fmt(r.measurement.value, meta.decimals)} ${meta.unit}. Status re-evaluated.`);
           setValue('');
           setSecondary('');
         }
       }
     }
     setErrors(errs);
-    if (Object.keys(errs).length) announce('Registro não salvo: corrija os campos indicados.');
+    if (Object.keys(errs).length) announce('Entry not saved: fix the highlighted fields.');
   }
 
   const err = (k: string) =>
@@ -158,9 +158,9 @@ function MeasurementForm({
 
   return (
     <form className="panel form" onSubmit={submit} noValidate aria-labelledby={`${uid}-title`}>
-      <h2 id={`${uid}-title`}>Registrar medição</h2>
+      <h2 id={`${uid}-title`}>Log a measurement</h2>
       <label className="field">
-        <span>Variável</span>
+        <span>Variable</span>
         <select
           value={variable}
           onChange={(e) => {
@@ -180,7 +180,7 @@ function MeasurementForm({
       <div className="field-row">
         <label className="field">
           <span>
-            {variable === 'bloodPressure' ? 'Sistólica' : variable === 'exerciseLoad' ? 'Completado' : 'Valor'} ({meta.unit})
+            {variable === 'bloodPressure' ? 'Systolic' : variable === 'exerciseLoad' ? 'Completed' : 'Value'} ({meta.unit})
           </span>
           <input
             inputMode="decimal"
@@ -196,7 +196,7 @@ function MeasurementForm({
             <span>
               {meta.secondaryLabel}
               {meta.secondaryUnit && meta.secondaryUnit !== '/5' ? ` (${meta.secondaryUnit})` : ''}
-              {!secondaryRequired && ' — opcional'}
+              {!secondaryRequired && ' — optional'}
             </span>
             <input
               inputMode="decimal"
@@ -210,7 +210,7 @@ function MeasurementForm({
         )}
       </div>
       <label className="field">
-        <span>Data e hora da coleta (UTC, horário de bordo)</span>
+        <span>Date and time of collection (UTC, onboard time)</span>
         <input
           type="datetime-local"
           value={when}
@@ -221,7 +221,7 @@ function MeasurementForm({
         {err('when')}
       </label>
       <button type="submit" className="btn btn--primary">
-        Registrar medição
+        Log measurement
       </button>
     </form>
   );
@@ -246,8 +246,8 @@ function SelfReportForm({
     e.preventDefault();
     const missing = SELF_REPORT_DIMENSIONS.filter((d) => values[d.method] == null).map((d) => d.label.toLowerCase());
     if (missing.length) {
-      setError(`Responda: ${missing.join(', ')}.`);
-      announce('Autorrelato não salvo: faltam respostas.');
+      setError(`Please answer: ${missing.join(', ')}.`);
+      announce('Self-report not saved: answers missing.');
       return;
     }
     const r = createSelfReport(astronautId, nowIso, {
@@ -257,20 +257,20 @@ function SelfReportForm({
     });
     const storeError = r.ok ? onAdd(r.measurements) : r.error;
     if (storeError) {
-      setError(`Não gravado: ${storeError}.`);
-      announce('Autorrelato não salvo.');
+      setError(`Not saved: ${storeError}.`);
+      announce('Self-report not saved.');
       return;
     }
     setError('');
-    announce('Autorrelato registrado. Estado reavaliado.');
+    announce('Self-report logged. Status re-evaluated.');
     setValues({});
   }
 
   return (
     <form className="panel form" onSubmit={submit} noValidate aria-labelledby={`${uid}-title`}>
-      <h2 id={`${uid}-title`}>Autorrelato de hoje</h2>
+      <h2 id={`${uid}-title`}>Today’s self-report</h2>
       <p className="muted small">
-        <VariableTerm variable="selfReport" /> — como você está agora? Escala de 1 a 5.
+        <VariableTerm variable="selfReport" /> — how are you right now? Scale of 1 to 5.
       </p>
       <HowToMeasure variable="selfReport" compact />
       {SELF_REPORT_DIMENSIONS.map((d) => (
@@ -298,7 +298,7 @@ function SelfReportForm({
       ))}
       {error && <span className="field-error">{error}</span>}
       <button type="submit" className="btn btn--primary">
-        Registrar autorrelato
+        Log self-report
       </button>
     </form>
   );

@@ -45,7 +45,7 @@ export function Octagon({ size = 18, className }: IconProps) {
   );
 }
 
-/** Não avaliado: círculo tracejado com interrogação. */
+/** Not assessed: dashed circle with a question mark. */
 export function Unknown({ size = 18, className }: IconProps) {
   return (
     <svg {...base(size)} className={className}>

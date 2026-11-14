@@ -10,17 +10,17 @@ interface Props {
   maxDay: number;
   preflightDays: number;
   history: MissionHistory;
-  /** Dias com ações registradas pelo astronauta (acompanhamento). */
+  /** Days with actions logged by the astronaut (follow-up). */
   actionDays?: number[];
   onChange: (day: number) => void;
   chartWindow: ChartWindow;
-  /** Primeiro dia exibido pelos gráficos (null = missão inteira). */
+  /** First day shown by the charts (null = whole mission). */
   windowFrom: number | null;
   onWindowChange: (w: ChartWindow) => void;
 }
 
 const PLAY_STEP_MS = 160;
-/** Inícios a menos de N dias um do outro vão para a linha de cima, para não se sobreporem. */
+/** Onsets less than N days apart go on the upper row so they do not overlap. */
 const ONSET_MIN_GAP_DAYS = 4;
 
 function withLevels(onsets: MissionHistory['onsets']) {
@@ -33,13 +33,13 @@ function withLevels(onsets: MissionHistory['onsets']) {
 }
 
 /**
- * Trilha da missão: cada dia de voo com o estado geral (altura + cor), o início de cada alerta
- * e o cursor do dia avaliado. Arrastar ou usar os botões reavalia o estado naquele dia.
+ * Mission track: each flight day with its overall status (height + color), when each alert began
+ * and the cursor for the assessed day. Dragging or using the buttons re-evaluates the state on that day.
  */
 export function MissionTrack({ day, maxDay, preflightDays, history, actionDays = [], onChange, chartWindow, windowFrom, onWindowChange }: Props) {
   const id = useId();
   const [playing, setPlaying] = useState(false);
-  const first = 1 - preflightDays; // primeiro dia de pré-voo
+  const first = 1 - preflightDays; // first pre-flight day
   const span = maxDay - first + 1;
   const pct = (d: number) => ((d - first + 0.5) / span) * 100;
   const atEnd = day >= maxDay;
@@ -63,14 +63,14 @@ export function MissionTrack({ day, maxDay, preflightDays, history, actionDays =
     <section className="track" aria-labelledby={`${id}-title`}>
       <div className="track__head">
         <h2 id={`${id}-title`} className="track__title">
-          Trilha da missão
+          Mission track
         </h2>
         <p className="track__now">
-          Avaliando o <strong>dia {day}</strong> de {maxDay}
-          {atEnd && <span> · mais recente</span>}
+          Assessing <strong>day {day}</strong> of {maxDay}
+          {atEnd && <span> · latest</span>}
         </p>
         <div className="track__controls">
-          <button type="button" className="shell-btn shell-btn--icon" onClick={() => onChange(Math.max(1, day - 1))} disabled={day <= 1} aria-label="Dia anterior" title="Dia anterior (←)">
+          <button type="button" className="shell-btn shell-btn--icon" onClick={() => onChange(Math.max(1, day - 1))} disabled={day <= 1} aria-label="Previous day" title="Previous day (←)">
             <ChevronLeft />
           </button>
           <button
@@ -83,21 +83,21 @@ export function MissionTrack({ day, maxDay, preflightDays, history, actionDays =
             }}
           >
             {playing ? <Pause size={14} /> : <Play size={14} />}
-            {playing ? 'Pausar' : 'Reproduzir'}
+            {playing ? 'Pause' : 'Play'}
           </button>
-          <button type="button" className="shell-btn shell-btn--icon" onClick={() => onChange(Math.min(maxDay, day + 1))} disabled={atEnd} aria-label="Próximo dia" title="Próximo dia (→)">
+          <button type="button" className="shell-btn shell-btn--icon" onClick={() => onChange(Math.min(maxDay, day + 1))} disabled={atEnd} aria-label="Next day" title="Next day (→)">
             <ChevronRight />
           </button>
           <button type="button" className="shell-btn" onClick={() => onChange(maxDay)} disabled={atEnd}>
             <Crosshair size={14} />
-            Hoje
+            Today
           </button>
-          <div className="segmented" role="group" aria-label="Período dos gráficos">
+          <div className="segmented" role="group" aria-label="Chart period">
             <button type="button" aria-pressed={chartWindow === 'recent'} onClick={() => onWindowChange('recent')}>
-              6 semanas
+              6 weeks
             </button>
             <button type="button" aria-pressed={chartWindow === 'all'} onClick={() => onWindowChange('all')}>
-              Missão inteira
+              Whole mission
             </button>
           </div>
         </div>
@@ -105,7 +105,7 @@ export function MissionTrack({ day, maxDay, preflightDays, history, actionDays =
 
       <div className="track__lane">
         <div className="track__preflight" style={{ left: 0, width: `${(preflightDays / span) * 100}%` }}>
-          <span>pré-voo</span>
+          <span>pre-flight</span>
         </div>
 
         <div className="track__days" aria-hidden="true">
@@ -125,15 +125,15 @@ export function MissionTrack({ day, maxDay, preflightDays, history, actionDays =
             className={`track__onset sev-${o.severity}`}
             style={{ left: `${pct(o.day)}%`, top: `${level * 24}px` }}
             onClick={() => onChange(o.day)}
-            title={`${SEVERITY_META[o.severity].label} · dia ${o.day}: ${o.title}`}
-            aria-label={`Ir ao dia ${o.day}: início de ${SEVERITY_META[o.severity].label.toLowerCase()}, ${o.title}`}
+            title={`${SEVERITY_META[o.severity].label} · day ${o.day}: ${o.title}`}
+            aria-label={`Go to day ${o.day}: ${SEVERITY_META[o.severity].label.toLowerCase()} onset, ${o.title}`}
           >
             <SeverityIcon severity={o.severity} size={14} />
           </button>
         ))}
 
         {[...new Set(actionDays)].filter((d) => d >= 1 && d <= maxDay).map((d) => (
-          <span key={`act-${d}`} className="track__action" style={{ left: `${pct(d)}%` }} title={`Ação registrada no dia ${d}`} aria-hidden="true" />
+          <span key={`act-${d}`} className="track__action" style={{ left: `${pct(d)}%` }} title={`Action logged on day ${d}`} aria-hidden="true" />
         ))}
 
         <div
@@ -150,8 +150,8 @@ export function MissionTrack({ day, maxDay, preflightDays, history, actionDays =
           min={1}
           max={maxDay}
           value={day}
-          aria-label="Dia de missão avaliado"
-          aria-valuetext={`Dia ${day} de ${maxDay}`}
+          aria-label="Assessed mission day"
+          aria-valuetext={`Day ${day} of ${maxDay}`}
           style={{ left: `${pct(1) - 50 / span}%`, width: `${((maxDay) / span) * 100}%` }}
           onChange={(e) => {
             setPlaying(false);
@@ -168,7 +168,7 @@ export function MissionTrack({ day, maxDay, preflightDays, history, actionDays =
         ))}
       </div>
 
-      <ul className="track__legend" aria-label="Legenda da trilha">
+      <ul className="track__legend" aria-label="Track legend">
         {(['normal', 'attention', 'critical'] as const).map((s) => (
           <li key={s}>
             <span className={`track__key track__day--${s}`} />
@@ -176,14 +176,14 @@ export function MissionTrack({ day, maxDay, preflightDays, history, actionDays =
           </li>
         ))}
         <li>
-          <SeverityIcon severity="attention" size={13} /> início de um alerta (clique para ir ao dia)
+          <SeverityIcon severity="attention" size={13} /> alert onset (click to go to that day)
         </li>
         <li>
-          <span className="track__key track__key--window" /> período mostrado nos gráficos
+          <span className="track__key track__key--window" /> period shown in the charts
         </li>
         {actionDays.length > 0 && (
           <li>
-            <span className="track__key track__key--action" /> ação registrada
+            <span className="track__key track__key--action" /> action logged
           </li>
         )}
       </ul>

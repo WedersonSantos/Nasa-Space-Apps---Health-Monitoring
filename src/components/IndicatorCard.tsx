@@ -31,10 +31,10 @@ interface Props {
   measurements: Measurement[];
   launchDate: string;
   fromDay: number | null;
-  /** row: dados à esquerda e gráfico à direita, para empilhar gráficos no mesmo eixo de tempo. */
+  /** row: data on the left and chart on the right, to stack charts on the same time axis. */
   variant?: 'card' | 'row';
   cursorIso?: string;
-  /** Cobertura do motor: se a variável pôde ser avaliada. */
+  /** Engine coverage: whether the variable could be assessed. */
   coverage?: VariableCoverage | null;
 }
 
@@ -85,19 +85,19 @@ export function IndicatorCard({ variable, latest, baseline, alerts, measurements
           <span className="indicator__date">{fmtDate(latest.timestamp)}</span>
         </div>
       ) : (
-        <p className="muted">Sem medição registrada.</p>
+        <p className="muted">No measurement logged.</p>
       )}
 
       {status === 'unassessed' && cov && <p className="indicator__unassessed">{cov.reason}</p>}
       {baseline && latest && variable !== 'selfReport' && (
         <p className="indicator__baseline">
-          Baseline pré-voo{' '}
+          Pre-flight baseline{' '}
           <strong>
             {fmt(baseline.mean, meta.decimals)} ± {fmt(baseline.stdDev, 1)} {meta.unit}
           </strong>
           {delta !== null && (
             <>
-              {' · '}desvio {fmtSigned(delta, meta.decimals)} {meta.unit}
+              {' · '}deviation {fmtSigned(delta, meta.decimals)} {meta.unit}
               {variable === 'bodyMass' && ` (${fmtPct(delta / baseline.mean, true)})`}
             </>
           )}
@@ -107,9 +107,9 @@ export function IndicatorCard({ variable, latest, baseline, alerts, measurements
         const sr = latestSelfReportIndex(measurements);
         return (
           <p className="indicator__baseline">
-            Índice de bem-estar <strong>{sr.index != null ? `${fmt(sr.index, 1)}/5` : '—'}</strong> · baseline pré-voo{' '}
+            Wellbeing index <strong>{sr.index != null ? `${fmt(sr.index, 1)}/5` : '—'}</strong> · pre-flight baseline{' '}
             <strong>{fmt(baseline.mean, 1)}/5</strong>
-            {sr.index != null && <> · desvio {fmtSigned(sr.index - baseline.mean, 1)}</>}
+            {sr.index != null && <> · deviation {fmtSigned(sr.index - baseline.mean, 1)}</>}
           </p>
         );
       })()}
@@ -121,24 +121,24 @@ export function IndicatorCard({ variable, latest, baseline, alerts, measurements
       <details className="indicator__about">
         <summary>
           <ChevronRight size={14} className="disclosure-icon" />
-          O que mede, por que importa e como medir
+          What it measures, why it matters and how to measure
         </summary>
         <p>
-          <strong>Mede:</strong> {meta.whatItMeasures}
+          <strong>Measures:</strong> {meta.whatItMeasures}
         </p>
         <p>
-          <strong>Em voo espacial:</strong> {meta.whyItMatters}
+          <strong>In spaceflight:</strong> {meta.whyItMatters}
         </p>
         <p className="small">
-          Perigo NASA: {meta.hazards.map((h) => HAZARD_LABEL[h]).join(', ')} · Risco: {meta.nasaRisk} · Constante de tempo:{' '}
+          NASA hazard: {meta.hazards.map((h) => HAZARD_LABEL[h]).join(', ')} · Risk: {meta.nasaRisk} · Time constant:{' '}
           {meta.timeConstant}
         </p>
         <p className="small">
-          Regra: {meta.ruleSummary}
+          Rule: {meta.ruleSummary}
         </p>
         <HowToMeasure variable={variable} compact />
         <p className="small">
-          Fontes:{' '}
+          Sources:{' '}
           {meta.sourceIds.map((id, i) => {
             const s = findOfficial(id);
             return s ? (

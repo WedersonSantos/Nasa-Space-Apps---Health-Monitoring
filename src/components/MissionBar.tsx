@@ -12,18 +12,18 @@ interface Props {
   missionDay: number;
   theme: Theme;
   onToggleTheme: () => void;
-  /** Leva à ação do alerta mais grave (aba Visão geral). */
+  /** Goes to the action of the most severe alert (Overview tab). */
   onShowAlerts: () => void;
 }
 
 function gmt(iso: string) {
   const d = new Date(iso);
-  const date = d.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', timeZone: 'UTC' });
-  const time = d.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit', timeZone: 'UTC' });
+  const date = d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', timeZone: 'UTC' });
+  const time = d.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hourCycle: 'h23', timeZone: 'UTC' });
   return { date, time };
 }
 
-/** Barra de missão: identidade, relógio de missão, tripulante, link com a Terra e o anunciador do estado geral. */
+/** Mission bar: identity, mission clock, crew member, link with Earth and the overall-status annunciator. */
 export function MissionBar({ state, asOf, missionDay, theme, onToggleTheme, onShowAlerts }: Props) {
   const online = useOnline();
   const { date, time } = gmt(asOf);
@@ -31,12 +31,12 @@ export function MissionBar({ state, asOf, missionDay, theme, onToggleTheme, onSh
   const meta = SEVERITY_META[state.overall];
   const { unassessed: partial, none } = assessmentSummary(state);
 
-  // Anuncia ao leitor de tela só quando o estado geral muda (não a cada dia da trilha).
+  // Announces to screen readers only when the overall status changes (not on every track day).
   const [announcement, setAnnouncement] = useState('');
   const prev = useRef(state.overall);
   useEffect(() => {
     if (prev.current !== state.overall) {
-      setAnnouncement(`Estado geral mudou para ${meta.label}. ${count} alerta${count === 1 ? '' : 's'} ativo${count === 1 ? '' : 's'}.`);
+      setAnnouncement(`Overall status changed to ${meta.label}. ${count} active alert${count === 1 ? '' : 's'}.`);
       prev.current = state.overall;
     }
   }, [state.overall, meta.label, count]);
@@ -52,23 +52,23 @@ export function MissionBar({ state, asOf, missionDay, theme, onToggleTheme, onSh
           <h1 className="brand__name">Vigília</h1>
         </div>
 
-        <div className="met" aria-label={missionDay >= 1 ? `Dia de missão ${missionDay}, ${date} às ${time} GMT` : `Pré-voo, dia ${missionDay + BASELINE.preflightDays} de ${BASELINE.preflightDays}, ${date} às ${time} GMT`}>
-          <span className="met__day">{missionDay >= 1 ? `D+${missionDay}` : `PV ${missionDay + BASELINE.preflightDays}/${BASELINE.preflightDays}`}</span>
+        <div className="met" aria-label={missionDay >= 1 ? `Mission day ${missionDay}, ${date} at ${time} GMT` : `Pre-flight, day ${missionDay + BASELINE.preflightDays} of ${BASELINE.preflightDays}, ${date} at ${time} GMT`}>
+          <span className="met__day">{missionDay >= 1 ? `D+${missionDay}` : `PF ${missionDay + BASELINE.preflightDays}/${BASELINE.preflightDays}`}</span>
           <span className="met__clock">
-            {date} · {time} <abbr title="Greenwich Mean Time, horário de bordo da ISS">GMT</abbr>
+            {date} · {time} <abbr title="Greenwich Mean Time, ISS onboard time">GMT</abbr>
           </span>
         </div>
 
         <dl className="crew">
           <div>
-            <dt>Tripulante</dt>
+            <dt>Crew member</dt>
             <dd>{state.name}</dd>
           </div>
           <div>
-            <dt>Link com a Terra</dt>
-            <dd className="crew__link" title="O app roda inteiro neste dispositivo. Ficar sem link é um estado esperado, não um erro.">
+            <dt>Link with Earth</dt>
+            <dd className="crew__link" title="The app runs entirely on this device. Having no link is an expected state, not an error.">
               <Satellite size={15} />
-              {online ? 'Disponível' : 'Sem link · operação local'}
+              {online ? 'Available' : 'No link · local operation'}
             </dd>
           </div>
         </dl>
@@ -78,11 +78,11 @@ export function MissionBar({ state, asOf, missionDay, theme, onToggleTheme, onSh
           className="shell-btn shell-btn--theme"
           onClick={onToggleTheme}
           aria-pressed={theme === 'dark'}
-          aria-label={theme === 'dark' ? 'Usar modo dia' : 'Usar modo noturno'}
-          title={theme === 'dark' ? 'Voltar ao modo dia' : 'Modo noturno: tons escuros e suaves para pouca luz'}
+          aria-label={theme === 'dark' ? 'Use day mode' : 'Use night mode'}
+          title={theme === 'dark' ? 'Back to day mode' : 'Night mode: dark, soft tones for low light'}
         >
           {theme === 'dark' ? <Sun size={15} /> : <Moon size={15} />}
-          <span className="shell-btn__text">{theme === 'dark' ? 'Modo dia' : 'Modo noturno'}</span>
+          <span className="shell-btn__text">{theme === 'dark' ? 'Day mode' : 'Night mode'}</span>
         </button>
 
         {count > 0 ? (
@@ -99,8 +99,8 @@ export function MissionBar({ state, asOf, missionDay, theme, onToggleTheme, onSh
             <div>
               <span className="annunciator__label">{meta.label}</span>
               <span className="annunciator__sub">
-                {count} alerta{count > 1 ? 's' : ''} ativo{count > 1 ? 's' : ''}
-                {partial.length > 0 && ` · ${partial.length} não avaliado${partial.length > 1 ? 's' : ''}`} · ver o que fazer
+                {count} active alert{count > 1 ? 's' : ''}
+                {partial.length > 0 && ` · ${partial.length} not assessed`} · see what to do
               </span>
             </div>
           </a>
@@ -108,13 +108,13 @@ export function MissionBar({ state, asOf, missionDay, theme, onToggleTheme, onSh
           <div className={`annunciator annunciator--${partial.length ? 'unassessed' : state.overall}`} key={partial.length ? 'p' : state.overall}>
             {partial.length ? <StatusIcon status="unassessed" size={26} /> : <SeverityIcon severity={state.overall} size={26} />}
             <div>
-              <span className="annunciator__label">{none ? 'Sem dados' : partial.length ? 'Avaliação parcial' : meta.label}</span>
+              <span className="annunciator__label">{none ? 'No data' : partial.length ? 'Partial assessment' : meta.label}</span>
               <span className="annunciator__sub">
                 {none
-                  ? 'Nenhum sinal pôde ser avaliado'
+                  ? 'No signal could be assessed'
                   : partial.length
-                    ? `Sem alertas · ${partial.length} de 7 sinais não avaliados`
-                    : 'Nenhum alerta ativo'}
+                    ? `No alerts · ${partial.length} of 7 signals not assessed`
+                    : 'No active alerts'}
               </span>
             </div>
           </div>

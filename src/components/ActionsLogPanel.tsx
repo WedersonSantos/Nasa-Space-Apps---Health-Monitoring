@@ -4,35 +4,35 @@ import { SeverityIcon, CheckCircle } from './Icons';
 
 interface Props {
   entries: ActionEntry[];
-  /** Alertas ativos no dia avaliado, para mostrar a evolução depois da ação. */
+  /** Alerts active on the assessed day, to show how things evolved after the action. */
   activeAlertIds: Set<string>;
   onRemove: (id: string) => void;
   day: number;
 }
 
-/** Histórico das ações registradas e a evolução de cada alerta no dia avaliado. */
+/** History of logged actions and how each alert stands on the assessed day. */
 export function ActionsLogPanel({ entries, activeAlertIds, onRemove, day }: Props) {
   const sorted = [...entries].sort((a, b) => b.at.localeCompare(a.at));
   return (
     <section className="panel" aria-labelledby="actions-title">
-      <h2 id="actions-title">Ações registradas</h2>
+      <h2 id="actions-title">Logged actions</h2>
       <p className="muted small">
-        O que foi feito com cada orientação e como o alerta está no dia {day}. As ações ficam neste dispositivo e não mudam a
-        avaliação: o alerta só sai quando os sinais voltam ao baseline.
+        What was done with each piece of guidance and how the alert stands on day {day}. Actions stay on this device and do
+        not change the assessment: an alert only clears when the signals return to baseline.
       </p>
       {sorted.length === 0 ? (
-        <p className="muted">Nenhuma ação registrada. Use o bloco “Acompanhamento” de um alerta.</p>
+        <p className="muted">No actions logged. Use an alert’s “Follow-up” section.</p>
       ) : (
         <div className="table-scroll">
           <table className="data-table">
             <thead>
               <tr>
-                <th scope="col">Quando</th>
-                <th scope="col">Ação</th>
-                <th scope="col">Alerta</th>
-                <th scope="col">No dia {day}</th>
+                <th scope="col">When</th>
+                <th scope="col">Action</th>
+                <th scope="col">Alert</th>
+                <th scope="col">On day {day}</th>
                 <th scope="col">
-                  <span className="visually-hidden">Desfazer</span>
+                  <span className="visually-hidden">Undo</span>
                 </th>
               </tr>
             </thead>
@@ -42,19 +42,19 @@ export function ActionsLogPanel({ entries, activeAlertIds, onRemove, day }: Prop
                 return (
                   <tr key={e.id}>
                     <td className="num">
-                      dia {e.missionDay} · {fmtDateTime(e.at)}
+                      day {e.missionDay} · {fmtDateTime(e.at)}
                     </td>
                     <td>{ACTION_LABEL[e.kind]}</td>
                     <td>{e.alertTitle}</td>
                     <td>
                       <span className={`evo evo--${active ? 'active' : 'cleared'}`}>
                         {active ? <SeverityIcon severity="attention" size={13} /> : <CheckCircle size={13} />}
-                        {active ? 'Alerta ainda ativo' : 'Alerta não está ativo'}
+                        {active ? 'Alert still active' : 'Alert no longer active'}
                       </span>
                     </td>
                     <td>
                       <button type="button" className="btn btn--small" onClick={() => onRemove(e.id)}>
-                        Desfazer
+                        Undo
                       </button>
                     </td>
                   </tr>

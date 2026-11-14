@@ -1,6 +1,6 @@
-// "Minha missão": uso próprio, separado da demonstração.
-// Perfil e modo ficam no dispositivo (prefixo ahm:v1, como a persistência do Bloco A); as medições usam a
-// MeasurementStore com o astronautId do perfil, numa chave diferente da do tripulante de demonstração.
+// "My mission": personal use, separate from the demo.
+// Profile and mode stay on the device (ahm:v1 prefix, like Bloco A persistence); measurements use the
+// MeasurementStore with the profile's astronautId, under a different key from the demo crew member.
 
 import type { Measurement } from '../types/contract';
 import { BASELINE } from '../engine';
@@ -9,7 +9,7 @@ export type AppMode = 'demo' | 'own';
 
 export interface OwnProfile {
   astronautId: string;
-  /** Apelido ou identificação fictícia — nunca dados pessoais. */
+  /** Nickname or fictitious ID — never personal data. */
   name: string;
   createdAt: string;
 }
@@ -30,7 +30,7 @@ function set(key: string, value: string | null) {
     if (value == null) localStorage.removeItem(key);
     else localStorage.setItem(key, value);
   } catch {
-    /* sem armazenamento: o modo vale só nesta sessão */
+    /* no storage: the mode lasts only for this session */
   }
 }
 
@@ -60,8 +60,8 @@ export function createOwnProfile(name: string, nowIso: string): OwnProfile {
 }
 
 /**
- * Lançamento da missão própria, na mesma convenção do motor: primeiro dia com registro + dias de pré-voo.
- * Sem registros, o primeiro registro seria hoje.
+ * Launch of the own mission, using the engine's convention: first day with data + pre-flight days.
+ * With no entries, the first entry would be today.
  */
 export function ownLaunchDate(measurements: Measurement[], nowIso: string): string {
   const first = measurements.reduce<string | null>((min, m) => (min == null || m.timestamp < min ? m.timestamp : min), null);
