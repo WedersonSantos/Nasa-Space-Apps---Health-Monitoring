@@ -1,6 +1,6 @@
 /* Vigília — identidade de operações de missão.
-   Modo dia: iluminação geral de módulo (cinza de painel, superfícies brancas, barra de missão em ardósia, dados em cobalto).
-   Modo pré-sono: iluminação de LED da ISS antes do sono — quente, sem azul.
+   Modo dia: fundo azul-lavanda, superfícies brancas, barra de missão lavanda com tinta índigo, dados em índigo-violeta.
+   Modo noturno: o mesmo mundo índigo-lavanda, escuro e dessaturado.
    Estado nunca só por cor: ícone + rótulo + cor, sempre. */
 
 :root {
@@ -50,40 +50,40 @@
 
 :root[data-theme='dark'] {
   color-scheme: dark;
-  --ground: #120f0b;
-  --surface: #1b1712;
-  --surface-2: #231e17;
-  --ink: #f1e5d3;
-  --muted: #bba98f;
-  --border: #3b3229;
-  --hairline: #2d261f;
-  --grid: #2a231c;
+  --ground: #14131f;
+  --surface: #1b1a29;
+  --surface-2: #222134;
+  --ink: #e6e4f2;
+  --muted: #a7a5c2;
+  --border: #34324c;
+  --hairline: #2a2940;
+  --grid: #28273c;
 
-  --shell: #0a0806;
-  --shell-2: #17120d;
-  --shell-line: #2e261d;
-  --shell-ink: #f1e5d3;
-  --shell-muted: #a8967d;
-  --shell-normal: #7ccb97;
-  --shell-attention: #f2b552;
-  --shell-critical: #ff8a7a;
+  --shell: #101019;
+  --shell-2: #1c1b2b;
+  --shell-line: #2f2d46;
+  --shell-ink: #e6e4f2;
+  --shell-muted: #9d9bbb;
+  --shell-normal: #6fbf93;
+  --shell-attention: #d9a55a;
+  --shell-critical: #e07a70;
 
-  --series-1: #ead9bd;
-  --series-2: #9dc0a4;
-  --series-3: #d8a4aa;
-  --band: rgba(234, 217, 189, 0.1);
-  --preflight: rgba(241, 229, 211, 0.05);
+  --series-1: #9d98e6;
+  --series-2: #7fa7d6;
+  --series-3: #b393d9;
+  --band: rgba(157, 152, 230, 0.12);
+  --preflight: rgba(230, 228, 242, 0.05);
 
-  --normal: #7ccb97;
-  --normal-bg: rgba(124, 203, 151, 0.12);
-  --attention: #f2b552;
-  --attention-bg: rgba(242, 181, 82, 0.13);
-  --critical: #ff8a7a;
-  --critical-bg: rgba(255, 138, 122, 0.13);
-  --on-sev: #120f0b;
-  --on-annunciator: #0a0806;
+  --normal: #77c49a;
+  --normal-bg: rgba(119, 196, 154, 0.12);
+  --attention: #e0ac5c;
+  --attention-bg: rgba(224, 172, 92, 0.13);
+  --critical: #ec8579;
+  --critical-bg: rgba(236, 133, 121, 0.13);
+  --on-sev: #14131f;
+  --on-annunciator: #14131f;
 
-  --focus: #ead9bd;
+  --focus: #9d98e6;
   --shadow: 0 1px 2px rgba(0, 0, 0, 0.4), 0 6px 18px -8px rgba(0, 0, 0, 0.6);
 }
 

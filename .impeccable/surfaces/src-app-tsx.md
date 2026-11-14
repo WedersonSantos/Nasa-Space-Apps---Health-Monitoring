@@ -12,6 +12,13 @@ primary_target: "src/App.tsx"
 related_targets: []
 ---
 
+---
+version: 1
+slug: "src-app-tsx"
+primary_target: "src/App.tsx"
+related_targets: []
+---
+
 # Surface: Vigília dashboard (src/App.tsx)
 
 Mode: Operate. Audience: astronaut in flight (primary), crew medical officer (secondary), Space Apps judges (demo). Job: know within seconds whether health changed, what to do, and why. Constraints: all 7 metrics, alert contract fields, origin on every value, synthetic labelled, state = icon + label + colour, offline (self-hosted fonts), pt-BR copy. Tone pinned by user: mission operations.
@@ -20,7 +27,7 @@ Mode: Operate. Audience: astronaut in flight (primary), crew medical officer (se
 
 THESIS: Mission time is the spine. Every reading is placed on the mission track and against the crew member's own baseline; the screen refuses the category default of a grey grid of identical KPI cards with one blue accent.
 
-OWN-WORLD: Day mode from the ISS general-illumination module interior: cool panel-grey ground, white work surfaces, a committed deep slate mission bar, cobalt data ink. Night mode "pré-sono" from the station's low-blue pre-sleep lighting: warm near-black, sand-white ink, no blue. Archivo variable throughout: expanded bold for headings, condensed tabular figures for every telemetry value and the MET clock; system mono only for formulas. Severity colours appear only where they carry state.
+OWN-WORLD: Day mode (user-revised palette): periwinkle ground, white work surfaces, a light lavender mission bar with deep indigo ink, indigo-violet data ink with light blue and purple series. Night mode "Modo noturno": the same indigo-lavender world, dark and desaturated (indigo near-black ground, soft periwinkle data ink). Archivo variable throughout: expanded bold for headings, condensed tabular figures for every telemetry value and the MET clock; system mono only for formulas. Severity colours appear only where they carry state.
 
 STORY: The astronaut reads the annunciator and the vitals strip, sees what to do first, then why and how it was calculated; scrubbing the track shows when each pattern began.
 

@@ -78,11 +78,11 @@ export function MissionBar({ state, asOf, missionDay, theme, onToggleTheme, onSh
           className="shell-btn shell-btn--theme"
           onClick={onToggleTheme}
           aria-pressed={theme === 'dark'}
-          aria-label={theme === 'dark' ? 'Usar modo dia' : 'Usar modo pré-sono (luz sem azul)'}
-          title="Pré-sono: luz sem azul, inspirada na iluminação de LED da ISS antes do sono"
+          aria-label={theme === 'dark' ? 'Usar modo dia' : 'Usar modo noturno'}
+          title={theme === 'dark' ? 'Voltar ao modo dia' : 'Modo noturno: tons escuros e suaves para pouca luz'}
         >
           {theme === 'dark' ? <Sun size={15} /> : <Moon size={15} />}
-          <span className="shell-btn__text">{theme === 'dark' ? 'Modo dia' : 'Modo pré-sono'}</span>
+          <span className="shell-btn__text">{theme === 'dark' ? 'Modo dia' : 'Modo noturno'}</span>
         </button>
 
         {count > 0 ? (

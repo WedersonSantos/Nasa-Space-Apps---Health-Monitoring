@@ -31,26 +31,33 @@ colors:
   critical-bg: "#fbe5e2"
   on-sev: "#ffffff"
   on-annunciator: "#ffffff"
-  night-ground: "#120f0b"
-  night-surface: "#1b1712"
-  night-surface-2: "#231e17"
-  night-ink: "#f1e5d3"
-  night-muted: "#bba98f"
-  night-border: "#3b3229"
-  night-hairline: "#2d261f"
-  night-grid: "#2a231c"
-  night-shell: "#0a0806"
-  night-shell-2: "#17120d"
-  night-shell-line: "#2e261d"
-  night-shell-muted: "#a8967d"
-  night-sand: "#ead9bd"
-  night-series-sage: "#9dc0a4"
-  night-series-rose: "#d8a4aa"
-  night-band: "rgba(234, 217, 189, 0.1)"
-  night-preflight: "rgba(241, 229, 211, 0.05)"
-  night-normal: "#7ccb97"
-  night-attention: "#f2b552"
-  night-critical: "#ff8a7a"
+  night-ground: "#14131f"
+  night-surface: "#1b1a29"
+  night-surface-2: "#222134"
+  night-ink: "#e6e4f2"
+  night-muted: "#a7a5c2"
+  night-border: "#34324c"
+  night-hairline: "#2a2940"
+  night-grid: "#28273c"
+  night-shell: "#101019"
+  night-shell-2: "#1c1b2b"
+  night-shell-line: "#2f2d46"
+  night-shell-ink: "#e6e4f2"
+  night-shell-muted: "#9d9bbb"
+  night-shell-normal: "#6fbf93"
+  night-shell-attention: "#d9a55a"
+  night-shell-critical: "#e07a70"
+  night-periwinkle: "#9d98e6"
+  night-series-blue: "#7fa7d6"
+  night-series-purple: "#b393d9"
+  night-band: "rgba(157, 152, 230, 0.12)"
+  night-preflight: "rgba(230, 228, 242, 0.05)"
+  night-normal: "#77c49a"
+  night-normal-bg: "rgba(119, 196, 154, 0.12)"
+  night-attention: "#e0ac5c"
+  night-attention-bg: "rgba(224, 172, 92, 0.13)"
+  night-critical: "#ec8579"
+  night-critical-bg: "rgba(236, 133, 121, 0.13)"
 typography:
   wordmark:
     fontFamily: "Archivo Variable, Segoe UI, system-ui, sans-serif"
@@ -221,45 +228,45 @@ components:
 
 Vigília looks like a station console, not a SaaS dashboard. Mission time is the spine: a pale lavender shell carries the wordmark, the MET clock (`D+113 · GMT`), the crew and the master annunciator, and directly under it the mission track lays every flight day on one horizontal lane. Everything below (vitals strip, alerts, indicator clusters) is read against that clock and against the crew member's own baseline.
 
-The world has two lighting conditions, taken from the station itself. **Day mode** is the module's general illumination, read in light tones between purple and blue: a periwinkle-tinted ground, white work surfaces, a lavender shell inked in deep indigo, indigo-violet data ink. **Night mode, "pré-sono"**, is the low-blue pre-sleep lighting: warm near-black, sand-white ink, and no blue anywhere, including focus rings, links and chart series. Density is operational: compact cells, tabular figures, hairline dividers, and one loud element (the annunciator) per screen.
+The world has one palette under two lighting conditions. **Day mode** is the module's general illumination, read in light tones between purple and blue: a periwinkle-tinted ground, white work surfaces, a lavender shell inked in deep indigo, indigo-violet data ink. **Night mode, "Modo noturno"**, is the same indigo-lavender world for low light, dark and desaturated: indigo-black grounds, lavender-white ink, soft periwinkle data ink, and severity lamps softened to carry dark text. Density is operational: compact cells, tabular figures, hairline dividers, and one loud element (the annunciator) per screen.
 
 Type is a single variable family stretched across its width axis: expanded bold for things you name, condensed tabular figures for things you measure. Severity colour is reserved for state; it never decorates.
 
 **Key Characteristics:**
-- Lavender mission shell (near-black warm shell at night) with MET clock and master annunciator, full width, above everything.
+- Lavender mission shell (deep indigo-black shell at night) with MET clock and master annunciator, full width, above everything.
 - The mission track (flight-day lane with onset markers and a day cursor) as the signature move.
 - Archivo Variable only, used along its width axis: 115–125% for headings, 75–82% for telemetry.
 - State is always icon + label + colour, including the honest fourth state, "Não avaliado", when the engine lacks data.
-- Two physically motivated palettes: light periwinkle-and-lavender module light by day, blue-free pre-sleep light by night.
+- One identity, two lightings: light periwinkle-and-lavender by day, the same indigo-lavender dark and desaturated by night.
 
 ## Colors
 
-A light instrument palette between purple and blue by day and a warm, blue-free one by night; each has its own shell band (pale lavender by day, near-black by night) and holds severity hues back for state.
+An instrument palette between purple and blue, light by day and dark and desaturated by night; each lighting has its own shell band (pale lavender by day, deep indigo-black by night) and holds severity hues back for state.
 
 ### Primary
-- **Indigo Data Ink** (`indigo`, CSS `--series-1` and `--focus`): the day-mode data colour. First chart series, links, selected tab underline, checked scale option, primary button (white text, 5.65:1), focus ring, caret, text selection, the alert "O que fazer" sub-heading, the how-to-measure title, and the brand mark. In night mode its role passes to **Pre-sleep Sand** (`night-sand`), which takes every one of those jobs so no blue survives after dark.
+- **Indigo Data Ink** (`indigo`, CSS `--series-1` and `--focus`): the day-mode data colour. First chart series, links, selected tab underline, checked scale option, primary button (white text, 5.65:1), focus ring, caret, text selection, the alert "O que fazer" sub-heading, the how-to-measure title, and the brand mark. In night mode every one of those jobs passes to **Soft Periwinkle** (`night-periwinkle`), the same hue at lower chroma (links on night surface 6.58:1; the primary button carries dark surface text).
 
 ### Secondary
-- **Lavender Shell** (`shell`, `shell-2`, `shell-line`): the mission bar and track band, a shade deeper than the ground; raised controls sit on `shell-2`, dividers and the pre-flight hatch on `shell-line`. Text on the shell is **Shell Indigo** (`shell-ink`) with `shell-muted` for secondary readouts (5.09:1). Night equivalents: `night-shell`, `night-shell-2`, `night-shell-line`, `night-shell-muted`; shell ink becomes `night-ink`.
-- **Shell annunciator lamps** (`shell-normal`, `shell-attention`, `shell-critical`): deep severity hues tuned for the light shell, solid enough to carry white text (`on-annunciator`, 4.52–5.5:1). Used only for the annunciator fill, the track's day bars, onset markers and legend icon; as graphics on the shell they hold at least 3:1. At night they take the night severity hues and `on-annunciator` becomes `night-shell`.
+- **Lavender Shell** (`shell`, `shell-2`, `shell-line`): the mission bar and track band, a shade deeper than the ground; raised controls sit on `shell-2`, dividers and the pre-flight hatch on `shell-line`. Text on the shell is **Shell Indigo** (`shell-ink`) with `shell-muted` for secondary readouts (5.09:1). Night equivalents: `night-shell`, `night-shell-2`, `night-shell-line`, `night-shell-ink`, `night-shell-muted` (7.06:1 on the night shell).
+- **Shell annunciator lamps** (`shell-normal`, `shell-attention`, `shell-critical`): deep severity hues tuned for the light shell, solid enough to carry white text (`on-annunciator`, 4.52–5.5:1). Used only for the annunciator fill, the track's day bars, onset markers and legend icon; as graphics on the shell they hold at least 3:1. At night they soften to `night-shell-normal`, `night-shell-attention`, `night-shell-critical`, and `on-annunciator` becomes dark (`night-ground`), 6.29–8.36:1 on the lamps.
 
 ### Tertiary
-- **Series Light Blue / Series Purple** (`series-blue`, `series-purple`): second and third chart series by day, flanking indigo on either side of the purple-blue axis. At night they become **Sage** (`night-series-sage`) and **Dusty Rose** (`night-series-rose`).
-- **Baseline band and pre-flight wash** (`band`, `preflight`): the individual baseline band is translucent indigo (`night-band`, translucent sand, after dark); pre-flight days in charts get a faint ink wash (`preflight` / `night-preflight`). Chart grid lines use `grid` / `night-grid`.
+- **Series Light Blue / Series Purple** (`series-blue`, `series-purple`): second and third chart series by day, flanking indigo on either side of the purple-blue axis. At night they become **Dusk Blue** (`night-series-blue`) and **Dusk Lilac** (`night-series-purple`), the same hues dimmed.
+- **Baseline band and pre-flight wash** (`band`, `preflight`): the individual baseline band is translucent indigo (`night-band`, translucent periwinkle, at night); pre-flight days in charts get a faint ink wash (`preflight` / `night-preflight`). Chart grid lines use `grid` / `night-grid`.
 
 ### Severity
-- **Normal** (`normal` on `normal-bg`), **Atenção** (`attention` on `attention-bg`), **Crítico** (`critical` on `critical-bg`). Text on solid severity fills uses `on-sev` (white by day, `night-ground` by night). At night the severity hues are `night-normal`, `night-attention`, `night-critical` over the same hue at 12–13% alpha.
+- **Normal** (`normal` on `normal-bg`), **Atenção** (`attention` on `attention-bg`), **Crítico** (`critical` on `critical-bg`). Text on solid severity fills uses `on-sev` (white by day, `night-ground` by night). At night the severity hues are `night-normal`, `night-attention`, `night-critical` over `night-normal-bg`, `night-attention-bg`, `night-critical-bg` (the same hue at 12–13% alpha); as text on the night surface they hold 6.68–8.34:1.
 
 ### Neutral
 - **Periwinkle Mist** (`ground`): page ground by day; `night-ground` at night.
 - **Work Surface** (`surface`, `surface-2`): cards, panels, alert bodies; `surface-2` for card heads, inputs, formula blocks. Night: `night-surface`, `night-surface-2`.
-- **Indigo Ink** (`ink`) and **Muted Indigo** (`muted`): body text and secondary text. Night: `night-ink` (sand-white) and `night-muted`.
+- **Indigo Ink** (`ink`) and **Muted Indigo** (`muted`): body text and secondary text. Night: `night-ink` (lavender-white, 14.65:1 on the night ground) and `night-muted` (7.18:1 on the night surface).
 - **Border / Hairline** (`border`, `hairline`): container strokes and internal dividers. Night: `night-border`, `night-hairline`.
 
 ### Named Rules
 **The Severity Is State Rule.** Green, amber and red appear only where they carry a severity state (annunciator, badges, track bars, tinted vital cells, alert borders, tab counts, adherence fill, the urgent follow-up button, logged-action checks). Never as decoration or brand accent; the brand mark is data ink, not a lamp.
 
-**The No Blue After Dark Rule.** In "pré-sono" mode no token resolves to a blue hue. Every role indigo plays by day is played by sand at night, and the day series' light blue becomes sage.
+**The Night Is the Same World, Dimmed Rule.** Night keeps the day hues at lower lightness and chroma; it never swaps in a new hue family. Data ink stays in the indigo family (soft periwinkle), never saturated neon, and every role indigo plays by day is played by periwinkle at night.
 
 ## Typography
 
@@ -322,10 +329,10 @@ Borders carry meaning. Severity raises border weight (attention: 1px amber; crit
 ## Components
 
 ### Mission Bar
-The console header. Wordmark with an indigo (`series-1`; sand at night) mark, MET clock (condensed tabular day plus muted GMT clock), crew `dl`, Earth link, theme toggle ("modo dia" / "modo pré-sono (luz sem azul)", `aria-pressed`), and the master annunciator last. Flex-wraps; focus rings inside the shell switch to `shell-ink`.
+The console header. Wordmark with an indigo (`series-1`; soft periwinkle at night) mark, MET clock (condensed tabular day plus muted GMT clock), crew `dl`, Earth link, theme toggle ("Modo noturno" / "Modo dia", moon / sun icon, `aria-pressed`, title "Modo noturno: tons escuros e suaves para pouca luz"), and the master annunciator last. Flex-wraps; focus rings inside the shell switch to `shell-ink`.
 
 ### Master Annunciator
-- **Shape:** 6px block, 8px 18px 8px 14px padding, fill = shell lamp colour for the overall state, text in `on-annunciator` (white by day).
+- **Shape:** 6px block, 8px 18px 8px 14px padding, fill = shell lamp colour for the overall state, text in `on-annunciator` (white by day, dark by night).
 - **Content:** severity icon (26px) + uppercase expanded label + sub-line with alert count (plus "· N não avaliados" when coverage is partial) or "Nenhum alerta ativo".
 - **Unassessed variant:** with no alerts but some signals not evaluable, it reads "Avaliação parcial" ("Sem alertas · N de 7 sinais não avaliados"), or "Sem dados" when none could be evaluated; `shell-2` fill, `shell-ink` text, 2px dashed `shell-muted` border, Unknown icon. Missing data is never shown as a calm green.
 - **States:** with alerts it is a link that jumps to the first alert's action ("ver o que fazer"); hover brightens 6%; focus ring `shell-ink`, 3px offset.
@@ -344,7 +351,7 @@ The flight-day timeline that every chart's time axis shares.
 - **Pre-flight state:** before launch the lane is replaced by a pre-flight progress track: title "Pré-voo", a muted count line, and seven hatched `shell-line` steps that fill solid `shell-muted` as days pass.
 
 ### Buttons
-- **Primary** (`button-primary`): indigo fill, white surface text, 40px min height; hover brightens 8%.
+- **Primary** (`button-primary`): `series-1` fill (indigo by day, periwinkle by night), `surface` text, 40px min height; hover brightens 8%.
 - **Secondary** (`button-secondary`): surface fill, 1px border; hover turns the border indigo. Small variant (`button-small`) 30px, 0.8rem. Urgent small variant: critical border and text at 700, used only for "medical officer contacted" on an escalating alert not yet acted on.
 - **Link button:** underlined `series-1` text at 0.8rem for inline undo.
 - **Shell button** (`shell-button`): on the shell, `shell-2` fill and `shell-line` border, 34px; hover border `shell-muted`; pressed inverts to `shell-ink` fill; disabled 40% opacity. Icon-only variant 6px 8px padding.
@@ -388,7 +395,7 @@ Text tabs on a 1px bottom rule, 600 weight at width 105%; selected tab gets ink 
 - **Scale (1–5):** five 42px tiles; hover border indigo; checked fills indigo with surface text; focus ring drawn on the tile.
 
 ### Charts
-Recharts with axis text condensed and tabular. Series 1–3 tokens (indigo, light blue, purple by day), the `band` baseline band, the `preflight` wash, `grid` lines, a custom legend in muted text, tooltip on surface with the chart-tooltip shadow and the reading's origin.
+Recharts with axis text condensed and tabular. Series 1–3 tokens (indigo, light blue, purple by day; soft periwinkle, dusk blue, dusk lilac by night), the `band` baseline band, the `preflight` wash, `grid` lines, a custom legend in muted text, tooltip on surface with the chart-tooltip shadow and the reading's origin.
 
 ### Variable Term
 Dotted-underlined term button with an info icon (`cursor: help`); hover or open turns underline and icon indigo. Opens a fixed 6px popover (`role="tooltip"`) with title + unit, "O que mede", "Por que importa no espaço", and a hairline-separated "Alerta quando" foot.
@@ -400,13 +407,13 @@ Dotted-underlined term button with an info icon (`cursor: help`); hover or open 
 - **Do** set every measured value in Archivo at width 75% or 82% with tabular numerals, and every heading at width 115%.
 - **Do** place time-based readings on the mission track's day axis and against the individual baseline band.
 - **Do** carry the data origin (Medido / Sintético / Estimado) with its own icon and stroke style next to every value.
-- **Do** swap indigo for sand in "pré-sono" mode for every role: links, focus, series 1, selection, primary button, brand mark.
+- **Do** build night mode as the day world dimmed: every indigo role (links, focus, series 1, selection, primary button, brand mark) moves to soft periwinkle, series 2 and 3 to dusk blue and dusk lilac, and text on solid severity fills flips to dark.
 - **Do** keep the annunciator pulse a single replay on state change, and honour `prefers-reduced-motion` (all animation and transitions off).
 - **Do** keep focus visible: 2px outline at 2px offset in `--focus`, `shell-ink` inside the shell, on the whole track lane when its range input is focused. Keep the skip link, the polite live region for state changes, and 34–42px minimum control heights.
 
 ### Don't:
 - **Don't** use green, amber or red for anything that is not a severity state.
-- **Don't** introduce blue or violet into the night palette.
+- **Don't** use saturated or neon hues at night, or bring in a hue family the day palette does not have.
 - **Don't** use monospace outside the arithmetic block.
 - **Don't** loop or repeat the annunciator pulse, or add other attention animations.
 - **Don't** use hard or offset shadows; depth is border plus soft ambient lift.

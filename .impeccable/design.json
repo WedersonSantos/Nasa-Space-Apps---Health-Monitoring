@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-11-14T22:00:00.000Z",
+  "generatedAt": "2026-11-14T23:30:00.000Z",
   "title": "Design System: Vigília",
   "extensions": {
     "colorMeta": {
@@ -441,302 +441,407 @@
       },
       "night-ground": {
         "role": "neutral",
-        "displayName": "Pre-sleep Ground",
-        "canonical": "#120f0b",
+        "displayName": "Indigo Night Ground",
+        "canonical": "#14131f",
         "tonalRamp": [
-          "#0c0b0a",
-          "#272522",
-          "#45413d",
-          "#64615b",
-          "#86827c",
-          "#a8a49f",
-          "#cbc9c5",
-          "#f0eeec"
+          "#0b0b0f",
+          "#24242d",
+          "#41404e",
+          "#605f6f",
+          "#818090",
+          "#a4a3b3",
+          "#c8c8d3",
+          "#eeeef4"
         ]
       },
       "night-surface": {
         "role": "neutral",
-        "displayName": "Pre-sleep Surface",
-        "canonical": "#1b1712",
+        "displayName": "Night Surface",
+        "canonical": "#1b1a29",
         "tonalRamp": [
-          "#0c0b09",
-          "#272521",
-          "#45413c",
-          "#65605a",
-          "#87817b",
-          "#a9a49e",
-          "#ccc8c4",
-          "#f0eeec"
+          "#0b0a10",
+          "#24242e",
+          "#414050",
+          "#605f71",
+          "#818093",
+          "#a3a3b6",
+          "#c8c7d6",
+          "#eeedf6"
         ]
       },
       "night-surface-2": {
         "role": "neutral",
-        "displayName": "Pre-sleep Surface Recessed",
-        "canonical": "#231e17",
+        "displayName": "Night Surface Recessed",
+        "canonical": "#222134",
         "tonalRamp": [
-          "#0c0b09",
-          "#282420",
-          "#46413a",
-          "#666058",
-          "#888179",
-          "#aaa49c",
-          "#cdc8c2",
-          "#f0eeeb"
+          "#0b0a11",
+          "#242330",
+          "#404054",
+          "#5f5f75",
+          "#808097",
+          "#a3a2ba",
+          "#c7c7d8",
+          "#ededf7"
         ]
       },
       "night-ink": {
         "role": "neutral",
-        "displayName": "Sand-white Ink",
-        "canonical": "#f1e5d3",
+        "displayName": "Lavender-white Ink",
+        "canonical": "#e6e4f2",
         "tonalRamp": [
-          "#0d0b07",
-          "#2a241b",
-          "#494134",
-          "#6a6050",
-          "#8b8171",
-          "#ada495",
-          "#d0c8bc",
-          "#f2eee8"
+          "#0b0b0e",
+          "#25242b",
+          "#42404b",
+          "#615f6b",
+          "#82808d",
+          "#a5a3b0",
+          "#c9c8d1",
+          "#eeeef3"
         ]
       },
       "night-muted": {
         "role": "neutral",
-        "displayName": "Pre-sleep Muted",
-        "canonical": "#bba98f",
+        "displayName": "Night Muted Lavender",
+        "canonical": "#a7a5c2",
         "tonalRamp": [
-          "#0e0a05",
-          "#2d2316",
-          "#4d402c",
-          "#6f5e47",
-          "#908067",
-          "#b2a38c",
-          "#d3c7b6",
-          "#f4ede5"
+          "#0b0a12",
+          "#242332",
+          "#413f56",
+          "#605e78",
+          "#817f9a",
+          "#a3a1bd",
+          "#c8c7db",
+          "#eeedf9"
         ]
       },
       "night-border": {
         "role": "neutral",
-        "displayName": "Pre-sleep Border",
-        "canonical": "#3b3229",
+        "displayName": "Night Border",
+        "canonical": "#34324c",
         "tonalRamp": [
-          "#0d0b08",
-          "#2a241e",
-          "#494038",
-          "#695f56",
-          "#8b8076",
-          "#ada39a",
-          "#cfc8c0",
-          "#f2eeea"
+          "#0b0a12",
+          "#242333",
+          "#403e58",
+          "#5f5e7a",
+          "#807f9d",
+          "#a3a1c0",
+          "#c7c7dd",
+          "#ededfa"
         ]
       },
       "night-hairline": {
         "role": "neutral",
-        "displayName": "Pre-sleep Hairline",
-        "canonical": "#2d261f",
+        "displayName": "Night Hairline",
+        "canonical": "#2a2940",
         "tonalRamp": [
-          "#0d0b09",
-          "#292420",
-          "#47413a",
-          "#686058",
-          "#898178",
-          "#aba39c",
-          "#cec8c2",
-          "#f1eeeb"
+          "#0a0a12",
+          "#242332",
+          "#403f57",
+          "#5f5e78",
+          "#7f7f9b",
+          "#a2a2be",
+          "#c7c7db",
+          "#ededf9"
         ]
       },
       "night-grid": {
         "role": "neutral",
-        "displayName": "Pre-sleep Chart Grid",
-        "canonical": "#2a231c",
+        "displayName": "Night Chart Grid",
+        "canonical": "#28273c",
         "tonalRamp": [
-          "#0e0a07",
-          "#29241f",
-          "#47413b",
-          "#676058",
-          "#898179",
-          "#aba49c",
-          "#cec8c2",
-          "#f3ede8"
+          "#0a0a11",
+          "#242331",
+          "#403f55",
+          "#5f5e76",
+          "#807f99",
+          "#a2a2bc",
+          "#c7c7da",
+          "#ededf8"
         ]
       },
       "night-shell": {
         "role": "secondary",
-        "displayName": "Pre-sleep Shell",
-        "canonical": "#0a0806",
+        "displayName": "Night Shell",
+        "canonical": "#101019",
         "tonalRamp": [
-          "#0c0b0a",
-          "#262523",
-          "#44413f",
-          "#64615d",
-          "#85827e",
-          "#a7a4a1",
-          "#cbc9c6",
-          "#efeeed"
+          "#0b0b0e",
+          "#24242b",
+          "#41414b",
+          "#60606c",
+          "#81818d",
+          "#a3a4b0",
+          "#c8c8d1",
+          "#eeeef3"
         ]
       },
       "night-shell-2": {
         "role": "secondary",
-        "displayName": "Pre-sleep Shell Raised",
-        "canonical": "#17120d",
+        "displayName": "Night Shell Raised",
+        "canonical": "#1c1b2b",
         "tonalRamp": [
-          "#0c0b09",
-          "#282421",
-          "#46413c",
-          "#66605a",
-          "#88817b",
-          "#aaa49e",
-          "#cdc8c3",
-          "#f0eeeb"
+          "#0b0a10",
+          "#24242f",
+          "#404051",
+          "#5f5f72",
+          "#808094",
+          "#a3a3b7",
+          "#c8c7d6",
+          "#eeedf6"
         ]
       },
       "night-shell-line": {
         "role": "secondary",
-        "displayName": "Pre-sleep Shell Rule",
-        "canonical": "#2e261d",
+        "displayName": "Night Shell Rule",
+        "canonical": "#2f2d46",
         "tonalRamp": [
-          "#0d0b08",
-          "#29241e",
-          "#484138",
-          "#696055",
-          "#8a8176",
-          "#aca39a",
-          "#cfc8c0",
-          "#f1eeea"
+          "#0b0a12",
+          "#242333",
+          "#403f58",
+          "#5f5e7a",
+          "#807f9c",
+          "#a3a1bf",
+          "#c7c7dc",
+          "#ededfa"
+        ]
+      },
+      "night-shell-ink": {
+        "role": "secondary",
+        "displayName": "Night Shell Ink",
+        "canonical": "#e6e4f2",
+        "tonalRamp": [
+          "#0b0b0e",
+          "#25242b",
+          "#42404b",
+          "#615f6b",
+          "#82808d",
+          "#a5a3b0",
+          "#c9c8d1",
+          "#eeeef3"
         ]
       },
       "night-shell-muted": {
         "role": "secondary",
-        "displayName": "Pre-sleep Shell Muted",
-        "canonical": "#a8967d",
+        "displayName": "Night Shell Muted",
+        "canonical": "#9d9bbb",
         "tonalRamp": [
-          "#0e0a05",
-          "#2d2316",
-          "#4d402c",
-          "#6f5e47",
-          "#917f67",
-          "#b2a28c",
-          "#d4c7b6",
-          "#f4ede5"
+          "#0b0a12",
+          "#242334",
+          "#413e59",
+          "#605d7b",
+          "#807e9d",
+          "#a3a1c0",
+          "#c8c6dd",
+          "#ededfa"
         ]
       },
-      "night-sand": {
+      "night-shell-normal": {
+        "role": "secondary",
+        "displayName": "Night Normal Lamp",
+        "canonical": "#6fbf93",
+        "tonalRamp": [
+          "#000f06",
+          "#002e1a",
+          "#024f30",
+          "#1c724b",
+          "#44956b",
+          "#6cb88e",
+          "#a3d7b9",
+          "#daf7e5"
+        ]
+      },
+      "night-shell-attention": {
+        "role": "secondary",
+        "displayName": "Night Attention Lamp",
+        "canonical": "#d9a55a",
+        "tonalRamp": [
+          "#130900",
+          "#342001",
+          "#5a3b01",
+          "#835702",
+          "#a97729",
+          "#cc9b53",
+          "#e6c393",
+          "#feebd3"
+        ]
+      },
+      "night-shell-critical": {
+        "role": "secondary",
+        "displayName": "Night Critical Lamp",
+        "canonical": "#e07a70",
+        "tonalRamp": [
+          "#1c0302",
+          "#460d0c",
+          "#761d1a",
+          "#9d3e38",
+          "#c36058",
+          "#e8857b",
+          "#fdb4ab",
+          "#fee9e6"
+        ]
+      },
+      "night-periwinkle": {
         "role": "primary",
-        "displayName": "Pre-sleep Sand",
-        "canonical": "#ead9bd",
+        "displayName": "Soft Periwinkle",
+        "canonical": "#9d98e6",
         "tonalRamp": [
-          "#0e0b05",
-          "#2c2415",
-          "#4c402c",
-          "#6e5f47",
-          "#8f8067",
-          "#b1a38c",
-          "#d3c8b6",
-          "#f3eee4"
+          "#0a081c",
+          "#231d47",
+          "#3f3678",
+          "#5d569e",
+          "#7d77c2",
+          "#9f9be6",
+          "#c4c3f9",
+          "#ededfe"
         ]
       },
-      "night-series-sage": {
+      "night-series-blue": {
         "role": "tertiary",
-        "displayName": "Sage",
-        "canonical": "#9dc0a4",
+        "displayName": "Dusk Blue",
+        "canonical": "#7fa7d6",
         "tonalRamp": [
-          "#060d07",
-          "#182a1c",
-          "#2f4935",
-          "#4b6a52",
-          "#6b8c72",
-          "#90ae96",
-          "#b9d0bd",
-          "#e6f2e8"
+          "#030c18",
+          "#10263f",
+          "#20436b",
+          "#3e638f",
+          "#5f85b2",
+          "#82a8d6",
+          "#b0cced",
+          "#e4f0fe"
         ]
       },
-      "night-series-rose": {
+      "night-series-purple": {
         "role": "tertiary",
-        "displayName": "Dusty Rose",
-        "canonical": "#d8a4aa",
+        "displayName": "Dusk Lilac",
+        "canonical": "#b393d9",
         "tonalRamp": [
-          "#130809",
-          "#361c20",
-          "#5b363b",
-          "#805359",
-          "#a37379",
-          "#c4979d",
-          "#e2bfc3",
-          "#fce9eb"
+          "#0f0618",
+          "#2d1a40",
+          "#4f316d",
+          "#6f5091",
+          "#9171b5",
+          "#b495d8",
+          "#d4beef",
+          "#f3eafe"
         ]
       },
       "night-band": {
         "role": "tertiary",
-        "displayName": "Pre-sleep Baseline Band",
-        "canonical": "rgba(234, 217, 189, 0.1)",
+        "displayName": "Night Baseline Band",
+        "canonical": "rgba(157, 152, 230, 0.12)",
         "tonalRamp": [
-          "#100a02",
-          "#2c2415",
-          "#4b402d",
-          "#6d5f48",
-          "#8f8068",
-          "#b0a38e",
-          "#d3c8b5",
-          "#f7eddd"
+          "#0a081c",
+          "#231d47",
+          "#3f3678",
+          "#5d569e",
+          "#7d77c2",
+          "#9f9be6",
+          "#c4c3f9",
+          "#ededfe"
         ]
       },
       "night-preflight": {
         "role": "neutral",
-        "displayName": "Pre-sleep Pre-flight Wash",
-        "canonical": "rgba(241, 229, 211, 0.05)",
+        "displayName": "Night Pre-flight Wash",
+        "canonical": "rgba(230, 228, 242, 0.05)",
         "tonalRamp": [
-          "#0f0a05",
-          "#2a241b",
-          "#494135",
-          "#696051",
-          "#8b8172",
-          "#ada496",
-          "#d0c8bc",
-          "#f4ede3"
+          "#0b0b0e",
+          "#25242b",
+          "#42404b",
+          "#615f6b",
+          "#82808d",
+          "#a5a3b0",
+          "#c9c8d1",
+          "#eeeef3"
         ]
       },
       "night-normal": {
         "role": "severity",
         "displayName": "Night Normal",
-        "canonical": "#7ccb97",
+        "canonical": "#77c49a",
         "tonalRamp": [
-          "#010f05",
-          "#002f14",
-          "#00502a",
-          "#217244",
-          "#489565",
-          "#73b78a",
-          "#a5d7b4",
-          "#ddf6e4"
+          "#000f06",
+          "#012e1a",
+          "#014f31",
+          "#21724c",
+          "#47946d",
+          "#6eb78f",
+          "#a5d7ba",
+          "#daf7e5"
+        ]
+      },
+      "night-normal-bg": {
+        "role": "severity",
+        "displayName": "Night Normal Tint",
+        "canonical": "rgba(119, 196, 154, 0.12)",
+        "tonalRamp": [
+          "#000f06",
+          "#012e1a",
+          "#014f31",
+          "#21724c",
+          "#47946d",
+          "#6eb78f",
+          "#a5d7ba",
+          "#daf7e5"
         ]
       },
       "night-attention": {
         "role": "severity",
         "displayName": "Night Atenção",
-        "canonical": "#f2b552",
+        "canonical": "#e0ac5c",
         "tonalRamp": [
-          "#150800",
-          "#3c1c00",
-          "#643600",
-          "#8a5400",
-          "#ae7600",
-          "#ce9b47",
-          "#eac287",
-          "#ffebce"
+          "#130900",
+          "#342100",
+          "#593b01",
+          "#825801",
+          "#a97821",
+          "#cc9b4f",
+          "#e6c390",
+          "#feecd1"
+        ]
+      },
+      "night-attention-bg": {
+        "role": "severity",
+        "displayName": "Night Atenção Tint",
+        "canonical": "rgba(224, 172, 92, 0.13)",
+        "tonalRamp": [
+          "#130900",
+          "#342100",
+          "#593b01",
+          "#825801",
+          "#a97821",
+          "#cc9b4f",
+          "#e6c390",
+          "#feecd1"
         ]
       },
       "night-critical": {
         "role": "severity",
         "displayName": "Night Crítico",
-        "canonical": "#ff8a7a",
+        "canonical": "#ec8579",
         "tonalRamp": [
           "#1b0302",
-          "#490905",
-          "#771c15",
-          "#a3382e",
-          "#c95c4e",
-          "#ea8476",
-          "#ffb2a6",
-          "#ffe3dc"
+          "#460e0b",
+          "#761d19",
+          "#9d3e36",
+          "#c36156",
+          "#e88579",
+          "#fdb4aa",
+          "#fee9e6"
+        ]
+      },
+      "night-critical-bg": {
+        "role": "severity",
+        "displayName": "Night Crítico Tint",
+        "canonical": "rgba(236, 133, 121, 0.13)",
+        "tonalRamp": [
+          "#1b0302",
+          "#460e0b",
+          "#761d19",
+          "#9d3e36",
+          "#c36156",
+          "#e88579",
+          "#fdb4aa",
+          "#fee9e6"
         ]
       }
     },
@@ -859,7 +964,7 @@
       "name": "Primary Button",
       "kind": "button",
       "refersTo": "button-primary",
-      "description": "Main form action, indigo by day, sand at night.",
+      "description": "Main form action, indigo by day, soft periwinkle at night.",
       "html": "<button class=\"ds-btn-primary\">Registrar</button>",
       "css": ".ds-btn-primary{display:inline-flex;align-items:center;gap:6px;font-family:var(--font);font-weight:600;font-size:16px;padding:9px 16px;min-height:40px;border-radius:var(--radius,6px);border:1px solid var(--series-1,#5b55d6);background:var(--series-1,#5b55d6);color:var(--surface,#fff);cursor:pointer}.ds-btn-primary:hover{filter:brightness(1.08)}.ds-btn-primary:focus-visible{outline:2px solid var(--focus,#5b55d6);outline-offset:2px}"
     },
@@ -935,13 +1040,13 @@
   ],
   "narrative": {
     "northStar": "The Mission Clock",
-    "overview": "Vigília looks like a station console, not a SaaS dashboard. Mission time is the spine: a pale lavender shell carries the wordmark, the MET clock (`D+113 · GMT`), the crew and the master annunciator, and directly under it the mission track lays every flight day on one horizontal lane. Everything below (vitals strip, alerts, indicator clusters) is read against that clock and against the crew member's own baseline.\n\nThe world has two lighting conditions, taken from the station itself. **Day mode** is the module's general illumination, read in light tones between purple and blue: a periwinkle-tinted ground, white work surfaces, a lavender shell inked in deep indigo, indigo-violet data ink. **Night mode, \"pré-sono\"**, is the low-blue pre-sleep lighting: warm near-black, sand-white ink, and no blue anywhere, including focus rings, links and chart series. Density is operational: compact cells, tabular figures, hairline dividers, and one loud element (the annunciator) per screen.\n\nType is a single variable family stretched across its width axis: expanded bold for things you name, condensed tabular figures for things you measure. Severity colour is reserved for state; it never decorates.",
+    "overview": "Vigília looks like a station console, not a SaaS dashboard. Mission time is the spine: a pale lavender shell carries the wordmark, the MET clock (`D+113 · GMT`), the crew and the master annunciator, and directly under it the mission track lays every flight day on one horizontal lane. Everything below (vitals strip, alerts, indicator clusters) is read against that clock and against the crew member's own baseline.\n\nThe world has one palette under two lighting conditions. **Day mode** is the module's general illumination, read in light tones between purple and blue: a periwinkle-tinted ground, white work surfaces, a lavender shell inked in deep indigo, indigo-violet data ink. **Night mode, \"Modo noturno\"**, is the same indigo-lavender world for low light, dark and desaturated: indigo-black grounds, lavender-white ink, soft periwinkle data ink, and severity lamps softened to carry dark text. Density is operational: compact cells, tabular figures, hairline dividers, and one loud element (the annunciator) per screen.\n\nType is a single variable family stretched across its width axis: expanded bold for things you name, condensed tabular figures for things you measure. Severity colour is reserved for state; it never decorates.",
     "keyCharacteristics": [
-      "Lavender mission shell (near-black warm shell at night) with MET clock and master annunciator, full width, above everything.",
+      "Lavender mission shell (deep indigo-black shell at night) with MET clock and master annunciator, full width, above everything.",
       "The mission track (flight-day lane with onset markers and a day cursor) as the signature move.",
       "Archivo Variable only, used along its width axis: 115–125% for headings, 75–82% for telemetry.",
       "State is always icon + label + colour, including the honest fourth state, \"Não avaliado\", when the engine lacks data.",
-      "Two physically motivated palettes: light periwinkle-and-lavender module light by day, blue-free pre-sleep light by night."
+      "One identity, two lightings: light periwinkle-and-lavender by day, the same indigo-lavender dark and desaturated by night."
     ],
     "rules": [
       {
@@ -950,8 +1055,8 @@
         "section": "colors"
       },
       {
-        "name": "The No Blue After Dark Rule",
-        "body": "In \"pré-sono\" mode no token resolves to a blue hue. Every role indigo plays by day is played by sand at night, and the day series' light blue becomes sage.",
+        "name": "The Night Is the Same World, Dimmed Rule",
+        "body": "Night keeps the day hues at lower lightness and chroma; it never swaps in a new hue family. Data ink stays in the indigo family (soft periwinkle), never saturated neon, and every role indigo plays by day is played by periwinkle at night.",
         "section": "colors"
       },
       {
@@ -975,13 +1080,13 @@
       "**Do** set every measured value in Archivo at width 75% or 82% with tabular numerals, and every heading at width 115%.",
       "**Do** place time-based readings on the mission track's day axis and against the individual baseline band.",
       "**Do** carry the data origin (Medido / Sintético / Estimado) with its own icon and stroke style next to every value.",
-      "**Do** swap indigo for sand in \"pré-sono\" mode for every role: links, focus, series 1, selection, primary button, brand mark.",
+      "**Do** build night mode as the day world dimmed: every indigo role (links, focus, series 1, selection, primary button, brand mark) moves to soft periwinkle, series 2 and 3 to dusk blue and dusk lilac, and text on solid severity fills flips to dark.",
       "**Do** keep the annunciator pulse a single replay on state change, and honour `prefers-reduced-motion` (all animation and transitions off).",
       "**Do** keep focus visible: 2px outline at 2px offset in `--focus`, `shell-ink` inside the shell, on the whole track lane when its range input is focused. Keep the skip link, the polite live region for state changes, and 34–42px minimum control heights."
     ],
     "donts": [
       "**Don't** use green, amber or red for anything that is not a severity state.",
-      "**Don't** introduce blue or violet into the night palette.",
+      "**Don't** use saturated or neon hues at night, or bring in a hue family the day palette does not have.",
       "**Don't** use monospace outside the arithmetic block.",
       "**Don't** loop or repeat the annunciator pulse, or add other attention animations.",
       "**Don't** use hard or offset shadows; depth is border plus soft ambient lift.",
