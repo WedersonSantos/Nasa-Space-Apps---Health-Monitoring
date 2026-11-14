@@ -10,7 +10,7 @@
  */
 import type { VariableId } from '../../types/contract';
 
-export const ENGINE_CONFIG_VERSION = '1.0.0';
+export const ENGINE_CONFIG_VERSION = '1.1.0';
 
 export const BASELINE = {
   /** Spec §5: baseline pré-voo = primeiros 7 dias de registro, congelados. */
@@ -127,6 +127,34 @@ export const RULES = {
     criticalWithBloodPressure: true,
   },
 } as const;
+
+export interface CoverageRequirement {
+  /** Janela (dias, terminando na data de avaliação) que a regra da variável lê. */
+  windowDays: number;
+  /** Dias com dado válido exigidos nessa janela para a regra poder avaliar. */
+  minValidDays: number;
+  /** A regra compara com o baseline pré-voo (sono e exercício usam a prescrição). */
+  needsBaseline: boolean;
+}
+
+/**
+ * Cobertura de dados (AstronautState.coverage). NENHUM limiar novo: cada valor
+ * é derivado da regra isolada da variável, para que coverage 'ok' signifique
+ * exatamente "a regra teve dados para avaliar".
+ */
+export const COVERAGE: Record<VariableId, CoverageRequirement> = {
+  // Regras de N dias consecutivos: todos os N dias até a data de avaliação.
+  restingHeartRate: { windowDays: RULES.restingHeartRate.consecutiveDays, minValidDays: RULES.restingHeartRate.consecutiveDays, needsBaseline: true },
+  hrv: { windowDays: RULES.hrv.consecutiveDays, minValidDays: RULES.hrv.consecutiveDays, needsBaseline: true },
+  bloodPressure: { windowDays: RULES.bloodPressure.consecutiveDays, minValidDays: RULES.bloodPressure.consecutiveDays, needsBaseline: true },
+  sleep: { windowDays: RULES.sleep.windowDays, minValidDays: RULES.sleep.minNights, needsBaseline: false },
+  // Autorrelato: a mesma exigência vale também para a janela anterior (checada no motor).
+  selfReport: { windowDays: RULES.selfReport.windowDays, minValidDays: RULES.selfReport.minDays, needsBaseline: true },
+  // Massa: ao menos uma pesagem na janela recente (em voo, pesagem a cada ~3 dias).
+  bodyMass: { windowDays: RULES.bodyMass.recentWindowDays, minValidDays: 1, needsBaseline: true },
+  // Exercício: ao menos um registro com minutos prescritos na janela.
+  exerciseLoad: { windowDays: RULES.exerciseLoad.windowDays, minValidDays: 1, needsBaseline: false },
+};
 
 /** Unidade esperada por variável (validação de entrada). */
 export const EXPECTED_UNITS: Record<VariableId, string> = {

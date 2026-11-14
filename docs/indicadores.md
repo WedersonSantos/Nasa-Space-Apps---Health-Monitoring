@@ -36,6 +36,7 @@ Motor de regras: [`src/engine`](../src/engine) · Limiares: [`src/engine/config/
 - **Dias faltantes.** As regras de "N dias consecutivos" exigem dado em todos os dias. Sem medição, a sequência não conta, o que é conservador.
 - **Início do alerta.** `raisedAt` é o primeiro dia da sequência contínua em que a regra dispara, e não o dia da avaliação. O `id` do alerta é estável: `astronautId:ruleId:data-de-início`.
 - **Pré-voo.** Nenhuma regra é avaliada antes do 1º dia de voo, porque o baseline ainda está sendo formado.
+- **Ausência de alerta ≠ normal (cobertura de dados).** `AstronautState.coverage` informa, para cada variável, se a regra dela conseguiu avaliar: `ok`, `no-data` (nenhum registro válido), `no-baseline` (pré-voo em formação, ou menos de 3 dias registrados nos 7 primeiros dias) ou `stale` (dados insuficientes na janela da regra, por exemplo FC sem os 3 dias consecutivos até a data de avaliação). Não há limiar novo: cada exigência sai da própria regra (`COVERAGE` em `thresholds.ts`). Sem registro de exercício, `adherenceRatio` continua 1 por compatibilidade, mas a cobertura do exercício não é `ok`. Nos três cenários, a cobertura é `ok` para todas as variáveis em todos os dias de voo.
 
 ## Variáveis cortadas
 
@@ -56,4 +57,4 @@ Gerados por `npm run generate` (seeds fixas) e verificados por `npm test` ([`tes
 | 2 — Degradação gradual | `attention` pela regra composta | `normal` até o dia 101. **Dia 102** (10º dia da degradação): `fast-cluster-overload` com sono ↓, HRV ↓ e FC ↑. **Dia 113**: soma-se `selfreport-decline`. Pressão e massa nunca alarmam |
 | 3 — Crítico com contramedida | `critical` com `escalate: true` | **Dia 95**: `exercise-adherence` (atenção). **Dia 110**: soma-se `bp-deviation`. **Dia 111**: `mass-exercise-association` **crítico** (massa −2,3% vs. pré-voo e −2,0% em 3 semanas; aderência de 59% em 21 dias; sistólica −12 mmHg vs. baseline) com escalonamento ao oficial médico |
 
-Suíte completa: 60 testes. Há um teste por regra (dispara e não dispara), um por cenário, além de testes de pureza de `evaluate()`, validação de dados, autorrelato e persistência.
+Suíte completa: 71 testes. Há um teste por regra (dispara e não dispara), um por cenário, além de testes de pureza de `evaluate()`, validação de dados, autorrelato, persistência e cobertura de dados (sem dados, dados parados, sem baseline, pré-voo).

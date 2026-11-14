@@ -64,8 +64,29 @@ export interface AdherenceStatus {
   astronautId: string;
   prescribedMinutes: number;
   completedMinutes: number;
-  adherenceRatio: number; // 0..1
+  /**
+   * 0..1. Sem registro de exercício na janela (prescribedMinutes = 0) vale 1
+   * por compatibilidade, mas NÃO significa 100% de aderência: nesse caso
+   * coverage.exerciseLoad.status !== 'ok'.
+   */
+  adherenceRatio: number;
   windowDays: number;
+}
+
+/*
+ * ADIÇÃO 14/11/2026 (acordo Bloco A + Bloco B): cobertura de dados por
+ * variável. Ausência de alerta ≠ normal: uma variável só é "avaliada" quando
+ * coverage[v].status === 'ok'. Campo opcional, nada do contrato anterior muda.
+ */
+export type DataStatus = 'ok' | 'no-data' | 'no-baseline' | 'stale';
+
+export interface VariableCoverage {
+  variable: VariableId;
+  status: DataStatus;
+  lastAt: string | null; // última medição VÁLIDA até asOf
+  daysSinceLast: number | null; // dias inteiros entre lastAt e asOf
+  validDays: number; // dias com dado válido na janela da regra
+  reason: string; // pt-BR, uma linha
 }
 
 export interface AstronautState {
@@ -77,6 +98,7 @@ export interface AstronautState {
   baselines: Baseline[];
   adherence: AdherenceStatus;
   latest: Record<VariableId, Measurement | null>;
+  coverage?: Record<VariableId, VariableCoverage>;
 }
 
 export const VARIABLE_IDS: readonly VariableId[] = [

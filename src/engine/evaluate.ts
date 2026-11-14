@@ -6,6 +6,7 @@ import { VARIABLE_IDS, type Alert, type AstronautState, type Measurement, type S
 import type { AstronautProfile } from '../types/scenario';
 import { preflightBaselines, rollingBaselines } from './baseline';
 import { BASELINE, RULES } from './config/thresholds';
+import { computeCoverage } from './coverage';
 import { ALL_RULES, SINGLE_RULES, adherenceOver, type RuleContext, type RuleHit, type RuleId } from './rules';
 import { buildDailySeries } from './series';
 import { dayNumber, dayToDate, dayToIso } from './util';
@@ -97,6 +98,7 @@ export function evaluate(
       windowDays: RULES.exerciseLoad.windowDays,
     },
     latest,
+    coverage: computeCoverage({ series, preflight, valid, asOfDay, firstDay, launchDay }),
   };
 }
 
