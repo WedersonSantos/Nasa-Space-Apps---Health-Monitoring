@@ -6,4 +6,6 @@ coverage
 .vercel
 .netlify
 .claude/
-.impeccable/
+.impeccable/*
+!.impeccable/surfaces/
+!.impeccable/design.json

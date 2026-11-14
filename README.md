@@ -40,6 +40,13 @@ O que diferencia a solução:
 | **Registrar** | Medição manual com validação e autorrelato de humor, estresse e fadiga (1–5). |
 | **Sobre e fontes** | Tabela de indicadores, limitações, referências e declaração de uso de IA. |
 
+### Uso próprio e honestidade dos dados
+
+- **Minha missão.** Além da demonstração, qualquer pessoa pode criar uma missão própria (só um apelido, sem dados pessoais). Os registros ficam neste dispositivo, separados dos dados sintéticos; os 7 primeiros dias de registro formam o baseline pré-voo e a avaliação começa no dia 1 de voo.
+- **"Não avaliado" não é "Normal".** O motor informa, por variável, se havia dados suficientes para aplicar a regra (`coverage`). Sem dados, sem baseline ou com registros desatualizados, a interface mostra "Não avaliado" com o motivo, e o estado geral vira "Avaliação parcial" ou "Sem dados". Ausência de alerta nunca é apresentada como saúde normal.
+- **Como medir.** Cada variável traz equipamento, condições de coleta adaptadas à microgravidade (por exemplo, pressão arterial com o corpo contido e o braço na altura do coração, massa medida por aceleração linear em vez de balança) e frequência.
+- **Acompanhamento das ações.** Cada alerta permite registrar "Medição repetida", "Oficial médico acionado" e "Ação concluída". As ações aparecem na trilha da missão e numa lista que mostra se o alerta continua ativo, sem alterar a avaliação.
+
 Os três cenários de demonstração trocam ao vivo pelos botões no topo ou pelas teclas **1**, **2** e **3**. A **linha do tempo da missão** reavalia o estado em qualquer dia (setas ← → ou botão *Reproduzir*), mostrando o dia exato em que cada padrão surge. Passe o mouse (ou foque com o teclado) sobre o nome de qualquer parâmetro para ver o que ele mede e por que importa em voo espacial.
 
 ## 3. Arquitetura
@@ -84,6 +91,7 @@ src/
 scripts/                 Gerador de dados sintéticos
 tests/                   Testes do motor
 docs/                    Tabela de indicadores e registro da busca de dados
+PRODUCT.md, DESIGN.md    Contexto do produto e sistema visual (identidade de operações de missão)
 ```
 
 ## 4. Como rodar

@@ -1,0 +1,886 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-11-14T21:06:48.854Z",
+  "title": "Design System: Vigília",
+  "extensions": {
+    "colorMeta": {
+      "ground": {
+        "role": "neutral",
+        "displayName": "Panel Grey",
+        "canonical": "#e5e9ee",
+        "tonalRamp": [
+          "#0a0b0c",
+          "#232528",
+          "#3f4246",
+          "#5e6266",
+          "#7f8387",
+          "#a2a5a9",
+          "#c7c9cc",
+          "#edeef0"
+        ]
+      },
+      "surface": {
+        "role": "neutral",
+        "displayName": "Work Surface",
+        "canonical": "#ffffff",
+        "tonalRamp": [
+          "#0b0b0b",
+          "#252525",
+          "#424242",
+          "#616161",
+          "#828282",
+          "#a5a5a5",
+          "#c9c9c9",
+          "#eeeeee"
+        ]
+      },
+      "surface-2": {
+        "role": "neutral",
+        "displayName": "Work Surface Recessed",
+        "canonical": "#f0f3f7",
+        "tonalRamp": [
+          "#0b0b0c",
+          "#242527",
+          "#404245",
+          "#5f6165",
+          "#808286",
+          "#a3a5a8",
+          "#c7c9cc",
+          "#edeef0"
+        ]
+      },
+      "ink": {
+        "role": "neutral",
+        "displayName": "Instrument Ink",
+        "canonical": "#101a22",
+        "tonalRamp": [
+          "#090c0e",
+          "#1f262c",
+          "#3a434b",
+          "#57636d",
+          "#78848e",
+          "#9ba7b0",
+          "#c2cad2",
+          "#ebeff3"
+        ]
+      },
+      "muted": {
+        "role": "neutral",
+        "displayName": "Muted Ink",
+        "canonical": "#4a5660",
+        "tonalRamp": [
+          "#090c0e",
+          "#1f262c",
+          "#39434c",
+          "#57636d",
+          "#77848f",
+          "#9ba7b1",
+          "#c1cad2",
+          "#eaeff3"
+        ]
+      },
+      "border": {
+        "role": "neutral",
+        "displayName": "Border",
+        "canonical": "#cdd5de",
+        "tonalRamp": [
+          "#0a0b0d",
+          "#22252a",
+          "#3d4349",
+          "#5b626a",
+          "#7c838b",
+          "#9fa6ad",
+          "#c4cad0",
+          "#eceff2"
+        ]
+      },
+      "hairline": {
+        "role": "neutral",
+        "displayName": "Hairline",
+        "canonical": "#dfe4ea",
+        "tonalRamp": [
+          "#0a0b0c",
+          "#232528",
+          "#3f4247",
+          "#5d6267",
+          "#7e8388",
+          "#a1a5aa",
+          "#c6c9cd",
+          "#edeff1"
+        ]
+      },
+      "shell": {
+        "role": "secondary",
+        "displayName": "Deep Slate Shell",
+        "canonical": "#12202b",
+        "tonalRamp": [
+          "#080c0f",
+          "#1d262e",
+          "#37444f",
+          "#546370",
+          "#748592",
+          "#98a7b4",
+          "#bfcbd5",
+          "#e9eff4"
+        ]
+      },
+      "shell-2": {
+        "role": "secondary",
+        "displayName": "Slate Raised",
+        "canonical": "#1b2c38",
+        "tonalRamp": [
+          "#070c0f",
+          "#1c272e",
+          "#35444f",
+          "#516471",
+          "#728593",
+          "#96a8b5",
+          "#becbd6",
+          "#e9f0f5"
+        ]
+      },
+      "shell-line": {
+        "role": "secondary",
+        "displayName": "Slate Rule",
+        "canonical": "#2c3f4c",
+        "tonalRamp": [
+          "#070c0f",
+          "#1b272f",
+          "#344450",
+          "#506472",
+          "#718694",
+          "#95a8b6",
+          "#bdccd6",
+          "#e8f0f5"
+        ]
+      },
+      "shell-ink": {
+        "role": "secondary",
+        "displayName": "Shell Paper",
+        "canonical": "#eef2ee",
+        "tonalRamp": [
+          "#0b0b0b",
+          "#242624",
+          "#404340",
+          "#5f625f",
+          "#808380",
+          "#a3a6a3",
+          "#c7cac7",
+          "#edefed"
+        ]
+      },
+      "shell-muted": {
+        "role": "secondary",
+        "displayName": "Shell Muted",
+        "canonical": "#a3b3bc",
+        "tonalRamp": [
+          "#080c0e",
+          "#1e262b",
+          "#38444b",
+          "#55646c",
+          "#76858d",
+          "#9aa7af",
+          "#c0cbd1",
+          "#eaeff3"
+        ]
+      },
+      "shell-normal": {
+        "role": "secondary",
+        "displayName": "Normal Lamp",
+        "canonical": "#6fd49b",
+        "tonalRamp": [
+          "#001005",
+          "#003013",
+          "#005229",
+          "#007543",
+          "#309864",
+          "#64ba89",
+          "#9cdab4",
+          "#d9f7e4"
+        ]
+      },
+      "shell-attention": {
+        "role": "secondary",
+        "displayName": "Attention Lamp",
+        "canonical": "#f5b54a",
+        "tonalRamp": [
+          "#160800",
+          "#3d1b00",
+          "#653500",
+          "#8c5300",
+          "#b07500",
+          "#d09a3f",
+          "#ebc283",
+          "#ffebcd"
+        ]
+      },
+      "shell-critical": {
+        "role": "secondary",
+        "displayName": "Critical Lamp",
+        "canonical": "#ff7a6b",
+        "tonalRamp": [
+          "#1d0201",
+          "#4d0001",
+          "#7d0e0c",
+          "#aa2d25",
+          "#d25347",
+          "#f27e70",
+          "#ffaea1",
+          "#ffe2da"
+        ]
+      },
+      "cobalt": {
+        "role": "primary",
+        "displayName": "Cobalt Data Ink",
+        "canonical": "#2446c8",
+        "tonalRamp": [
+          "#020727",
+          "#081865",
+          "#17319f",
+          "#2c51d1",
+          "#4a76f9",
+          "#719eff",
+          "#a1c6ff",
+          "#daeeff"
+        ]
+      },
+      "series-teal": {
+        "role": "tertiary",
+        "displayName": "Series Teal",
+        "canonical": "#0e7c7b",
+        "tonalRamp": [
+          "#000f0f",
+          "#002d2d",
+          "#004e4e",
+          "#00706f",
+          "#349391",
+          "#67b5b3",
+          "#9dd6d4",
+          "#d9f5f4"
+        ]
+      },
+      "series-violet": {
+        "role": "tertiary",
+        "displayName": "Series Violet",
+        "canonical": "#7b4fae",
+        "tonalRamp": [
+          "#0f051c",
+          "#2f144b",
+          "#512a79",
+          "#7347a4",
+          "#9469c9",
+          "#b690e8",
+          "#d6bafe",
+          "#f5e7ff"
+        ]
+      },
+      "normal": {
+        "role": "severity",
+        "displayName": "Normal",
+        "canonical": "#17784a",
+        "tonalRamp": [
+          "#001005",
+          "#002f15",
+          "#00512b",
+          "#127346",
+          "#3f9667",
+          "#6eb88c",
+          "#a2d8b6",
+          "#dbf6e5"
+        ]
+      },
+      "normal-bg": {
+        "role": "severity",
+        "displayName": "Normal Tint",
+        "canonical": "#e1f1e7",
+        "tonalRamp": [
+          "#090c0a",
+          "#1f2722",
+          "#3a453e",
+          "#58655d",
+          "#78867e",
+          "#9ca9a1",
+          "#c2ccc6",
+          "#ebf0ed"
+        ]
+      },
+      "attention": {
+        "role": "severity",
+        "displayName": "Atenção",
+        "canonical": "#995700",
+        "tonalRamp": [
+          "#160700",
+          "#3f1900",
+          "#683200",
+          "#8f4f00",
+          "#b4702c",
+          "#d4965d",
+          "#efbe94",
+          "#ffe9d4"
+        ]
+      },
+      "attention-bg": {
+        "role": "severity",
+        "displayName": "Atenção Tint",
+        "canonical": "#fbeed6",
+        "tonalRamp": [
+          "#0d0b06",
+          "#2a2418",
+          "#4a4130",
+          "#6b604b",
+          "#8c816b",
+          "#aea490",
+          "#d0c8b9",
+          "#f2eee6"
+        ]
+      },
+      "critical": {
+        "role": "severity",
+        "displayName": "Crítico",
+        "canonical": "#b3261e",
+        "tonalRamp": [
+          "#1e0100",
+          "#500000",
+          "#810001",
+          "#af241d",
+          "#d74d40",
+          "#f77a6b",
+          "#ffab9d",
+          "#ffe1d8"
+        ]
+      },
+      "critical-bg": {
+        "role": "severity",
+        "displayName": "Crítico Tint",
+        "canonical": "#fbe5e2",
+        "tonalRamp": [
+          "#0e0a09",
+          "#2d2221",
+          "#4d3e3c",
+          "#6e5c5a",
+          "#907d7b",
+          "#b2a09e",
+          "#d4c5c3",
+          "#f4eceb"
+        ]
+      },
+      "on-sev": {
+        "role": "severity",
+        "displayName": "On Severity",
+        "canonical": "#ffffff",
+        "tonalRamp": [
+          "#0b0b0b",
+          "#252525",
+          "#424242",
+          "#616161",
+          "#828282",
+          "#a5a5a5",
+          "#c9c9c9",
+          "#eeeeee"
+        ]
+      },
+      "night-ground": {
+        "role": "neutral",
+        "displayName": "Pre-sleep Ground",
+        "canonical": "#120f0b",
+        "tonalRamp": [
+          "#0c0b0a",
+          "#272522",
+          "#45413d",
+          "#64615b",
+          "#86827c",
+          "#a8a49f",
+          "#cbc9c5",
+          "#f0eeec"
+        ]
+      },
+      "night-surface": {
+        "role": "neutral",
+        "displayName": "Pre-sleep Surface",
+        "canonical": "#1b1712",
+        "tonalRamp": [
+          "#0c0b09",
+          "#272521",
+          "#45413c",
+          "#65605a",
+          "#87817b",
+          "#a9a49e",
+          "#ccc8c4",
+          "#f0eeec"
+        ]
+      },
+      "night-surface-2": {
+        "role": "neutral",
+        "displayName": "Pre-sleep Surface Recessed",
+        "canonical": "#231e17",
+        "tonalRamp": [
+          "#0c0b09",
+          "#282420",
+          "#46413a",
+          "#666058",
+          "#888179",
+          "#aaa49c",
+          "#cdc8c2",
+          "#f0eeeb"
+        ]
+      },
+      "night-ink": {
+        "role": "neutral",
+        "displayName": "Sand-white Ink",
+        "canonical": "#f1e5d3",
+        "tonalRamp": [
+          "#0d0b07",
+          "#2a241b",
+          "#494134",
+          "#6a6050",
+          "#8b8171",
+          "#ada495",
+          "#d0c8bc",
+          "#f2eee8"
+        ]
+      },
+      "night-muted": {
+        "role": "neutral",
+        "displayName": "Pre-sleep Muted",
+        "canonical": "#bba98f",
+        "tonalRamp": [
+          "#0e0a05",
+          "#2d2316",
+          "#4d402c",
+          "#6f5e47",
+          "#908067",
+          "#b2a38c",
+          "#d3c7b6",
+          "#f4ede5"
+        ]
+      },
+      "night-border": {
+        "role": "neutral",
+        "displayName": "Pre-sleep Border",
+        "canonical": "#3b3229",
+        "tonalRamp": [
+          "#0d0b08",
+          "#2a241e",
+          "#494038",
+          "#695f56",
+          "#8b8076",
+          "#ada39a",
+          "#cfc8c0",
+          "#f2eeea"
+        ]
+      },
+      "night-hairline": {
+        "role": "neutral",
+        "displayName": "Pre-sleep Hairline",
+        "canonical": "#2d261f",
+        "tonalRamp": [
+          "#0d0b09",
+          "#292420",
+          "#47413a",
+          "#686058",
+          "#898178",
+          "#aba39c",
+          "#cec8c2",
+          "#f1eeeb"
+        ]
+      },
+      "night-shell": {
+        "role": "secondary",
+        "displayName": "Pre-sleep Shell",
+        "canonical": "#0a0806",
+        "tonalRamp": [
+          "#0c0b0a",
+          "#262523",
+          "#44413f",
+          "#64615d",
+          "#85827e",
+          "#a7a4a1",
+          "#cbc9c6",
+          "#efeeed"
+        ]
+      },
+      "night-shell-2": {
+        "role": "secondary",
+        "displayName": "Pre-sleep Shell Raised",
+        "canonical": "#17120d",
+        "tonalRamp": [
+          "#0c0b09",
+          "#282421",
+          "#46413c",
+          "#66605a",
+          "#88817b",
+          "#aaa49e",
+          "#cdc8c3",
+          "#f0eeeb"
+        ]
+      },
+      "night-shell-line": {
+        "role": "secondary",
+        "displayName": "Pre-sleep Shell Rule",
+        "canonical": "#2e261d",
+        "tonalRamp": [
+          "#0d0b08",
+          "#29241e",
+          "#484138",
+          "#696055",
+          "#8a8176",
+          "#aca39a",
+          "#cfc8c0",
+          "#f1eeea"
+        ]
+      },
+      "night-shell-muted": {
+        "role": "secondary",
+        "displayName": "Pre-sleep Shell Muted",
+        "canonical": "#a8967d",
+        "tonalRamp": [
+          "#0e0a05",
+          "#2d2316",
+          "#4d402c",
+          "#6f5e47",
+          "#917f67",
+          "#b2a28c",
+          "#d4c7b6",
+          "#f4ede5"
+        ]
+      },
+      "night-sand": {
+        "role": "primary",
+        "displayName": "Pre-sleep Sand",
+        "canonical": "#ead9bd",
+        "tonalRamp": [
+          "#0e0b05",
+          "#2c2415",
+          "#4c402c",
+          "#6e5f47",
+          "#8f8067",
+          "#b1a38c",
+          "#d3c8b6",
+          "#f3eee4"
+        ]
+      },
+      "night-series-sage": {
+        "role": "tertiary",
+        "displayName": "Sage",
+        "canonical": "#9dc0a4",
+        "tonalRamp": [
+          "#060d07",
+          "#182a1c",
+          "#2f4935",
+          "#4b6a52",
+          "#6b8c72",
+          "#90ae96",
+          "#b9d0bd",
+          "#e6f2e8"
+        ]
+      },
+      "night-series-rose": {
+        "role": "tertiary",
+        "displayName": "Dusty Rose",
+        "canonical": "#d8a4aa",
+        "tonalRamp": [
+          "#130809",
+          "#361c20",
+          "#5b363b",
+          "#805359",
+          "#a37379",
+          "#c4979d",
+          "#e2bfc3",
+          "#fce9eb"
+        ]
+      },
+      "night-normal": {
+        "role": "severity",
+        "displayName": "Night Normal",
+        "canonical": "#7ccb97",
+        "tonalRamp": [
+          "#010f05",
+          "#002f14",
+          "#00502a",
+          "#217244",
+          "#489565",
+          "#73b78a",
+          "#a5d7b4",
+          "#ddf6e4"
+        ]
+      },
+      "night-attention": {
+        "role": "severity",
+        "displayName": "Night Atenção",
+        "canonical": "#f2b552",
+        "tonalRamp": [
+          "#150800",
+          "#3c1c00",
+          "#643600",
+          "#8a5400",
+          "#ae7600",
+          "#ce9b47",
+          "#eac287",
+          "#ffebce"
+        ]
+      },
+      "night-critical": {
+        "role": "severity",
+        "displayName": "Night Crítico",
+        "canonical": "#ff8a7a",
+        "tonalRamp": [
+          "#1b0302",
+          "#490905",
+          "#771c15",
+          "#a3382e",
+          "#c95c4e",
+          "#ea8476",
+          "#ffb2a6",
+          "#ffe3dc"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "wordmark": {
+        "displayName": "Wordmark",
+        "purpose": "\"Vigília\" in the mission bar only; width 125%, uppercase."
+      },
+      "annunciator": {
+        "displayName": "Annunciator",
+        "purpose": "Master state label in the mission bar; uppercase, width 115%."
+      },
+      "headline": {
+        "displayName": "Headline",
+        "purpose": "Alert titles, section titles, panel headings (1.15–1.35rem), width 115%."
+      },
+      "title": {
+        "displayName": "Title",
+        "purpose": "Cluster, indicator and track headings, width 115%."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "Running text; 17px at ≥1600px; 62–75ch measure."
+      },
+      "label": {
+        "displayName": "Label",
+        "purpose": "Uppercase table heads, alert sub-headings, crew labels, legends."
+      },
+      "telemetry-xl": {
+        "displayName": "Telemetry XL",
+        "purpose": "Indicator current value (3rem for adherence); condensed tabular."
+      },
+      "telemetry": {
+        "displayName": "Telemetry",
+        "purpose": "Vitals strip values and MET day (2rem); condensed tabular."
+      },
+      "telemetry-small": {
+        "displayName": "Telemetry Small",
+        "purpose": "Clock, deltas, ticks, chart axes, table numbers; width 82%."
+      },
+      "formula": {
+        "displayName": "Formula",
+        "purpose": "Alert arithmetic block only."
+      }
+    },
+    "shadows": [
+      {
+        "name": "surface-lift",
+        "value": "0 1px 2px rgba(16,26,34,0.06), 0 4px 14px -6px rgba(16,26,34,0.12)",
+        "purpose": "Cards, panels, alerts, clusters, vitals strip (day). Night: 0 1px 2px rgba(0,0,0,0.4), 0 6px 18px -8px rgba(0,0,0,0.6)."
+      },
+      {
+        "name": "chart-tooltip",
+        "value": "0 8px 24px -8px rgba(0,0,0,0.3)",
+        "purpose": "Chart tooltip."
+      },
+      {
+        "name": "term-popover",
+        "value": "0 12px 32px -10px rgba(0,0,0,0.35)",
+        "purpose": "Variable explanation popover."
+      }
+    ],
+    "motion": [
+      {
+        "name": "ease-out-expo",
+        "value": "cubic-bezier(0.16, 1, 0.3, 1)",
+        "purpose": "All state motion: annunciator ring, track cursor and window, disclosure chevron."
+      },
+      {
+        "name": "annunciate",
+        "value": "0.9s ease-out-expo; box-shadow ring 0 to 16px transparent; once per state change",
+        "purpose": "The single annunciator pulse; never loops."
+      },
+      {
+        "name": "track-slide",
+        "value": "0.16s ease-out-expo",
+        "purpose": "Track cursor and chart-window bracket position."
+      },
+      {
+        "name": "disclosure",
+        "value": "0.2s ease-out-expo, rotate(90deg)",
+        "purpose": "Indicator \"Sobre\" chevron."
+      },
+      {
+        "name": "day-fade",
+        "value": "opacity 0.2s ease-out",
+        "purpose": "Track day bars, past vs future."
+      },
+      {
+        "name": "reduced-motion",
+        "value": "prefers-reduced-motion: reduce sets animation and transition to none",
+        "purpose": "Global override."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "xl",
+        "value": "1600px (min-width; body 17px)"
+      },
+      {
+        "name": "lg",
+        "value": "1280px"
+      },
+      {
+        "name": "md-wide",
+        "value": "1180px"
+      },
+      {
+        "name": "md",
+        "value": "900px"
+      },
+      {
+        "name": "sm",
+        "value": "640px"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Main form action, cobalt by day, sand at night.",
+      "html": "<button class=\"ds-btn-primary\">Registrar</button>",
+      "css": ".ds-btn-primary{display:inline-flex;align-items:center;gap:6px;font-family:var(--font);font-weight:600;font-size:16px;padding:9px 16px;min-height:40px;border-radius:var(--radius,6px);border:1px solid var(--series-1,#2446c8);background:var(--series-1,#2446c8);color:var(--surface,#fff);cursor:pointer}.ds-btn-primary:hover{filter:brightness(1.08)}.ds-btn-primary:focus-visible{outline:2px solid var(--focus,#2446c8);outline-offset:2px}"
+    },
+    {
+      "name": "Secondary Button",
+      "kind": "button",
+      "refersTo": "button-secondary",
+      "description": "Neutral action on work surfaces.",
+      "html": "<button class=\"ds-btn\">Remover</button>",
+      "css": ".ds-btn{display:inline-flex;align-items:center;gap:6px;font-family:var(--font);font-weight:600;font-size:16px;padding:9px 16px;min-height:40px;border-radius:var(--radius,6px);border:1px solid var(--border,#cdd5de);background:var(--surface,#fff);color:var(--ink,#101a22);cursor:pointer}.ds-btn:hover{border-color:var(--series-1,#2446c8)}.ds-btn:focus-visible{outline:2px solid var(--focus,#2446c8);outline-offset:2px}"
+    },
+    {
+      "name": "Shell Segmented Control",
+      "kind": "button",
+      "refersTo": "shell-button",
+      "description": "Chart-period toggle on the slate mission shell; the pressed segment inverts.",
+      "html": "<div class=\"ds-shell\"><div class=\"ds-seg\" role=\"group\" aria-label=\"Período dos gráficos\"><button aria-pressed=\"true\">Recente</button><button aria-pressed=\"false\">Missão toda</button></div></div>",
+      "css": ".ds-shell{background:var(--shell,#12202b);padding:12px}.ds-seg{display:inline-flex;border:1px solid var(--shell-line,#2c3f4c);border-radius:6px;overflow:hidden}.ds-seg button{font-family:var(--font);font-size:.82rem;font-weight:600;padding:6px 12px;min-height:34px;border:none;background:var(--shell-2,#1b2c38);color:var(--shell-muted,#a3b3bc);cursor:pointer}.ds-seg button+button{border-left:1px solid var(--shell-line,#2c3f4c)}.ds-seg button:hover{color:var(--shell-ink,#eef2ee)}.ds-seg button[aria-pressed=true]{background:var(--shell-ink,#eef2ee);color:var(--shell,#12202b)}.ds-seg button:focus-visible{outline:2px solid var(--shell-ink,#eef2ee);outline-offset:-2px}"
+    },
+    {
+      "name": "Master Annunciator",
+      "kind": "custom",
+      "refersTo": "annunciator-attention",
+      "description": "Overall state in the mission bar: icon + label + colour, one ring pulse per state change.",
+      "html": "<div class=\"ds-shell\"><a href=\"#\" class=\"ds-ann\"><svg width=\"26\" height=\"26\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M12 3.5 2.5 20h19L12 3.5Z\"/><path d=\"M12 10v4.5M12 17.2v.1\"/></svg><span class=\"ds-ann__t\"><span class=\"ds-ann__l\">Atenção</span><span class=\"ds-ann__s\">2 alertas ativos · ver o que fazer</span></span></a></div>",
+      "css": ".ds-shell{background:var(--shell,#12202b);padding:16px}.ds-ann{display:inline-flex;align-items:center;gap:12px;padding:8px 18px 8px 14px;border-radius:6px;background:var(--shell-attention,#f5b54a);color:var(--shell,#12202b);text-decoration:none;font-family:var(--font);animation:ds-annunciate .9s cubic-bezier(.16,1,.3,1) both}.ds-ann__t{display:grid;line-height:1.15}.ds-ann__l{font-size:1.3rem;font-weight:800;font-stretch:115%;text-transform:uppercase;letter-spacing:.03em}.ds-ann__s{font-size:.82rem;font-weight:600}.ds-ann:hover{filter:brightness(1.06)}.ds-ann:focus-visible{outline:2px solid var(--shell-ink,#eef2ee);outline-offset:3px}@keyframes ds-annunciate{from{box-shadow:0 0 0 0 rgba(245,181,74,.6)}to{box-shadow:0 0 0 16px transparent}}@media (prefers-reduced-motion:reduce){.ds-ann{animation:none}}"
+    },
+    {
+      "name": "Mission Track Lane",
+      "kind": "custom",
+      "description": "Signature flight-day lane: hatched pre-flight block, severity-height day bars, onset marker, day cursor.",
+      "html": "<div class=\"ds-shell\"><div class=\"ds-lane\"><div class=\"ds-pre\"></div><i class=\"ds-d\" style=\"left:30%\"></i><i class=\"ds-d\" style=\"left:36%\"></i><i class=\"ds-d ds-d--a\" style=\"left:42%\"></i><i class=\"ds-d ds-d--a\" style=\"left:48%\"></i><i class=\"ds-d ds-d--c\" style=\"left:54%\"></i><i class=\"ds-d ds-d--f\" style=\"left:66%\"></i><i class=\"ds-d ds-d--f\" style=\"left:72%\"></i><button class=\"ds-onset\" style=\"left:43%\" aria-label=\"Ir ao dia 9: início de atenção\"><svg width=\"12\" height=\"12\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M12 3.5 2.5 20h19L12 3.5Z\"/><path d=\"M12 10v4.5M12 17.2v.1\"/></svg></button><span class=\"ds-cur\" style=\"left:57%\"></span></div></div>",
+      "css": ".ds-shell{background:var(--shell,#12202b);padding:16px 20px 24px}.ds-lane{position:relative;height:72px;border-bottom:1px solid var(--shell-line,#2c3f4c)}.ds-pre{position:absolute;bottom:0;left:0;width:24%;height:10px;background:repeating-linear-gradient(135deg,var(--shell-line,#2c3f4c) 0 3px,transparent 3px 7px);border-left:1px solid var(--shell-line,#2c3f4c);border-right:1px solid var(--shell-line,#2c3f4c)}.ds-d{position:absolute;bottom:0;width:4%;transform:scaleX(.72);border-radius:1px 1px 0 0;height:6px;background:var(--shell-normal,#6fd49b);opacity:.55}.ds-d--a{height:16px;background:var(--shell-attention,#f5b54a);opacity:1}.ds-d--c{height:26px;background:var(--shell-critical,#ff7a6b);opacity:1}.ds-d--f{opacity:.18}.ds-onset{position:absolute;top:0;transform:translateX(-50%);width:22px;height:22px;padding:0;border-radius:50%;border:1.5px solid currentColor;color:var(--shell-attention,#f5b54a);background:var(--shell,#12202b);display:grid;place-items:center;cursor:pointer}.ds-onset:hover{background:var(--shell-2,#1b2c38)}.ds-onset:focus-visible{outline:2px solid var(--shell-ink,#eef2ee);outline-offset:2px}.ds-cur{position:absolute;top:6px;bottom:-6px;width:2px;margin-left:-1px;background:var(--shell-ink,#eef2ee)}.ds-cur::after{content:'';position:absolute;bottom:-2px;left:-5px;width:12px;height:12px;border-radius:50%;background:var(--shell-ink,#eef2ee);box-shadow:0 0 0 3px var(--shell,#12202b)}"
+    },
+    {
+      "name": "Severity Badges",
+      "kind": "chip",
+      "refersTo": "severity-badge-attention",
+      "description": "State as icon + label + colour, never colour alone.",
+      "html": "<span class=\"ds-sev ds-sev--n\"><svg width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><circle cx=\"12\" cy=\"12\" r=\"9.5\"/><path d=\"m7.5 12.5 3 3 6-6.5\"/></svg>Normal</span> <span class=\"ds-sev ds-sev--a\"><svg width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M12 3.5 2.5 20h19L12 3.5Z\"/><path d=\"M12 10v4.5M12 17.2v.1\"/></svg>Atenção</span> <span class=\"ds-sev ds-sev--c\"><svg width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M8.3 2.5h7.4l5.3 5.3v7.4l-5.3 5.3H8.3L3 15.2V7.8z\"/><path d=\"M12 8v4.5M12 15.8v.1\"/></svg>Crítico</span>",
+      "css": ".ds-sev{display:inline-flex;align-items:center;gap:6px;padding:3px 10px 3px 7px;border-radius:6px;font-family:var(--font);font-weight:700;font-size:.82rem;border:1px solid currentColor;white-space:nowrap}.ds-sev--n{color:var(--normal,#17784a);background:var(--normal-bg,#e1f1e7)}.ds-sev--a{color:var(--attention,#995700);background:var(--attention-bg,#fbeed6)}.ds-sev--c{color:var(--critical,#b3261e);background:var(--critical-bg,#fbe5e2)}"
+    },
+    {
+      "name": "Origin Badges",
+      "kind": "chip",
+      "description": "Data origin on every value; stroke style encodes the origin.",
+      "html": "<span class=\"ds-org ds-org--m\">Medido</span> <span class=\"ds-org ds-org--s\">Sintético</span> <span class=\"ds-org ds-org--e\">Estimado</span>",
+      "css": ".ds-org{display:inline-flex;align-items:center;gap:4px;padding:1px 7px;border-radius:3px;font-family:var(--font);font-size:.7rem;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:var(--muted,#4a5660);border:1.5px solid var(--border,#cdd5de)}.ds-org--m{border-style:solid;color:var(--ink,#101a22);border-color:var(--ink,#101a22)}.ds-org--s{border-style:dashed;border-color:var(--muted,#4a5660)}.ds-org--e{border-style:dotted;border-color:var(--muted,#4a5660)}"
+    },
+    {
+      "name": "Text Field",
+      "kind": "input",
+      "refersTo": "input",
+      "description": "Manual entry field with tabular numerals and invalid state.",
+      "html": "<label class=\"ds-field\">FC de repouso (bpm)<input value=\"62\"></label><label class=\"ds-field\">Massa corporal (kg)<input aria-invalid=\"true\" value=\"\"></label>",
+      "css": ".ds-field{display:grid;gap:4px;font-family:var(--font);font-size:.9rem;font-weight:600;color:var(--ink,#101a22);margin-bottom:10px}.ds-field input{font:inherit;font-weight:400;font-variant-numeric:tabular-nums;padding:8px 10px;min-height:40px;border-radius:6px;border:1px solid var(--border,#cdd5de);background:var(--surface-2,#f0f3f7);color:var(--ink,#101a22)}.ds-field input:hover{border-color:var(--muted,#4a5660)}.ds-field input:focus-visible{outline:2px solid var(--focus,#2446c8);outline-offset:2px}.ds-field input[aria-invalid=true]{border-color:var(--critical,#b3261e);box-shadow:0 0 0 1px var(--critical,#b3261e)}"
+    },
+    {
+      "name": "Tabs",
+      "kind": "nav",
+      "refersTo": "tab",
+      "description": "Section tabs with a solid severity count pill.",
+      "html": "<div class=\"ds-tabs\" role=\"tablist\"><button role=\"tab\" aria-selected=\"true\" class=\"ds-tab\">Alertas <span class=\"ds-count\">2</span></button><button role=\"tab\" aria-selected=\"false\" class=\"ds-tab\">Indicadores</button><button role=\"tab\" aria-selected=\"false\" class=\"ds-tab\">Contramedida</button></div>",
+      "css": ".ds-tabs{display:flex;gap:2px;border-bottom:1px solid var(--border,#cdd5de)}.ds-tab{display:inline-flex;align-items:center;gap:8px;padding:10px 16px;font-family:var(--font);font-size:16px;font-weight:600;font-stretch:105%;color:var(--muted,#4a5660);background:none;border:none;border-bottom:3px solid transparent;margin-bottom:-1px;cursor:pointer}.ds-tab:hover{color:var(--ink,#101a22)}.ds-tab[aria-selected=true]{color:var(--ink,#101a22);border-bottom-color:var(--series-1,#2446c8)}.ds-tab:focus-visible{outline:2px solid var(--focus,#2446c8);outline-offset:2px}.ds-count{padding:1px 7px;border-radius:999px;font-size:.75rem;font-weight:700;background:var(--attention,#995700);color:var(--on-sev,#fff)}"
+    },
+    {
+      "name": "Vital Cell",
+      "kind": "card",
+      "description": "One cell of the seven-cell vitals strip: condensed value, delta vs baseline, state line.",
+      "html": "<a href=\"#\" class=\"ds-vital\"><span class=\"ds-vital__n\">VFC (RMSSD)</span><span class=\"ds-vital__v\">38<small>ms</small></span><span class=\"ds-vital__d\">−22% vs baseline</span><span class=\"ds-vital__s\"><svg width=\"14\" height=\"14\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M12 3.5 2.5 20h19L12 3.5Z\"/><path d=\"M12 10v4.5M12 17.2v.1\"/></svg>Atenção</span></a>",
+      "css": ".ds-vital{display:flex;flex-direction:column;gap:2px;width:160px;padding:10px 12px 12px;font-family:var(--font);color:var(--ink,#101a22);text-decoration:none;background:var(--attention-bg,#fbeed6);border:1px solid var(--border,#cdd5de);border-radius:6px}.ds-vital__n{font-size:.78rem;font-weight:600;color:var(--muted,#4a5660)}.ds-vital:hover .ds-vital__n{color:var(--series-1,#2446c8)}.ds-vital:focus-visible{outline:2px solid var(--focus,#2446c8);outline-offset:2px}.ds-vital__v{font-size:1.6rem;font-weight:700;font-stretch:75%;font-variant-numeric:tabular-nums;line-height:1.1}.ds-vital__v small{font-size:.8rem;font-weight:500;font-stretch:100%;color:var(--muted,#4a5660);margin-left:3px}.ds-vital__d{font-size:.78rem;font-stretch:82%;font-variant-numeric:tabular-nums;color:var(--muted,#4a5660)}.ds-vital__s{display:inline-flex;align-items:center;gap:5px;font-size:.78rem;font-weight:700;color:var(--attention,#995700);padding-top:6px}"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Mission Clock",
+    "overview": "Vigília looks like a station console, not a SaaS dashboard. Mission time is the spine: a deep slate shell carries the wordmark, the MET clock (`D+113 · GMT`), the crew and the master annunciator, and directly under it the mission track lays every flight day on one horizontal lane. Everything below (vitals strip, alerts, indicator clusters) is read against that clock and against the crew member's own baseline.\n\nThe world has two lighting conditions, taken from the station itself. **Day mode** is the module's general illumination: cool panel-grey ground, white work surfaces, the slate shell, cobalt data ink. **Night mode, \"pré-sono\"**, is the low-blue pre-sleep lighting: warm near-black, sand-white ink, and no blue anywhere, including focus rings, links and chart series. Density is operational: compact cells, tabular figures, hairline dividers, and one loud element (the annunciator) per screen.\n\nType is a single variable family stretched across its width axis: expanded bold for things you name, condensed tabular figures for things you measure. Severity colour is reserved for state; it never decorates.",
+    "keyCharacteristics": [
+      "Slate mission shell with MET clock and master annunciator, full width, above everything.",
+      "The mission track (flight-day lane with onset markers and a day cursor) as the signature move.",
+      "Archivo Variable only, used along its width axis: 115–125% for headings, 75–82% for telemetry.",
+      "State is always icon + label + colour.",
+      "Two physically motivated palettes: module day light and blue-free pre-sleep light."
+    ],
+    "rules": [
+      {
+        "name": "The Severity Is State Rule",
+        "body": "Green, amber and red appear only where they carry a severity state (annunciator, badges, track bars, tinted vital cells, alert borders, tab counts, adherence fill). Never as decoration or brand accent.",
+        "section": "colors"
+      },
+      {
+        "name": "The No Blue After Dark Rule",
+        "body": "In \"pré-sono\" mode no token resolves to a blue hue. Every role cobalt plays by day is played by sand at night.",
+        "section": "colors"
+      },
+      {
+        "name": "The Stretch Means Role Rule",
+        "body": "Width encodes meaning: expanded (`--wide`, 115%; 125% for the wordmark) for names and headings, condensed (75% or `--narrow`, 82%) with tabular numerals for every measured value. Body copy stays at 100%.",
+        "section": "typography"
+      },
+      {
+        "name": "The Mono Is Math Rule",
+        "body": "Monospace appears only in the arithmetic block that shows how an alert was calculated.",
+        "section": "typography"
+      },
+      {
+        "name": "The Border Carries the Edge Rule",
+        "body": "Every surface has a 1px border; shadows are soft and ambient, never offset or hard.",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "**Do** show every state as icon + label + colour (badges, annunciator, vital state lines, tab counts, track onsets, field errors).",
+      "**Do** set every measured value in Archivo at width 75% or 82% with tabular numerals, and every heading at width 115%.",
+      "**Do** place time-based readings on the mission track's day axis and against the individual baseline band.",
+      "**Do** carry the data origin (Medido / Sintético / Estimado) with its own icon and stroke style next to every value.",
+      "**Do** swap cobalt for sand in \"pré-sono\" mode for every role: links, focus, series 1, selection, primary button.",
+      "**Do** keep the annunciator pulse a single replay on state change, and honour `prefers-reduced-motion` (all animation and transitions off).",
+      "**Do** keep focus visible: 2px outline at 2px offset in `--focus`, `shell-ink` inside the shell, on the whole track lane when its range input is focused. Keep the skip link, the polite live region for state changes, and 34–42px minimum control heights."
+    ],
+    "donts": [
+      "**Don't** use green, amber or red for anything that is not a severity state.",
+      "**Don't** introduce blue into the night palette.",
+      "**Don't** use monospace outside the arithmetic block.",
+      "**Don't** loop or repeat the annunciator pulse, or add other attention animations.",
+      "**Don't** use hard or offset shadows; depth is border plus soft ambient lift.",
+      "**Don't** fall back to a grid of identical KPI cards with one blue accent; the vitals strip is one joined instrument, and alerts lead with the action."
+    ]
+  }
+}
