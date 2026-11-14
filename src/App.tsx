@@ -15,7 +15,7 @@ import {
   type ScenarioId,
 } from './integration/dataSource';
 import { ChartColorsContext, readChartColors, useTheme, type ChartColors } from './lib/theme';
-import { AboutPanel } from './components/AboutPanel';
+import { AboutPanel, LICENSE_URL, REPO_URL } from './components/AboutPanel';
 import { AlertCard } from './components/AlertCard';
 import { OriginBadge } from './components/Badges';
 import { CountermeasurePanel } from './components/CountermeasurePanel';
@@ -248,7 +248,16 @@ export default function App() {
 
       <footer className="app-foot">
         <p>{DISCLAIMER} Em caso de dúvida, acione o oficial médico da tripulação ou o controle em Terra.</p>
-        <p className="muted small">NASA Space Apps Challenge 2026 · Desafio 05 · Formandos UDI · Licença Apache-2.0</p>
+        <p className="muted small">
+          NASA Space Apps Challenge 2026 · Desafio 05 · Formandos UDI ·{' '}
+          <a href={LICENSE_URL} target="_blank" rel="noreferrer">
+            Licença Apache-2.0
+          </a>{' '}
+          ·{' '}
+          <a href={REPO_URL} target="_blank" rel="noreferrer">
+            Código-fonte
+          </a>
+        </p>
       </footer>
     </ChartColorsContext.Provider>
   );

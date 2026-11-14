@@ -4,6 +4,9 @@ import { CLASS_LABEL, CLASS_ROLE, HAZARD_LABEL, VARIABLES } from '../config/vari
 import { ClassChip } from './Badges';
 import { VariableTerm } from './VariableTerm';
 
+export const REPO_URL = 'https://github.com/WedersonSantos/Nasa-Space-Apps---Health-Monitoring';
+export const LICENSE_URL = `${REPO_URL}/blob/main/LICENSE`;
+
 export function AboutPanel() {
   return (
     <div className="stack">
@@ -106,6 +109,24 @@ export function AboutPanel() {
         </ul>
         <p className="muted small">
           A NASA não endossa entidades não governamentais. Projeto desenvolvido para o NASA Space Apps Challenge 2026.
+        </p>
+      </section>
+
+      <section className="panel prose" aria-labelledby="license-title">
+        <h2 id="license-title">Licença e código-fonte</h2>
+        <p>
+          Projeto de código aberto sob a{' '}
+          <a href={LICENSE_URL} target="_blank" rel="noreferrer">
+            Apache License 2.0 (Apache-2.0)
+          </a>
+          , licença aprovada pela OSI. Código-fonte, dados de demonstração e testes:{' '}
+          <a href={REPO_URL} target="_blank" rel="noreferrer">
+            github.com/WedersonSantos/Nasa-Space-Apps---Health-Monitoring
+          </a>
+          .
+        </p>
+        <p className="muted small">
+          Bibliotecas de terceiros: React, Recharts e Vite (MIT); TypeScript (Apache-2.0).
         </p>
       </section>
 
