@@ -118,6 +118,47 @@ export function Moon({ size = 16 }: IconProps) {
   );
 }
 
+export function ChevronLeft({ size = 16 }: IconProps) {
+  return (
+    <svg {...base(size)}>
+      <path d="m14.5 6-6 6 6 6" />
+    </svg>
+  );
+}
+
+export function ChevronRight({ size = 16, className }: IconProps) {
+  return (
+    <svg {...base(size)} className={className}>
+      <path d="m9.5 6 6 6-6 6" />
+    </svg>
+  );
+}
+
+export function Play({ size = 16 }: IconProps) {
+  return (
+    <svg {...base(size)}>
+      <path d="M7 5v14l12-7Z" />
+    </svg>
+  );
+}
+
+export function Pause({ size = 16 }: IconProps) {
+  return (
+    <svg {...base(size)}>
+      <path d="M8 5v14M16 5v14" />
+    </svg>
+  );
+}
+
+export function Crosshair({ size = 16 }: IconProps) {
+  return (
+    <svg {...base(size)}>
+      <circle cx="12" cy="12" r="7" />
+      <path d="M12 2v4M12 18v4M2 12h4M18 12h4" />
+    </svg>
+  );
+}
+
 export function Link({ size = 13 }: IconProps) {
   return (
     <svg {...base(size)}>

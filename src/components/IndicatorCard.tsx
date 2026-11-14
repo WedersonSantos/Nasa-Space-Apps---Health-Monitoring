@@ -4,8 +4,10 @@ import { findOfficial } from '../config/sources';
 import { HAZARD_LABEL, VARIABLES } from '../config/variables';
 import { fmt, fmtDate, fmtPct, fmtSigned } from '../lib/format';
 import { ClassChip, OriginBadge, SeverityBadge } from './Badges';
+import { ChevronRight } from './Icons';
 import { TrendChart } from './TrendChart';
 import { VariableTerm } from './VariableTerm';
+import { latestSelfReport as latestSelfReportIndex } from '../lib/selfReport';
 
 function worstOf(alerts: Alert[]): Severity {
   if (alerts.some((a) => a.severity === 'critical')) return 'critical';
@@ -28,16 +30,25 @@ interface Props {
   measurements: Measurement[];
   launchDate: string;
   fromDay: number | null;
+  /** row: dados à esquerda e gráfico à direita, para empilhar gráficos no mesmo eixo de tempo. */
+  variant?: 'card' | 'row';
+  cursorIso?: string;
 }
 
-export function IndicatorCard({ variable, latest, baseline, alerts, measurements, launchDate, fromDay }: Props) {
+export function IndicatorCard({ variable, latest, baseline, alerts, measurements, launchDate, fromDay, variant = 'card', cursorIso }: Props) {
   const meta = VARIABLES[variable];
   const related = alerts.filter((a) => a.variables.includes(variable));
   const status = worstOf(related);
   const delta = latest && baseline ? latest.value - baseline.mean : null;
 
   return (
-    <article className={`indicator sev-border-${status}`} aria-labelledby={`ind-${variable}`}>
+    <article
+      id={`card-${variable}`}
+      tabIndex={-1}
+      className={`indicator indicator--${variant} indicator--${status}`}
+      aria-labelledby={`ind-${variable}`}
+    >
+      <div className="indicator__meta">
       <header className="indicator__head">
         <div>
           <h3 id={`ind-${variable}`}>
@@ -66,7 +77,7 @@ export function IndicatorCard({ variable, latest, baseline, alerts, measurements
             </span>
           )}
           <OriginBadge origin={latest.origin} />
-          <span className="muted small">{fmtDate(latest.timestamp)}</span>
+          <span className="indicator__date">{fmtDate(latest.timestamp)}</span>
         </div>
       ) : (
         <p className="muted">Sem medição registrada.</p>
@@ -86,23 +97,26 @@ export function IndicatorCard({ variable, latest, baseline, alerts, measurements
           )}
         </p>
       )}
-      {variable === 'selfReport' && baseline && (
-        <p className="indicator__baseline">
-          Humor — baseline pré-voo <strong>{fmt(baseline.mean, 1)}/5</strong>
-        </p>
+      {variable === 'selfReport' && baseline && (() => {
+        const sr = latestSelfReportIndex(measurements);
+        return (
+          <p className="indicator__baseline">
+            Índice de bem-estar <strong>{sr.index != null ? `${fmt(sr.index, 1)}/5` : '—'}</strong> · baseline pré-voo{' '}
+            <strong>{fmt(baseline.mean, 1)}/5</strong>
+            {sr.index != null && <> · desvio {fmtSigned(sr.index - baseline.mean, 1)}</>}
+          </p>
+        );
+      })()}
+
+      {variant === 'card' && (
+        <TrendChart variable={variable} measurements={measurements} baseline={baseline} alerts={alerts} launchDate={launchDate} fromDay={fromDay} cursorIso={cursorIso} />
       )}
 
-      <TrendChart
-        variable={variable}
-        measurements={measurements}
-        baseline={baseline}
-        alerts={alerts}
-        launchDate={launchDate}
-        fromDay={fromDay}
-      />
-
       <details className="indicator__about">
-        <summary>O que mede e por que importa</summary>
+        <summary>
+          <ChevronRight size={14} className="disclosure-icon" />
+          O que mede e por que importa
+        </summary>
         <p>
           <strong>Mede:</strong> {meta.whatItMeasures}
         </p>
@@ -131,6 +145,12 @@ export function IndicatorCard({ variable, latest, baseline, alerts, measurements
           })}
         </p>
       </details>
+      </div>
+      {variant === 'row' && (
+        <div className="indicator__chart">
+          <TrendChart variable={variable} measurements={measurements} baseline={baseline} alerts={alerts} launchDate={launchDate} fromDay={fromDay} cursorIso={cursorIso} height={150} />
+        </div>
+      )}
     </article>
   );
 }

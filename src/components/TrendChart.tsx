@@ -131,21 +131,32 @@ function ChartTooltip({
   );
 }
 
-// Recharts só enxerga ReferenceLine como filho direto do gráfico: por isso é uma função, não um componente.
-function alertMarkers(alerts: Alert[], launch: string, c: ChartColors, minX: number) {
+// Recharts só enxerga ReferenceLine como filho direto do gráfico: por isso são funções, não componentes.
+// Todo gráfico mostra o início de todos os alertas ativos (forte quando envolve esta variável) e o dia avaliado.
+function alertMarkers(alerts: Alert[], relatedIds: Set<string>, launch: string, c: ChartColors, minX: number) {
   return alerts
     .filter((a) => missionPos(a.raisedAt, launch) >= minX)
-    .map((a) => (
-      <ReferenceLine
-        key={a.id}
-        x={missionPos(a.raisedAt, launch)}
-        stroke={a.severity === 'critical' ? c.critical : c.attention}
-        strokeWidth={2}
-        strokeDasharray="4 3"
-        ifOverflow="extendDomain"
-        label={{ value: '▲ alerta', position: 'insideTopLeft', fill: c.text, fontSize: 11, fontWeight: 700 }}
-      />
-    ));
+    .map((a) => {
+      const own = relatedIds.has(a.id);
+      const color = a.severity === 'critical' ? c.critical : c.attention;
+      return (
+        <ReferenceLine
+          key={a.id}
+          x={missionPos(a.raisedAt, launch)}
+          stroke={own ? color : c.muted}
+          strokeWidth={own ? 2 : 1}
+          strokeOpacity={own ? 1 : 0.6}
+          strokeDasharray={own ? '4 3' : '2 4'}
+          ifOverflow="extendDomain"
+          label={own ? { value: 'início', position: 'insideTopRight', fill: color, fontSize: 11, fontWeight: 700 } : undefined}
+        />
+      );
+    });
+}
+
+function dayCursor(cursorIso: string | undefined, launch: string, c: ChartColors) {
+  if (!cursorIso) return null;
+  return <ReferenceLine x={missionPos(cursorIso, launch)} stroke={c.text} strokeWidth={1} strokeOpacity={0.55} ifOverflow="extendDomain" />;
 }
 
 /** Marcas do eixo X em dias de missão, semanais, ancoradas no último dia. */
@@ -169,13 +180,15 @@ interface TrendChartProps {
   launchDate: string;
   /** Primeiro dia de missão exibido; null = série inteira, incluindo o pré-voo. */
   fromDay: number | null;
+  /** Fim do dia avaliado: desenha o cursor da trilha no eixo de tempo. */
+  cursorIso?: string;
   height?: number;
 }
 
-export function TrendChart({ variable, measurements, baseline, alerts, launchDate, fromDay, height = 170 }: TrendChartProps) {
+export function TrendChart({ variable, measurements, baseline, alerts, launchDate, fromDay, cursorIso, height = 170 }: TrendChartProps) {
   const c = useChartColors();
   if (variable === 'exerciseLoad') {
-    return <ExerciseChart measurements={measurements} alerts={alerts} launchDate={launchDate} fromDay={fromDay} height={height} />;
+    return <ExerciseChart measurements={measurements} alerts={alerts} launchDate={launchDate} fromDay={fromDay} cursorIso={cursorIso} height={height} />;
   }
   const meta = VARIABLES[variable];
   const rows = buildRows(variable, measurements, launchDate, fromDay);
@@ -250,7 +263,8 @@ export function TrendChart({ variable, measurements, baseline, alerts, launchDat
               isAnimationActive={false}
             />
           ))}
-          {alertMarkers(related, launchDate, c, minX)}
+          {alertMarkers(alerts, new Set(related.map((a) => a.id)), launchDate, c, minX)}
+          {dayCursor(cursorIso, launchDate, c)}
         </LineChart>
       </ResponsiveContainer>
       {series.length > 1 && (
@@ -280,12 +294,14 @@ export function ExerciseChart({
   alerts,
   launchDate,
   fromDay,
+  cursorIso,
   height = 170,
 }: {
   measurements: Measurement[];
   alerts: Alert[];
   launchDate: string;
   fromDay: number | null;
+  cursorIso?: string;
   height?: number;
 }) {
   const c = useChartColors();
@@ -314,7 +330,8 @@ export function ExerciseChart({
           <Tooltip content={<ChartTooltip series={series} decimals={0} />} />
           <Bar dataKey="value" name="Completado" fill={c.accent} maxBarSize={8} isAnimationActive={false} />
           <Line dataKey="secondary" name="Prescrito" type="stepAfter" stroke={c.text} strokeWidth={1.5} strokeDasharray="4 3" dot={false} isAnimationActive={false} />
-          {alertMarkers(related, launchDate, c, minX)}
+          {alertMarkers(alerts, new Set(related.map((a) => a.id)), launchDate, c, minX)}
+          {dayCursor(cursorIso, launchDate, c)}
         </ComposedChart>
       </ResponsiveContainer>
       <ul className="chart-legend">

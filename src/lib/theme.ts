@@ -47,7 +47,7 @@ export function readChartColors(): ChartColors {
   const s = getComputedStyle(document.documentElement);
   const v = (name: string) => s.getPropertyValue(name).trim();
   return {
-    text: v('--text'),
+    text: v('--ink'),
     muted: v('--muted'),
     grid: v('--grid'),
     surface: v('--surface'),

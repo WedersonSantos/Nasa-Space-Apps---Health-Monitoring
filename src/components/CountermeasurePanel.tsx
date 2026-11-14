@@ -16,10 +16,11 @@ interface Props {
   measurements: Measurement[];
   launchDate: string;
   fromDay: number | null;
+  cursorIso: string;
   missionDayOfAlert: (a: Alert) => number;
 }
 
-export function CountermeasurePanel({ state, measurements, launchDate, fromDay, missionDayOfAlert }: Props) {
+export function CountermeasurePanel({ state, measurements, launchDate, fromDay, cursorIso, missionDayOfAlert }: Props) {
   const { adherence } = state;
   const exerciseAlerts = state.alerts.filter((a) => a.variables.includes('exerciseLoad'));
   const association = state.alerts.find((a) => a.variables.includes('exerciseLoad') && a.variables.includes('bodyMass'));
@@ -71,7 +72,7 @@ export function CountermeasurePanel({ state, measurements, launchDate, fromDay, 
             </dl>
           </div>
         </div>
-        <ExerciseChart measurements={measurements} alerts={state.alerts} launchDate={launchDate} fromDay={fromDay} height={200} />
+        <ExerciseChart measurements={measurements} alerts={state.alerts} launchDate={launchDate} fromDay={fromDay} cursorIso={cursorIso} height={200} />
       </section>
 
       <section className="panel" aria-labelledby="assoc-title">
@@ -89,17 +90,17 @@ export function CountermeasurePanel({ state, measurements, launchDate, fromDay, 
             <h3 className="side-title">
               <VariableTerm variable="bodyMass" /> <ClassChip varClass="accumulator" />
             </h3>
-            <TrendChart variable="bodyMass" measurements={measurements} baseline={massBaseline} alerts={state.alerts} launchDate={launchDate} fromDay={fromDay} height={200} />
+            <TrendChart variable="bodyMass" measurements={measurements} baseline={massBaseline} alerts={state.alerts} launchDate={launchDate} fromDay={fromDay} cursorIso={cursorIso} height={200} />
           </div>
           <div>
             <h3 className="side-title">
               <VariableTerm variable="exerciseLoad">Exercício completado</VariableTerm> <ClassChip varClass="countermeasure" />
             </h3>
-            <ExerciseChart measurements={measurements} alerts={state.alerts} launchDate={launchDate} fromDay={fromDay} height={200} />
+            <ExerciseChart measurements={measurements} alerts={state.alerts} launchDate={launchDate} fromDay={fromDay} cursorIso={cursorIso} height={200} />
           </div>
         </div>
         {association ? (
-          <AlertCard alert={association} missionDay={missionDayOfAlert(association)} />
+          <AlertCard alert={association} missionDay={missionDayOfAlert(association)} variant="compact" />
         ) : (
           <p className="all-clear-inline">Nenhuma associação ativa entre variação de massa e queda de aderência.</p>
         )}
