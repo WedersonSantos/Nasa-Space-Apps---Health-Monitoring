@@ -1,169 +1,172 @@
-# Vigília — monitor de saúde de astronautas
+# Vigília — astronaut health monitor
 
-**NASA Space Apps Challenge 2026 · Desafio 05 — [Create Health Monitoring Software for Astronauts on Space Missions](https://www.spaceappschallenge.org/2026/challenges/health-monitoring-software/)**
-Equipe Formandos UDI (Uberlândia) · Licença [Apache-2.0](LICENSE)
+**NASA Space Apps Challenge 2026 · Challenge 05 — [Create Health Monitoring Software for Astronauts on Space Missions](https://www.spaceappschallenge.org/2026/challenges/health-monitoring-software/)**
+Team Formandos UDI (Uberlândia, Brazil) · License [Apache-2.0](LICENSE)
 
-> **Coletar → Interpretar → Orientar.** A Vigília não é um painel de sinais vitais. Ela compara cada medição com o *baseline individual* do astronauta, reconhece padrões entre sinais, mostra a conta por trás de cada alerta e diz o que fazer — inclusive quando acionar o oficial médico da tripulação. Funciona sem conexão com a Terra.
+> **Collect → Interpret → Guide.** Vigília is not a vital-signs dashboard. It compares each measurement with the astronaut's *individual baseline*, recognizes patterns across signals, shows the math behind every alert and says what to do — including when to call the crew medical officer. It works with no connection to Earth.
 
-- **Demo publicada:** https://nasa-chi-ten.vercel.app — abre sem login e funciona offline depois da primeira visita
-- **Vídeo:** _(link — preencher)_
+- **Live demo:** https://nasa-chi-ten.vercel.app — no login, works offline after the first visit
+- **Languages:** the app opens in English; the **EN | PT** toggle in the header switches it to Portuguese
+- **Video:** _(link — to be added)_
 
 ---
 
-## 1. Problema
+## 1. Problem
 
-Em missões longas, a tripulação enfrenta os cinco perigos do voo espacial humano descritos pelo NASA Human Research Program — radiação, isolamento e confinamento, distância da Terra, alterações da gravidade e ambientes fechados e hostis. Eles se traduzem em descondicionamento cardiovascular, perda muscular e óssea, ruptura do sono e problemas de saúde comportamental. Longe da Terra, com comunicação atrasada e recursos médicos limitados, o astronauta precisa **perceber sozinho** que algo mudou e **saber o que fazer**.
+On long missions, the crew faces the five hazards of human spaceflight described by the NASA Human Research Program — radiation, isolation and confinement, distance from Earth, altered gravity and hostile, closed environments. They translate into cardiovascular deconditioning, muscle and bone loss, sleep disruption and behavioral health problems. Far from Earth, with delayed communication and limited medical resources, the astronaut has to **notice on their own** that something changed and **know what to do**.
 
-## 2. Solução
+## 2. Solution
 
-Sete variáveis, em três classes, mapeadas um-para-um no fluxo do desafio:
+Seven variables in three classes, mapped one-to-one to the challenge's flow:
 
-| Classe | Variáveis | Papel |
+| Class | Variables | Role |
 | --- | --- | --- |
-| **Sinais** | FC de repouso, HRV (RMSSD), pressão arterial, sono, autorrelato (humor/estresse/fadiga) | Coletar → interpretar. Geram alerta. |
-| **Acumulador** | Massa corporal | Consequência de longo prazo. |
-| **Contramedida** | Carga de exercício (prescrito × completado) | Orientar — fecha o ciclo. |
+| **Signals** | Resting HR, HRV (RMSSD), blood pressure, sleep, self-report (mood/stress/fatigue) | Collect → interpret. Raise alerts. |
+| **Accumulator** | Body mass | Long-term consequence. |
+| **Countermeasure** | Exercise load (prescribed × completed) | Guide — closes the loop. |
 
-O que diferencia a solução:
+What sets it apart:
 
-- **Regra composta multi-sinal.** Três noites curtas, HRV caindo e FC subindo, juntos, viram um alerta de *sobrecarga* — não "sono baixo". Nenhum sinal isolado justificaria o alerta; o padrão sim.
-- **Associação entre acumulador e contramedida, sem inventar causa.** "Massa −2% em 3 semanas; no mesmo período, 61% do exercício prescrito foi completado. Os dois podem estar relacionados." O sistema associa; não modela dose-resposta.
-- **Alerta explicável.** Cada alerta mostra a fórmula aplicada, os números que o sustentam (atual × baseline × desvio), a orientação e a fonte do limiar — ou declara o limiar como arbitrário.
-- **Offline por construção.** Sem backend: tudo roda no dispositivo. Um app para astronauta tem que funcionar sem a Terra.
+- **Composite multi-signal rule.** Three short nights, falling HRV and rising HR, together, become an *overload* alert — not "low sleep". No single signal would justify the alert; the pattern does.
+- **Association between accumulator and countermeasure, without inventing a cause.** "Mass −2% in 3 weeks; over the same period, 61% of the prescribed exercise was completed. The two may be related." The system associates; it does not model dose-response.
+- **Explainable alerts.** Every alert shows the formula applied, the numbers behind it (current × baseline × deviation), the guidance and the source of the threshold — or declares the threshold arbitrary.
+- **Offline by design.** No backend: everything runs on the device. An app for astronauts has to work without Earth.
 
-### Telas
+### Screens
 
-| Aba | O que mostra |
+| Tab | What it shows |
 | --- | --- |
-| **Visão geral** | Estado geral (normal / atenção / crítico, sempre com ícone + rótulo), alertas explicativos e um cartão por indicador com gráfico, faixa de baseline e ponto do alerta. |
-| **Contramedida** | Aderência ao exercício e, lado a lado, massa corporal × exercício completado com o alerta de associação. |
-| **Registrar** | Medição manual com validação e autorrelato de humor, estresse e fadiga (1–5). |
-| **Sobre e fontes** | Tabela de indicadores, limitações, referências e declaração de uso de IA. |
+| **Overview** | Overall status (normal / attention / critical, always with icon + label), explainable alerts and one card per indicator with chart, baseline band and alert onset. |
+| **Countermeasure** | Exercise adherence and, side by side, body mass × exercise completed with the association alert. |
+| **Log data** | Manual measurement with validation, and self-report of mood, stress and fatigue (1–5). |
+| **About & sources** | Indicator table, limitations, references and AI-use statement. |
 
-### Uso próprio e honestidade dos dados
+### Own use and data honesty
 
-- **Minha missão.** Além da demonstração, qualquer pessoa pode criar uma missão própria (só um apelido, sem dados pessoais). Os registros ficam neste dispositivo, separados dos dados sintéticos; os 7 primeiros dias de registro formam o baseline pré-voo e a avaliação começa no dia 1 de voo.
-- **"Não avaliado" não é "Normal".** O motor informa, por variável, se havia dados suficientes para aplicar a regra (`coverage`). Sem dados, sem baseline ou com registros desatualizados, a interface mostra "Não avaliado" com o motivo, e o estado geral vira "Avaliação parcial" ou "Sem dados". Ausência de alerta nunca é apresentada como saúde normal.
-- **Como medir.** Cada variável traz equipamento, condições de coleta adaptadas à microgravidade (por exemplo, pressão arterial com o corpo contido e o braço na altura do coração, massa medida por aceleração linear em vez de balança) e frequência.
-- **Acompanhamento das ações.** Cada alerta permite registrar "Medição repetida", "Oficial médico acionado" e "Ação concluída". As ações aparecem na trilha da missão e numa lista que mostra se o alerta continua ativo, sem alterar a avaliação.
+- **My mission.** Besides the demo, anyone can create their own mission (just a nickname, no personal data). Entries stay on this device, separate from the synthetic data; the first 7 days of entries form the pre-flight baseline and assessment starts on flight day 1.
+- **"Not assessed" is not "Normal".** The engine reports, per variable, whether there was enough data to apply the rule (`coverage`). With no data, no baseline or stale entries, the interface shows "Not assessed" with the reason, and the overall status becomes "Partial assessment" or "No data". The absence of an alert is never presented as normal health.
+- **How to measure.** Each variable lists the equipment, collection conditions adapted to microgravity (for example, blood pressure with the body restrained and the arm at heart level, mass measured by linear acceleration instead of a scale) and frequency.
+- **Action follow-up.** Each alert lets the crew log "Measurement repeated", "CMO contacted" and "Action completed". Actions appear on the mission track and in a list that shows whether the alert is still active, without changing the assessment.
 
-Os três cenários de demonstração trocam ao vivo pelos botões no topo ou pelas teclas **1**, **2** e **3**. A **linha do tempo da missão** reavalia o estado em qualquer dia (setas ← → ou botão *Reproduzir*), mostrando o dia exato em que cada padrão surge. Passe o mouse (ou foque com o teclado) sobre o nome de qualquer parâmetro para ver o que ele mede e por que importa em voo espacial.
+The three demo scenarios switch live with the buttons at the top or the **1**, **2** and **3** keys. The **mission track** re-evaluates the state on any day (← → arrows or the *Play* button), showing the exact day each pattern emerges. Hover over (or keyboard-focus) any parameter name to see what it measures and why it matters in spaceflight.
 
-## 3. Arquitetura
+## 3. Architecture
 
 ```
-Medições (JSON de cenário + registros manuais)
+Measurements (scenario JSON + manual entries)
         │
         ▼
-evaluate(measurements, astronautId, asOf)  ← função pura, determinística (src/engine)
+evaluate(measurements, astronautId, asOf, profile?, { locale })  ← pure, deterministic function (src/engine)
         │
         ▼
-AstronautState { overall, alerts[], baselines[], adherence, latest }
+AstronautState { overall, alerts[], baselines[], adherence, latest, coverage }
         │
         ▼
-Interface React (src/components) — só exibe; nenhum limiar mora na UI
+React interface (src/components) — display only; no threshold lives in the UI
 ```
 
-| Camada | Escolha |
+| Layer | Choice |
 | --- | --- |
 | Build | Vite |
 | UI | React 18 + TypeScript |
-| Gráficos | Recharts |
-| Motor | TypeScript puro, sem dependências — `src/engine` |
-| Testes | Vitest sobre o motor — `tests/` |
-| Persistência | `localStorage` com reserva em memória — `src/storage` |
-| Offline | Service worker (rede primeiro, cache como reserva) — `public/sw.js` |
-| Deploy | Build estático (Vercel ou Netlify) |
+| Charts | Recharts |
+| Engine | Plain TypeScript, no dependencies — `src/engine` |
+| Languages | English (default) and Portuguese — `src/i18n`; the engine writes alert text in the chosen locale |
+| Tests | Vitest on the engine — `tests/` |
+| Persistence | `localStorage` with in-memory fallback — `src/storage` |
+| Offline | Service worker (network first, cache as fallback) — `public/sw.js` |
+| Deploy | Static build (Vercel) |
 
-**IA fora do caminho crítico.** Nenhum modelo de IA decide se há alerta. As regras são determinísticas e auditáveis; é isso que torna o alerta explicável.
+**AI out of the critical path.** No AI model decides whether there is an alert. The rules are deterministic and auditable; that is what makes the alert explainable.
 
-### Estrutura do repositório
+### Repository structure
 
 ```
 src/
-  types/contract.ts      Contrato congelado entre motor e interface
-  engine/                Motor de regras, baseline, aderência (Bloco A)
-  data/                  Cenários de demonstração (JSON gerados) e criação de medições
-  storage/               Persistência local
-  integration/           Ponto único de ligação motor ↔ interface
-  components/            Interface (Bloco B)
-  config/                Textos de interface e metadados das variáveis
-scripts/                 Gerador de dados sintéticos
-tests/                   Testes do motor
-docs/                    Tabela de indicadores e registro da busca de dados
-PRODUCT.md, DESIGN.md    Contexto do produto e sistema visual (identidade de operações de missão)
+  types/contract.ts      Frozen contract between engine and interface
+  engine/                Rule engine, baseline, adherence (Block A)
+  data/                  Demo scenarios (generated JSON) and measurement creation
+  storage/               Local persistence
+  integration/           Single connection point engine ↔ interface
+  i18n/                  Language provider and EN | PT toggle
+  components/            Interface (Block B)
+  config/                Interface text and variable metadata
+scripts/                 Synthetic data generator
+tests/                   Engine tests
+docs/                    Indicator table and data-search log (Portuguese)
+PRODUCT.md, DESIGN.md    Product context and visual system (mission-operations identity)
 ```
 
-## 4. Como rodar
+## 4. Running it
 
-Requer Node.js 20 ou superior.
+Requires Node.js 20 or later.
 
 ```bash
 npm install
 npm run dev        # http://localhost:5173
-npm test           # testes do motor
-npm run build      # build estático em dist/
-npm run preview    # serve o build localmente
+npm test           # engine tests
+npm run build      # static build in dist/
+npm run preview    # serves the build locally
 ```
 
 ### Deploy
 
-Build estático, sem variáveis de ambiente. Na Vercel ou na Netlify, basta importar o repositório: comando `npm run build`, pasta de saída `dist`.
+Static build, no environment variables. On Vercel or Netlify, just import the repository: command `npm run build`, output folder `dist`.
 
-## 5. Dados de demonstração
+## 5. Demo data
 
-**Todos os dados da demo são sintéticos** e marcados `origin: 'synthetic'` em cada medição; a interface mostra a origem em todo valor exibido (Sintético · Medido · Estimado), e registros manuais aparecem como *Medido*.
+**All demo data is synthetic** and marked `origin: 'synthetic'` on every measurement; the interface shows the origin on every displayed value (Synthetic · Measured · Estimated), and manual entries appear as *Measured*.
 
-Cada cenário tem 120 dias (7 de pré-voo + 113 de missão), gerados por `npm run generate` a partir de `scripts/generate-scenarios.ts` com semente fixa, em `src/data/scenarios/*.json`.
+Each scenario covers 120 days (7 pre-flight + 113 in mission), generated by `npm run generate` from `scripts/generate-scenarios.ts` with a fixed seed, in `src/data/scenarios/*.json`.
 
-| Cenário | Roteiro | Resultado observado no dia 113 | Prova |
+| Scenario | Script | Result observed on day 113 | Proves |
 | --- | --- | --- | --- |
-| 1 — Nominal | Sinais no baseline, aderência > 90%, massa estável | Normal, nenhum alerta | O sistema não alarma sem motivo |
-| 2 — Degradação gradual | Sono ↓, HRV ↓, FC ↑ ao longo de 3 semanas | Atenção — padrão de sobrecarga desde o dia 102 | A regra composta reconhece o padrão |
-| 3 — Crítico com contramedida | Aderência baixa, massa em queda, pressão desviando do baseline | Crítico — associação desde o dia 111, com escalonamento | Associação + escalonamento ao oficial médico |
+| 1 — Nominal | Signals at baseline, adherence > 90%, stable mass | Normal, no alerts | The system does not alarm without reason |
+| 2 — Gradual degradation | Sleep ↓, HRV ↓, HR ↑ over 3 weeks | Attention — overload pattern since day 102 | The composite rule recognizes the pattern |
+| 3 — Critical with countermeasure | Low adherence, falling mass, blood pressure drifting from baseline | Critical — association since day 111, with escalation | Association + escalation to the medical officer |
 
-A tabela completa de indicadores (unidade, origem, baseline, regra, limiar, fonte) e os resultados por cenário estão em [docs/indicadores.md](docs/indicadores.md); o registro da busca de dados nas fontes oficiais está em [docs/busca-de-dados.md](docs/busca-de-dados.md).
+The full indicator table (unit, origin, baseline, rule, threshold, source) and per-scenario results are in [docs/indicadores.md](docs/indicadores.md); the log of the data search in official sources is in [docs/busca-de-dados.md](docs/busca-de-dados.md) (both in Portuguese).
 
-Convenções de medição: pressão arterial usa `value` = sistólica e `secondaryValue` = diastólica; sono usa `secondaryValue` = qualidade (1–5); exercício usa `value` = minutos completados e `secondaryValue` = minutos prescritos; o autorrelato gera três medições por registro (`method` = `self-report:mood`, `self-report:stress` ou `self-report:fatigue`).
+Measurement conventions: blood pressure uses `value` = systolic and `secondaryValue` = diastolic; sleep uses `secondaryValue` = quality (1–5); exercise uses `value` = minutes completed and `secondaryValue` = minutes prescribed; self-report produces three measurements per entry (`method` = `self-report:mood`, `self-report:stress` or `self-report:fatigue`).
 
-## 6. Validação
+## 6. Validation
 
-- Testes automatizados do motor: uma verificação por regra e uma por cenário, conferindo a severidade final esperada (`npm test`).
-- Cada alerta exibe a operação aritmética aplicada e as evidências numéricas.
-- Limiares sem fonte publicada aparecem na interface como **"Limiar arbitrário · sujeito a validação clínica"**.
+- Automated engine tests: one check per rule and one per scenario, confirming the expected final severity (`npm test`).
+- Every alert shows the arithmetic applied and the numeric evidence.
+- Thresholds without a published source appear in the interface as **"Arbitrary threshold · subject to clinical validation"**.
 
-## 7. Limitações
+## 7. Limitations
 
-1. Dados sintéticos, com faixas derivadas de literatura pública. Não há telemetria real de astronauta.
-2. Limiares de alerta são parâmetros iniciais, sujeitos a validação clínica.
-3. O sistema associa variáveis; não modela causalidade nem prevê desfecho clínico.
-4. Não substitui avaliação médica: indica quando escalonar, nunca diagnostica.
-5. Perda óssea e síndrome neuro-ocular (SANS) ficaram fora: constantes de tempo longas demais para a janela da demo e dados indisponíveis no prazo.
-6. O baseline individual exige período pré-voo de registro; sem ele, a sensibilidade cai.
+1. Synthetic data, with ranges derived from public literature. There is no real astronaut telemetry.
+2. Alert thresholds are initial parameters, subject to clinical validation.
+3. The system associates variables; it does not model causality or predict clinical outcomes.
+4. It does not replace medical evaluation: it indicates when to escalate, it never diagnoses.
+5. Bone loss and spaceflight-associated neuro-ocular syndrome (SANS) were left out: their time constants are too long for the demo window and data were not available in time.
+6. The individual baseline requires a pre-flight logging period; without it, sensitivity drops.
 
-### Trabalhos futuros
+### Future work
 
-- Dosimetria de radiação como contexto de missão.
-- Acuidade visual e pressão intraocular para rastreio de SANS.
-- Marcadores de perda óssea em missões longas.
-- Validação dos limiares com equipe médica aeroespacial.
-- Adaptação para ambientes remotos na Terra: bases antárticas, plataformas offshore, expedições.
+- Radiation dosimetry as mission context.
+- Visual acuity and intraocular pressure for SANS screening.
+- Bone-loss markers on long missions.
+- Threshold validation with an aerospace medical team.
+- Adaptation for remote environments on Earth: Antarctic bases, offshore platforms, expeditions.
 
-## 8. Declaração de uso de IA
+## 8. AI-use statement
 
-Usamos ferramentas de IA generativa (Claude, da Anthropic) como assistentes de programação e redação. Todo o código e todo o texto foram revisados pela equipe. A IA **não** participa do motor de alertas: as decisões saem de regras determinísticas, com a fórmula visível no próprio alerta. A interface não apresenta IA como autoridade médica.
+We used generative AI tools (Claude, by Anthropic) as programming and writing assistants. All code and text were reviewed by the team. AI does **not** take part in the alert engine: decisions come from deterministic rules, with the formula visible in the alert itself. The interface does not present AI as a medical authority.
 
-## 9. Créditos e referências
+## 9. Credits and references
 
-**Equipe Formandos UDI**
+**Team Formandos UDI**
 
-| Integrante | Responsabilidade |
+| Member | Responsibility |
 | --- | --- |
-| Moacir Nascimento | **Ciência de Dados e Regras Clínicas** (Bloco A). Contrato de dados, pesquisa das referências NASA, dados sintéticos e cenários, baselines individuais, regras de alerta, cobertura de dados, persistência e testes |
-| Wederson Ferreira | **Front-end e Entrega** (Bloco B). Telas, integração com o motor, modo "Minha missão", registro de medições, README e publicação |
-| Vivian Vitoria | **Design**. Identidade visual, design system e paletas dos modos diurno e noturno |
+| Moacir Nascimento | **Data Science & Clinical Rules** (Block A). Data contract, research of NASA references, synthetic data and scenarios, individual baselines, alert rules, data coverage, persistence and tests |
+| Wederson Ferreira | **Front-end & Delivery** (Block B). Screens, engine integration, "My mission" mode, measurement logging, bilingual interface, README and publishing |
+| Vivian Vitoria | **Design**. Visual identity, design system and day and night palettes |
 
-**Recursos oficiais do desafio**
+**Official challenge resources**
 
 - NASA HRP — [5 Hazards of Human Spaceflight](https://www.nasa.gov/hrp/hazards/)
 - NASA HRP — [Risks of Human Spaceflight](https://www.nasa.gov/hrp/risks/)
@@ -172,8 +175,8 @@ Usamos ferramentas de IA generativa (Claude, da Anthropic) como assistentes de p
 - CSA — [Why Do We Conduct Science Experiments in Space?](https://www.asc-csa.gc.ca/eng/iss/science/why-do-we-conduct-science-experiments-in-space.asp)
 - [NASA Open Science Data Repository (OSDR)](https://osdr.nasa.gov/) · [NASA Life Sciences Portal (NLSP)](https://nlsp.nasa.gov/)
 
-As fontes específicas de cada limiar (relatórios de evidência do NASA Human Research Roadmap, NASA/SP-20250000273 e outros) estão em `src/engine/config/sources.ts` e na aba **Sobre e fontes** do app.
+The specific sources for each threshold (NASA Human Research Roadmap evidence reports, NASA/SP-20250000273 and others) are in `src/engine/config/sources.ts` and in the app's **About & sources** tab.
 
-**Bibliotecas de código aberto:** React (MIT), Recharts (MIT), Vite (MIT), Vitest (MIT), TypeScript (Apache-2.0).
+**Open-source libraries:** React (MIT), Recharts (MIT), Vite (MIT), Vitest (MIT), TypeScript (Apache-2.0).
 
-A NASA não endossa nenhuma entidade não governamental e não é responsável por informações contidas em sites não governamentais. Este projeto não contém informações pessoais identificáveis: o tripulante da demonstração é fictício.
+NASA does not endorse any non-U.S. Government entity and is not responsible for information contained on non-U.S. Government websites. This project contains no personally identifiable information: the demo crew member is fictional.
