@@ -2,14 +2,14 @@
 name: Vigília
 description: Mission-operations health console for astronauts, placed on mission time and against each crew member's own baseline.
 colors:
-  ground: "#eef0fa"
-  surface: "#ffffff"
-  surface-2: "#f5f5fd"
+  ground: "#e7e9f4"
+  surface: "#f7f7fb"
+  surface-2: "#eeeff8"
   ink: "#1e1b3a"
   muted: "#55557a"
-  border: "#d6d8ef"
-  hairline: "#e6e7f6"
-  grid: "#e7e8f5"
+  border: "#d1d3ea"
+  hairline: "#e0e1f0"
+  grid: "#e1e2f0"
   shell: "#e4e3fa"
   shell-2: "#d5d4f5"
   shell-line: "#c0bfeb"
@@ -228,7 +228,7 @@ components:
 
 Vigília looks like a station console, not a SaaS dashboard. Mission time is the spine: a pale lavender shell carries the wordmark, the MET clock (`D+113 · GMT`), the crew and the master annunciator, and directly under it the mission track lays every flight day on one horizontal lane. Everything below (vitals strip, alerts, indicator clusters) is read against that clock and against the crew member's own baseline.
 
-The world has one palette under two lighting conditions. **Day mode** is the module's general illumination, read in light tones between purple and blue: a periwinkle-tinted ground, white work surfaces, a lavender shell inked in deep indigo, indigo-violet data ink. **Night mode, "Modo noturno"**, is the same indigo-lavender world for low light, dark and desaturated: indigo-black grounds, lavender-white ink, soft periwinkle data ink, and severity lamps softened to carry dark text. Density is operational: compact cells, tabular figures, hairline dividers, and one loud element (the annunciator) per screen.
+The world has one palette under two lighting conditions. **Day mode** is the module's general illumination, read in light tones between purple and blue: a periwinkle-tinted ground, soft off-white work surfaces, a lavender shell inked in deep indigo, indigo-violet data ink. **Night mode, "Modo noturno"**, is the same indigo-lavender world for low light, dark and desaturated: indigo-black grounds, lavender-white ink, soft periwinkle data ink, and severity lamps softened to carry dark text. Density is operational: compact cells, tabular figures, hairline dividers, and one loud element (the annunciator) per screen.
 
 Type is a single variable family stretched across its width axis: expanded bold for things you name, condensed tabular figures for things you measure. Severity colour is reserved for state; it never decorates.
 
@@ -244,7 +244,7 @@ Type is a single variable family stretched across its width axis: expanded bold 
 An instrument palette between purple and blue, light by day and dark and desaturated by night; each lighting has its own shell band (pale lavender by day, deep indigo-black by night) and holds severity hues back for state.
 
 ### Primary
-- **Indigo Data Ink** (`indigo`, CSS `--series-1` and `--focus`): the day-mode data colour. First chart series, links, selected tab underline, checked scale option, primary button (white text, 5.65:1), focus ring, caret, text selection, the alert "O que fazer" sub-heading, the how-to-measure title, and the brand mark. In night mode every one of those jobs passes to **Soft Periwinkle** (`night-periwinkle`), the same hue at lower chroma (links on night surface 6.58:1; the primary button carries dark surface text).
+- **Indigo Data Ink** (`indigo`, CSS `--series-1` and `--focus`): the day-mode data colour. First chart series, links, selected tab underline, checked scale option, primary button (`surface` text, 5.29:1; indigo links on `surface` also 5.29:1), focus ring, caret, text selection, the alert "O que fazer" sub-heading, the how-to-measure title, and the brand mark. In night mode every one of those jobs passes to **Soft Periwinkle** (`night-periwinkle`), the same hue at lower chroma (links on night surface 6.58:1; the primary button carries dark surface text).
 
 ### Secondary
 - **Lavender Shell** (`shell`, `shell-2`, `shell-line`): the mission bar and track band, a shade deeper than the ground; raised controls sit on `shell-2`, dividers and the pre-flight hatch on `shell-line`. Text on the shell is **Shell Indigo** (`shell-ink`) with `shell-muted` for secondary readouts (5.09:1). Night equivalents: `night-shell`, `night-shell-2`, `night-shell-line`, `night-shell-ink`, `night-shell-muted` (7.06:1 on the night shell).
@@ -255,12 +255,12 @@ An instrument palette between purple and blue, light by day and dark and desatur
 - **Baseline band and pre-flight wash** (`band`, `preflight`): the individual baseline band is translucent indigo (`night-band`, translucent periwinkle, at night); pre-flight days in charts get a faint ink wash (`preflight` / `night-preflight`). Chart grid lines use `grid` / `night-grid`.
 
 ### Severity
-- **Normal** (`normal` on `normal-bg`), **Atenção** (`attention` on `attention-bg`), **Crítico** (`critical` on `critical-bg`). Text on solid severity fills uses `on-sev` (white by day, `night-ground` by night). At night the severity hues are `night-normal`, `night-attention`, `night-critical` over `night-normal-bg`, `night-attention-bg`, `night-critical-bg` (the same hue at 12–13% alpha); as text on the night surface they hold 6.68–8.34:1.
+- **Normal** (`normal` on `normal-bg`), **Atenção** (`attention` on `attention-bg`), **Crítico** (`critical` on `critical-bg`). As text on the day surface the severity hues hold 5.14–6.12:1. Text on solid severity fills uses `on-sev` (pure white by day, kept for legibility on the solid fills; `night-ground` by night). At night the severity hues are `night-normal`, `night-attention`, `night-critical` over `night-normal-bg`, `night-attention-bg`, `night-critical-bg` (the same hue at 12–13% alpha); as text on the night surface they hold 6.68–8.34:1.
 
 ### Neutral
 - **Periwinkle Mist** (`ground`): page ground by day; `night-ground` at night.
-- **Work Surface** (`surface`, `surface-2`): cards, panels, alert bodies; `surface-2` for card heads, inputs, formula blocks. Night: `night-surface`, `night-surface-2`.
-- **Indigo Ink** (`ink`) and **Muted Indigo** (`muted`): body text and secondary text. Night: `night-ink` (lavender-white, 14.65:1 on the night ground) and `night-muted` (7.18:1 on the night surface).
+- **Work Surface** (`surface`, `surface-2`): cards, panels, alert bodies; `surface-2` for card heads, inputs, formula blocks. Day work surfaces are a soft lavender off-white, never pure white: pure white read too bright and tiring over a shift. Night: `night-surface`, `night-surface-2`.
+- **Indigo Ink** (`ink`) and **Muted Indigo** (`muted`): body text (15.44:1 on `surface`) and secondary text (6.62:1 on `surface`, 6.18:1 on `surface-2`, 5.85:1 on `ground`). Night: `night-ink` (lavender-white, 14.65:1 on the night ground) and `night-muted` (7.18:1 on the night surface).
 - **Border / Hairline** (`border`, `hairline`): container strokes and internal dividers. Night: `night-border`, `night-hairline`.
 
 ### Named Rules
@@ -309,7 +309,7 @@ Every grid child carries `min-width: 0`; wide tables scroll inside their own con
 
 ## Elevation & Depth
 
-Mostly flat with tonal layering: the lavender shell band, the periwinkle ground and white surfaces do most of the separation, and every container also carries a 1px border. One soft ambient shadow, tinted indigo by day, lifts working surfaces; floating layers get a deeper neutral one.
+Mostly flat with tonal layering: the lavender shell band, the periwinkle ground and soft off-white surfaces do most of the separation, and every container also carries a 1px border. One soft ambient shadow, tinted indigo by day, lifts working surfaces; floating layers get a deeper neutral one.
 
 ### Shadow Vocabulary
 - **Surface lift** (`--shadow`; day `0 1px 2px rgba(30,27,58,.06), 0 4px 14px -6px rgba(60,55,140,.16)`, night `0 1px 2px rgba(0,0,0,.4), 0 6px 18px -8px rgba(0,0,0,.6)`): cards, panels, alerts, clusters, the vitals strip.

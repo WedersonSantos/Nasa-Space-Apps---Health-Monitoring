@@ -1,52 +1,52 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-11-14T23:30:00.000Z",
+  "generatedAt": "2026-11-14T23:59:00.000Z",
   "title": "Design System: Vigília",
   "extensions": {
     "colorMeta": {
       "ground": {
         "role": "neutral",
         "displayName": "Periwinkle Mist",
-        "canonical": "#eef0fa",
+        "canonical": "#e7e9f4",
         "tonalRamp": [
-          "#0a0b0e",
+          "#0a0b0f",
           "#24252a",
-          "#404248",
+          "#404149",
           "#5f6169",
-          "#80828a",
-          "#a3a4ac",
-          "#c7c9cf",
-          "#edeef4"
+          "#80828b",
+          "#a3a4ad",
+          "#c7c9d0",
+          "#edeef5"
         ]
       },
       "surface": {
         "role": "neutral",
-        "displayName": "Work Surface",
-        "canonical": "#ffffff",
+        "displayName": "Soft Work Surface",
+        "canonical": "#f7f7fb",
         "tonalRamp": [
-          "#0b0b0b",
-          "#252525",
-          "#424242",
-          "#616161",
-          "#828282",
-          "#a5a5a5",
-          "#c9c9c9",
-          "#eeeeee"
+          "#0b0b0c",
+          "#252527",
+          "#424244",
+          "#616164",
+          "#828285",
+          "#a5a5a8",
+          "#c9c9cb",
+          "#eeeef0"
         ]
       },
       "surface-2": {
         "role": "neutral",
         "displayName": "Lavender Recessed",
-        "canonical": "#f5f5fd",
+        "canonical": "#eeeff8",
         "tonalRamp": [
           "#0b0b0e",
-          "#252529",
-          "#414146",
-          "#606067",
-          "#828288",
-          "#a4a4aa",
-          "#c8c8ce",
-          "#eeeef2"
+          "#242529",
+          "#414147",
+          "#606168",
+          "#818289",
+          "#a4a4ab",
+          "#c8c9cf",
+          "#edeef3"
         ]
       },
       "ink": {
@@ -82,46 +82,46 @@
       "border": {
         "role": "neutral",
         "displayName": "Border",
-        "canonical": "#d6d8ef",
+        "canonical": "#d1d3ea",
         "tonalRamp": [
-          "#0a0a13",
+          "#0a0a12",
           "#232430",
           "#3f4150",
           "#5e5f72",
           "#7f8194",
-          "#a2a3b5",
-          "#c6c8d7",
+          "#a2a3b6",
+          "#c6c8d8",
           "#ecedfb"
         ]
       },
       "hairline": {
         "role": "neutral",
         "displayName": "Hairline",
-        "canonical": "#e6e7f6",
+        "canonical": "#e0e1f0",
         "tonalRamp": [
           "#0a0b10",
           "#24242c",
           "#40414b",
           "#5f606c",
           "#80818e",
-          "#a3a4af",
+          "#a3a4b0",
           "#c7c8d2",
-          "#edeef6"
+          "#edeef7"
         ]
       },
       "grid": {
         "role": "neutral",
         "displayName": "Chart Grid",
-        "canonical": "#e7e8f5",
+        "canonical": "#e1e2f0",
         "tonalRamp": [
-          "#0a0b0f",
+          "#0a0b10",
           "#24242b",
           "#41414a",
           "#5f606b",
-          "#80818c",
-          "#a3a4ae",
-          "#c8c8d1",
-          "#edeef5"
+          "#80818d",
+          "#a3a4af",
+          "#c7c8d2",
+          "#edeef6"
         ]
       },
       "shell": {
@@ -966,7 +966,7 @@
       "refersTo": "button-primary",
       "description": "Main form action, indigo by day, soft periwinkle at night.",
       "html": "<button class=\"ds-btn-primary\">Registrar</button>",
-      "css": ".ds-btn-primary{display:inline-flex;align-items:center;gap:6px;font-family:var(--font);font-weight:600;font-size:16px;padding:9px 16px;min-height:40px;border-radius:var(--radius,6px);border:1px solid var(--series-1,#5b55d6);background:var(--series-1,#5b55d6);color:var(--surface,#fff);cursor:pointer}.ds-btn-primary:hover{filter:brightness(1.08)}.ds-btn-primary:focus-visible{outline:2px solid var(--focus,#5b55d6);outline-offset:2px}"
+      "css": ".ds-btn-primary{display:inline-flex;align-items:center;gap:6px;font-family:var(--font);font-weight:600;font-size:16px;padding:9px 16px;min-height:40px;border-radius:var(--radius,6px);border:1px solid var(--series-1,#5b55d6);background:var(--series-1,#5b55d6);color:var(--surface,#f7f7fb);cursor:pointer}.ds-btn-primary:hover{filter:brightness(1.08)}.ds-btn-primary:focus-visible{outline:2px solid var(--focus,#5b55d6);outline-offset:2px}"
     },
     {
       "name": "Secondary Button",
@@ -974,7 +974,7 @@
       "refersTo": "button-secondary",
       "description": "Neutral action on work surfaces.",
       "html": "<button class=\"ds-btn\">Remover</button>",
-      "css": ".ds-btn{display:inline-flex;align-items:center;gap:6px;font-family:var(--font);font-weight:600;font-size:16px;padding:9px 16px;min-height:40px;border-radius:var(--radius,6px);border:1px solid var(--border,#d6d8ef);background:var(--surface,#fff);color:var(--ink,#1e1b3a);cursor:pointer}.ds-btn:hover{border-color:var(--series-1,#5b55d6)}.ds-btn:focus-visible{outline:2px solid var(--focus,#5b55d6);outline-offset:2px}"
+      "css": ".ds-btn{display:inline-flex;align-items:center;gap:6px;font-family:var(--font);font-weight:600;font-size:16px;padding:9px 16px;min-height:40px;border-radius:var(--radius,6px);border:1px solid var(--border,#d1d3ea);background:var(--surface,#f7f7fb);color:var(--ink,#1e1b3a);cursor:pointer}.ds-btn:hover{border-color:var(--series-1,#5b55d6)}.ds-btn:focus-visible{outline:2px solid var(--focus,#5b55d6);outline-offset:2px}"
     },
     {
       "name": "Shell Segmented Control",
@@ -1005,14 +1005,14 @@
       "refersTo": "severity-badge-attention",
       "description": "State as icon + label + colour, never colour alone; missing coverage is a dashed muted \"Não avaliado\".",
       "html": "<span class=\"ds-sev ds-sev--n\"><svg width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><circle cx=\"12\" cy=\"12\" r=\"9.5\"/><path d=\"m7.5 12.5 3 3 6-6.5\"/></svg>Normal</span> <span class=\"ds-sev ds-sev--a\"><svg width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M12 3.5 2.5 20h19L12 3.5Z\"/><path d=\"M12 10v4.5M12 17.2v.1\"/></svg>Atenção</span> <span class=\"ds-sev ds-sev--c\"><svg width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M8.3 2.5h7.4l5.3 5.3v7.4l-5.3 5.3H8.3L3 15.2V7.8z\"/><path d=\"M12 8v4.5M12 15.8v.1\"/></svg>Crítico</span> <span class=\"ds-sev ds-sev--u\" title=\"Sem medição recente\"><svg width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><circle cx=\"12\" cy=\"12\" r=\"9.5\" stroke-dasharray=\"3 3\"/><path d=\"M9.6 9.4a2.5 2.5 0 1 1 3.4 2.3c-.6.3-1 .8-1 1.5v.3M12 16.6v.1\"/></svg>Não avaliado</span>",
-      "css": ".ds-sev{display:inline-flex;align-items:center;gap:6px;padding:3px 10px 3px 7px;border-radius:6px;font-family:var(--font);font-weight:700;font-size:.82rem;border:1px solid currentColor;white-space:nowrap}.ds-sev--n{color:var(--normal,#17784a);background:var(--normal-bg,#e1f1e7)}.ds-sev--a{color:var(--attention,#995700);background:var(--attention-bg,#fbeed6)}.ds-sev--c{color:var(--critical,#b3261e);background:var(--critical-bg,#fbe5e2)}.ds-sev--u{color:var(--muted,#55557a);background:var(--surface-2,#f5f5fd);border-style:dashed}"
+      "css": ".ds-sev{display:inline-flex;align-items:center;gap:6px;padding:3px 10px 3px 7px;border-radius:6px;font-family:var(--font);font-weight:700;font-size:.82rem;border:1px solid currentColor;white-space:nowrap}.ds-sev--n{color:var(--normal,#17784a);background:var(--normal-bg,#e1f1e7)}.ds-sev--a{color:var(--attention,#995700);background:var(--attention-bg,#fbeed6)}.ds-sev--c{color:var(--critical,#b3261e);background:var(--critical-bg,#fbe5e2)}.ds-sev--u{color:var(--muted,#55557a);background:var(--surface-2,#eeeff8);border-style:dashed}"
     },
     {
       "name": "Origin Badges",
       "kind": "chip",
       "description": "Data origin on every value; stroke style encodes the origin.",
       "html": "<span class=\"ds-org ds-org--m\">Medido</span> <span class=\"ds-org ds-org--s\">Sintético</span> <span class=\"ds-org ds-org--e\">Estimado</span>",
-      "css": ".ds-org{display:inline-flex;align-items:center;gap:4px;padding:1px 7px;border-radius:3px;font-family:var(--font);font-size:.7rem;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:var(--muted,#55557a);border:1.5px solid var(--border,#d6d8ef)}.ds-org--m{border-style:solid;color:var(--ink,#1e1b3a);border-color:var(--ink,#1e1b3a)}.ds-org--s{border-style:dashed;border-color:var(--muted,#55557a)}.ds-org--e{border-style:dotted;border-color:var(--muted,#55557a)}"
+      "css": ".ds-org{display:inline-flex;align-items:center;gap:4px;padding:1px 7px;border-radius:3px;font-family:var(--font);font-size:.7rem;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:var(--muted,#55557a);border:1.5px solid var(--border,#d1d3ea)}.ds-org--m{border-style:solid;color:var(--ink,#1e1b3a);border-color:var(--ink,#1e1b3a)}.ds-org--s{border-style:dashed;border-color:var(--muted,#55557a)}.ds-org--e{border-style:dotted;border-color:var(--muted,#55557a)}"
     },
     {
       "name": "Text Field",
@@ -1020,7 +1020,7 @@
       "refersTo": "input",
       "description": "Manual entry field with tabular numerals and invalid state.",
       "html": "<label class=\"ds-field\">FC de repouso (bpm)<input value=\"62\"></label><label class=\"ds-field\">Massa corporal (kg)<input aria-invalid=\"true\" value=\"\"></label>",
-      "css": ".ds-field{display:grid;gap:4px;font-family:var(--font);font-size:.9rem;font-weight:600;color:var(--ink,#1e1b3a);margin-bottom:10px}.ds-field input{font:inherit;font-weight:400;font-variant-numeric:tabular-nums;padding:8px 10px;min-height:40px;border-radius:6px;border:1px solid var(--border,#d6d8ef);background:var(--surface-2,#f5f5fd);color:var(--ink,#1e1b3a)}.ds-field input:hover{border-color:var(--muted,#55557a)}.ds-field input:focus-visible{outline:2px solid var(--focus,#5b55d6);outline-offset:2px}.ds-field input[aria-invalid=true]{border-color:var(--critical,#b3261e);box-shadow:0 0 0 1px var(--critical,#b3261e)}"
+      "css": ".ds-field{display:grid;gap:4px;font-family:var(--font);font-size:.9rem;font-weight:600;color:var(--ink,#1e1b3a);margin-bottom:10px}.ds-field input{font:inherit;font-weight:400;font-variant-numeric:tabular-nums;padding:8px 10px;min-height:40px;border-radius:6px;border:1px solid var(--border,#d1d3ea);background:var(--surface-2,#eeeff8);color:var(--ink,#1e1b3a)}.ds-field input:hover{border-color:var(--muted,#55557a)}.ds-field input:focus-visible{outline:2px solid var(--focus,#5b55d6);outline-offset:2px}.ds-field input[aria-invalid=true]{border-color:var(--critical,#b3261e);box-shadow:0 0 0 1px var(--critical,#b3261e)}"
     },
     {
       "name": "Tabs",
@@ -1028,19 +1028,19 @@
       "refersTo": "tab",
       "description": "Section tabs with a solid severity count pill.",
       "html": "<div class=\"ds-tabs\" role=\"tablist\"><button role=\"tab\" aria-selected=\"true\" class=\"ds-tab\">Alertas <span class=\"ds-count\">2</span></button><button role=\"tab\" aria-selected=\"false\" class=\"ds-tab\">Indicadores</button><button role=\"tab\" aria-selected=\"false\" class=\"ds-tab\">Contramedida</button></div>",
-      "css": ".ds-tabs{display:flex;gap:2px;border-bottom:1px solid var(--border,#d6d8ef)}.ds-tab{display:inline-flex;align-items:center;gap:8px;padding:10px 16px;font-family:var(--font);font-size:16px;font-weight:600;font-stretch:105%;color:var(--muted,#55557a);background:none;border:none;border-bottom:3px solid transparent;margin-bottom:-1px;cursor:pointer}.ds-tab:hover{color:var(--ink,#1e1b3a)}.ds-tab[aria-selected=true]{color:var(--ink,#1e1b3a);border-bottom-color:var(--series-1,#5b55d6)}.ds-tab:focus-visible{outline:2px solid var(--focus,#5b55d6);outline-offset:2px}.ds-count{padding:1px 7px;border-radius:999px;font-size:.75rem;font-weight:700;background:var(--attention,#995700);color:var(--on-sev,#fff)}"
+      "css": ".ds-tabs{display:flex;gap:2px;border-bottom:1px solid var(--border,#d1d3ea)}.ds-tab{display:inline-flex;align-items:center;gap:8px;padding:10px 16px;font-family:var(--font);font-size:16px;font-weight:600;font-stretch:105%;color:var(--muted,#55557a);background:none;border:none;border-bottom:3px solid transparent;margin-bottom:-1px;cursor:pointer}.ds-tab:hover{color:var(--ink,#1e1b3a)}.ds-tab[aria-selected=true]{color:var(--ink,#1e1b3a);border-bottom-color:var(--series-1,#5b55d6)}.ds-tab:focus-visible{outline:2px solid var(--focus,#5b55d6);outline-offset:2px}.ds-count{padding:1px 7px;border-radius:999px;font-size:.75rem;font-weight:700;background:var(--attention,#995700);color:var(--on-sev,#fff)}"
     },
     {
       "name": "Vital Cell",
       "kind": "card",
       "description": "One cell of the seven-cell vitals strip: condensed value, delta vs baseline, state line.",
       "html": "<a href=\"#\" class=\"ds-vital\"><span class=\"ds-vital__n\">VFC (RMSSD)</span><span class=\"ds-vital__v\">38<small>ms</small></span><span class=\"ds-vital__d\">−22% vs baseline</span><span class=\"ds-vital__s\"><svg width=\"14\" height=\"14\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M12 3.5 2.5 20h19L12 3.5Z\"/><path d=\"M12 10v4.5M12 17.2v.1\"/></svg>Atenção</span></a>",
-      "css": ".ds-vital{display:flex;flex-direction:column;gap:2px;width:160px;padding:10px 12px 12px;font-family:var(--font);color:var(--ink,#1e1b3a);text-decoration:none;background:var(--attention-bg,#fbeed6);border:1px solid var(--border,#d6d8ef);border-radius:6px}.ds-vital__n{font-size:.78rem;font-weight:600;color:var(--muted,#55557a)}.ds-vital:hover .ds-vital__n{color:var(--series-1,#5b55d6)}.ds-vital:focus-visible{outline:2px solid var(--focus,#5b55d6);outline-offset:2px}.ds-vital__v{font-size:1.6rem;font-weight:700;font-stretch:75%;font-variant-numeric:tabular-nums;line-height:1.1}.ds-vital__v small{font-size:.8rem;font-weight:500;font-stretch:100%;color:var(--muted,#55557a);margin-left:3px}.ds-vital__d{font-size:.78rem;font-stretch:82%;font-variant-numeric:tabular-nums;color:var(--muted,#55557a)}.ds-vital__s{display:inline-flex;align-items:center;gap:5px;font-size:.78rem;font-weight:700;color:var(--attention,#995700);padding-top:6px}"
+      "css": ".ds-vital{display:flex;flex-direction:column;gap:2px;width:160px;padding:10px 12px 12px;font-family:var(--font);color:var(--ink,#1e1b3a);text-decoration:none;background:var(--attention-bg,#fbeed6);border:1px solid var(--border,#d1d3ea);border-radius:6px}.ds-vital__n{font-size:.78rem;font-weight:600;color:var(--muted,#55557a)}.ds-vital:hover .ds-vital__n{color:var(--series-1,#5b55d6)}.ds-vital:focus-visible{outline:2px solid var(--focus,#5b55d6);outline-offset:2px}.ds-vital__v{font-size:1.6rem;font-weight:700;font-stretch:75%;font-variant-numeric:tabular-nums;line-height:1.1}.ds-vital__v small{font-size:.8rem;font-weight:500;font-stretch:100%;color:var(--muted,#55557a);margin-left:3px}.ds-vital__d{font-size:.78rem;font-stretch:82%;font-variant-numeric:tabular-nums;color:var(--muted,#55557a)}.ds-vital__s{display:inline-flex;align-items:center;gap:5px;font-size:.78rem;font-weight:700;color:var(--attention,#995700);padding-top:6px}"
     }
   ],
   "narrative": {
     "northStar": "The Mission Clock",
-    "overview": "Vigília looks like a station console, not a SaaS dashboard. Mission time is the spine: a pale lavender shell carries the wordmark, the MET clock (`D+113 · GMT`), the crew and the master annunciator, and directly under it the mission track lays every flight day on one horizontal lane. Everything below (vitals strip, alerts, indicator clusters) is read against that clock and against the crew member's own baseline.\n\nThe world has one palette under two lighting conditions. **Day mode** is the module's general illumination, read in light tones between purple and blue: a periwinkle-tinted ground, white work surfaces, a lavender shell inked in deep indigo, indigo-violet data ink. **Night mode, \"Modo noturno\"**, is the same indigo-lavender world for low light, dark and desaturated: indigo-black grounds, lavender-white ink, soft periwinkle data ink, and severity lamps softened to carry dark text. Density is operational: compact cells, tabular figures, hairline dividers, and one loud element (the annunciator) per screen.\n\nType is a single variable family stretched across its width axis: expanded bold for things you name, condensed tabular figures for things you measure. Severity colour is reserved for state; it never decorates.",
+    "overview": "Vigília looks like a station console, not a SaaS dashboard. Mission time is the spine: a pale lavender shell carries the wordmark, the MET clock (`D+113 · GMT`), the crew and the master annunciator, and directly under it the mission track lays every flight day on one horizontal lane. Everything below (vitals strip, alerts, indicator clusters) is read against that clock and against the crew member's own baseline.\n\nThe world has one palette under two lighting conditions. **Day mode** is the module's general illumination, read in light tones between purple and blue: a periwinkle-tinted ground, soft off-white work surfaces, a lavender shell inked in deep indigo, indigo-violet data ink. **Night mode, \"Modo noturno\"**, is the same indigo-lavender world for low light, dark and desaturated: indigo-black grounds, lavender-white ink, soft periwinkle data ink, and severity lamps softened to carry dark text. Density is operational: compact cells, tabular figures, hairline dividers, and one loud element (the annunciator) per screen.\n\nType is a single variable family stretched across its width axis: expanded bold for things you name, condensed tabular figures for things you measure. Severity colour is reserved for state; it never decorates.",
     "keyCharacteristics": [
       "Lavender mission shell (deep indigo-black shell at night) with MET clock and master annunciator, full width, above everything.",
       "The mission track (flight-day lane with onset markers and a day cursor) as the signature move.",

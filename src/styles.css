@@ -1,18 +1,18 @@
 /* Vigília — identidade de operações de missão.
-   Modo dia: fundo azul-lavanda, superfícies brancas, barra de missão lavanda com tinta índigo, dados em índigo-violeta.
+   Modo dia: fundo azul-lavanda, superfícies em branco suave, barra de missão lavanda com tinta índigo, dados em índigo-violeta.
    Modo noturno: o mesmo mundo índigo-lavanda, escuro e dessaturado.
    Estado nunca só por cor: ícone + rótulo + cor, sempre. */
 
 :root {
   color-scheme: light;
-  --ground: #eef0fa;
-  --surface: #ffffff;
-  --surface-2: #f5f5fd;
+  --ground: #e7e9f4;
+  --surface: #f7f7fb;
+  --surface-2: #eeeff8;
   --ink: #1e1b3a;
   --muted: #55557a;
-  --border: #d6d8ef;
-  --hairline: #e6e7f6;
-  --grid: #e7e8f5;
+  --border: #d1d3ea;
+  --hairline: #e0e1f0;
+  --grid: #e1e2f0;
 
   --shell: #e4e3fa;
   --shell-2: #d5d4f5;
