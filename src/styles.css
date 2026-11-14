@@ -5,29 +5,29 @@
 
 :root {
   color-scheme: light;
-  --ground: #e5e9ee;
+  --ground: #eef0fa;
   --surface: #ffffff;
-  --surface-2: #f0f3f7;
-  --ink: #101a22;
-  --muted: #4a5660;
-  --border: #cdd5de;
-  --hairline: #dfe4ea;
-  --grid: #e2e7ed;
+  --surface-2: #f5f5fd;
+  --ink: #1e1b3a;
+  --muted: #55557a;
+  --border: #d6d8ef;
+  --hairline: #e6e7f6;
+  --grid: #e7e8f5;
 
-  --shell: #12202b;
-  --shell-2: #1b2c38;
-  --shell-line: #2c3f4c;
-  --shell-ink: #eef2ee;
-  --shell-muted: #a3b3bc;
-  --shell-normal: #6fd49b;
-  --shell-attention: #f5b54a;
-  --shell-critical: #ff7a6b;
+  --shell: #e4e3fa;
+  --shell-2: #d5d4f5;
+  --shell-line: #c0bfeb;
+  --shell-ink: #23204a;
+  --shell-muted: #5c5a88;
+  --shell-normal: #1d8754;
+  --shell-attention: #b06200;
+  --shell-critical: #c2342a;
 
-  --series-1: #2446c8;
-  --series-2: #0e7c7b;
-  --series-3: #7b4fae;
-  --band: rgba(36, 70, 200, 0.1);
-  --preflight: rgba(16, 26, 34, 0.06);
+  --series-1: #5b55d6;
+  --series-2: #3a7fc4;
+  --series-3: #9a63d4;
+  --band: rgba(91, 85, 214, 0.11);
+  --preflight: rgba(30, 27, 58, 0.06);
 
   --normal: #17784a;
   --normal-bg: #e1f1e7;
@@ -36,10 +36,11 @@
   --critical: #b3261e;
   --critical-bg: #fbe5e2;
   --on-sev: #ffffff;
+  --on-annunciator: #ffffff;
 
-  --focus: #2446c8;
+  --focus: #5b55d6;
   --radius: 6px;
-  --shadow: 0 1px 2px rgba(16, 26, 34, 0.06), 0 4px 14px -6px rgba(16, 26, 34, 0.12);
+  --shadow: 0 1px 2px rgba(30, 27, 58, 0.06), 0 4px 14px -6px rgba(60, 55, 140, 0.16);
 
   --font: 'Archivo Variable', 'Segoe UI', system-ui, sans-serif;
   --mono: ui-monospace, 'Cascadia Mono', 'SFMono-Regular', Consolas, monospace;
@@ -80,6 +81,7 @@
   --critical: #ff8a7a;
   --critical-bg: rgba(255, 138, 122, 0.13);
   --on-sev: #120f0b;
+  --on-annunciator: #0a0806;
 
   --focus: #ead9bd;
   --shadow: 0 1px 2px rgba(0, 0, 0, 0.4), 0 6px 18px -8px rgba(0, 0, 0, 0.6);
@@ -226,7 +228,7 @@ kbd {
   color: var(--shell-ink);
 }
 .brand__mark {
-  color: var(--shell-normal);
+  color: var(--series-1);
 }
 .brand__name {
   font-size: 1.35rem;
@@ -295,27 +297,27 @@ kbd {
   gap: 12px;
   padding: 8px 18px 8px 14px;
   border-radius: var(--radius);
-  color: var(--shell);
+  color: var(--on-annunciator);
   min-width: 0;
   animation: annunciate 0.9s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 .annunciator--normal {
   background: var(--shell-normal);
-  --ring: rgba(111, 212, 155, 0.55);
+  --ring: color-mix(in srgb, var(--shell-normal) 50%, transparent);
 }
 .annunciator--attention {
   background: var(--shell-attention);
-  --ring: rgba(245, 181, 74, 0.6);
+  --ring: color-mix(in srgb, var(--shell-attention) 55%, transparent);
 }
 .annunciator--critical {
   background: var(--shell-critical);
-  --ring: rgba(255, 122, 107, 0.65);
+  --ring: color-mix(in srgb, var(--shell-critical) 60%, transparent);
 }
 .annunciator--unassessed {
   background: var(--shell-2);
   color: var(--shell-ink);
   border: 2px dashed var(--shell-muted);
-  --ring: rgba(163, 179, 188, 0.4);
+  --ring: color-mix(in srgb, var(--shell-muted) 40%, transparent);
 }
 .annunciator > div {
   display: grid;
