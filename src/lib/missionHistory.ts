@@ -2,8 +2,7 @@
 // Reavalia o motor (função pura) no fim de cada dia de missão; nenhuma regra mora aqui.
 
 import type { Measurement, Severity } from '../types/contract';
-import type { ScenarioFile } from '../types/scenario';
-import { endOfMissionDay, evaluateState, missionDayOf } from '../integration/dataSource';
+import { endOfMissionDay, evaluateState, missionDayOf, type MissionContext } from '../integration/dataSource';
 
 export interface DayStatus {
   day: number;
@@ -26,7 +25,7 @@ const RANK: Record<Severity, number> = { normal: 0, attention: 1, critical: 2 };
 
 export function computeMissionHistory(
   measurements: Measurement[],
-  scenario: ScenarioFile,
+  scenario: MissionContext,
   maxDay: number,
 ): MissionHistory {
   const days: DayStatus[] = [];

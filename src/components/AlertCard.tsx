@@ -1,3 +1,4 @@
+import type { ReactNode } from 'react';
 import type { Alert, Evidence } from '../types/contract';
 import { fmt, fmtDate, fmtPct, fmtSigned } from '../lib/format';
 import { SeverityBadge } from './Badges';
@@ -42,13 +43,15 @@ interface Props {
   variant?: 'full' | 'compact';
   /** id do bloco de ação, alvo do link do anunciador. */
   actionId?: string;
+  /** Registro do que foi feito com a orientação. */
+  followUp?: ReactNode;
 }
 
 /**
  * Card de alerta, na ordem do desafio: o que fazer primeiro, depois por que e como foi calculado.
  * Todos os campos do contrato aparecem; nenhum fica escondido.
  */
-export function AlertCard({ alert, missionDay, variant = 'full', actionId }: Props) {
+export function AlertCard({ alert, missionDay, variant = 'full', actionId, followUp }: Props) {
   const composite = alert.variables.length > 1;
   const titleId = `${alert.id}-${variant}-title`;
 
@@ -57,6 +60,15 @@ export function AlertCard({ alert, missionDay, variant = 'full', actionId }: Pro
       <header className="alert__head">
         <SeverityBadge severity={alert.severity} />
         {composite && <span className="tag tag--strong">Alerta composto · {alert.variables.length} sinais</span>}
+        {variant === 'full' && (
+          <ul className="alert__vars" aria-label="Variáveis envolvidas">
+            {alert.variables.map((v) => (
+              <li key={v} className="tag">
+                <VariableTerm variable={v} />
+              </li>
+            ))}
+          </ul>
+        )}
         <span className="alert__when">
           Início do padrão: {missionDay != null ? `dia ${missionDay} · ` : ''}
           {fmtDate(alert.raisedAt)}
@@ -66,16 +78,6 @@ export function AlertCard({ alert, missionDay, variant = 'full', actionId }: Pro
       <h3 id={titleId} className="alert__title">
         {alert.title}
       </h3>
-      {variant === 'full' && (
-        <ul className="alert__vars" aria-label="Variáveis envolvidas">
-          {alert.variables.map((v) => (
-            <li key={v} className="tag">
-              <VariableTerm variable={v} />
-            </li>
-          ))}
-        </ul>
-      )}
-
       <section className="alert__action" aria-label="O que fazer agora" id={actionId} tabIndex={actionId ? -1 : undefined}>
         <h4>O que fazer agora</h4>
         {alert.escalate && (
@@ -88,6 +90,7 @@ export function AlertCard({ alert, missionDay, variant = 'full', actionId }: Pro
           </p>
         )}
         <p className="alert__guidance">{alert.guidance}</p>
+        {followUp}
       </section>
 
       {variant === 'full' ? (

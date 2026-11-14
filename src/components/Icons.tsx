@@ -45,6 +45,21 @@ export function Octagon({ size = 18, className }: IconProps) {
   );
 }
 
+/** Não avaliado: círculo tracejado com interrogação. */
+export function Unknown({ size = 18, className }: IconProps) {
+  return (
+    <svg {...base(size)} className={className}>
+      <circle cx="12" cy="12" r="9.5" strokeDasharray="3 3" />
+      <path d="M9.6 9.4a2.5 2.5 0 1 1 3.4 2.3c-.6.3-1 .8-1 1.5v.3M12 16.6v.1" />
+    </svg>
+  );
+}
+
+export function StatusIcon({ status, size }: { status: Severity | 'unassessed'; size?: number }) {
+  if (status === 'unassessed') return <Unknown size={size} />;
+  return <SeverityIcon severity={status} size={size} />;
+}
+
 export function SeverityIcon({ severity, size }: { severity: Severity; size?: number }) {
   if (severity === 'critical') return <Octagon size={size} />;
   if (severity === 'attention') return <Triangle size={size} />;

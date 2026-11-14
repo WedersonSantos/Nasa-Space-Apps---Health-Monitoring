@@ -10,6 +10,8 @@ interface Props {
   maxDay: number;
   preflightDays: number;
   history: MissionHistory;
+  /** Dias com ações registradas pelo astronauta (acompanhamento). */
+  actionDays?: number[];
   onChange: (day: number) => void;
   chartWindow: ChartWindow;
   /** Primeiro dia exibido pelos gráficos (null = missão inteira). */
@@ -34,7 +36,7 @@ function withLevels(onsets: MissionHistory['onsets']) {
  * Trilha da missão: cada dia de voo com o estado geral (altura + cor), o início de cada alerta
  * e o cursor do dia avaliado. Arrastar ou usar os botões reavalia o estado naquele dia.
  */
-export function MissionTrack({ day, maxDay, preflightDays, history, onChange, chartWindow, windowFrom, onWindowChange }: Props) {
+export function MissionTrack({ day, maxDay, preflightDays, history, actionDays = [], onChange, chartWindow, windowFrom, onWindowChange }: Props) {
   const id = useId();
   const [playing, setPlaying] = useState(false);
   const first = 1 - preflightDays; // primeiro dia de pré-voo
@@ -121,13 +123,17 @@ export function MissionTrack({ day, maxDay, preflightDays, history, onChange, ch
             key={o.id}
             type="button"
             className={`track__onset sev-${o.severity}`}
-            style={{ left: `${pct(o.day)}%`, top: `${level * 28}px` }}
+            style={{ left: `${pct(o.day)}%`, top: `${level * 24}px` }}
             onClick={() => onChange(o.day)}
             title={`${SEVERITY_META[o.severity].label} · dia ${o.day}: ${o.title}`}
             aria-label={`Ir ao dia ${o.day}: início de ${SEVERITY_META[o.severity].label.toLowerCase()}, ${o.title}`}
           >
             <SeverityIcon severity={o.severity} size={14} />
           </button>
+        ))}
+
+        {[...new Set(actionDays)].filter((d) => d >= 1 && d <= maxDay).map((d) => (
+          <span key={`act-${d}`} className="track__action" style={{ left: `${pct(d)}%` }} title={`Ação registrada no dia ${d}`} aria-hidden="true" />
         ))}
 
         <div
@@ -175,6 +181,11 @@ export function MissionTrack({ day, maxDay, preflightDays, history, onChange, ch
         <li>
           <span className="track__key track__key--window" /> período mostrado nos gráficos
         </li>
+        {actionDays.length > 0 && (
+          <li>
+            <span className="track__key track__key--action" /> ação registrada
+          </li>
+        )}
       </ul>
     </section>
   );

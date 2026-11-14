@@ -26,7 +26,9 @@ export function CountermeasurePanel({ state, measurements, launchDate, fromDay, 
   const association = state.alerts.find((a) => a.variables.includes('exerciseLoad') && a.variables.includes('bodyMass'));
   const status = worstOf(exerciseAlerts);
   const missing = Math.max(0, adherence.prescribedMinutes - adherence.completedMinutes);
-  const pct = Math.min(1, Math.max(0, adherence.adherenceRatio));
+  const exCov = state.coverage?.exerciseLoad;
+  const adherenceKnown = !exCov || exCov.status === 'ok';
+  const pct = adherenceKnown ? Math.min(1, Math.max(0, adherence.adherenceRatio)) : 0;
   const massBaseline: Baseline | undefined = state.baselines.find((b) => b.variable === 'bodyMass' && b.kind === 'preflight');
 
   return (
@@ -42,8 +44,8 @@ export function CountermeasurePanel({ state, measurements, launchDate, fromDay, 
 
         <div className="adherence">
           <div className="adherence__big">
-            <span className="big">{fmtPct(adherence.adherenceRatio)}</span>
-            <span className="muted">de aderência</span>
+            <span className="big">{adherenceKnown ? fmtPct(adherence.adherenceRatio) : '—'}</span>
+            <span className="muted">{adherenceKnown ? 'de aderência' : 'sem registros suficientes'}</span>
           </div>
           <div className="adherence__bar-wrap">
             <div
@@ -72,6 +74,7 @@ export function CountermeasurePanel({ state, measurements, launchDate, fromDay, 
             </dl>
           </div>
         </div>
+        {!adherenceKnown && exCov && <p className="indicator__unassessed">{exCov.reason}</p>}
         <ExerciseChart measurements={measurements} alerts={state.alerts} launchDate={launchDate} fromDay={fromDay} cursorIso={cursorIso} height={200} />
       </section>
 

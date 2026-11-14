@@ -6,6 +6,7 @@ import { PLAUSIBLE_RANGES } from '../engine';
 import { createMeasurement, createSelfReport } from '../data/createMeasurement';
 import { fmt, fmtDateTime } from '../lib/format';
 import { OriginBadge } from './Badges';
+import { HowToMeasure } from './HowToMeasure';
 import { VariableTerm } from './VariableTerm';
 
 const MANUAL_VARIABLES: VariableId[] = ['restingHeartRate', 'hrv', 'bloodPressure', 'sleep', 'bodyMass', 'exerciseLoad'];
@@ -175,9 +176,7 @@ function MeasurementForm({
           ))}
         </select>
       </label>
-      <p className="muted small field-hint">
-        <VariableTerm variable={variable} /> — {meta.whatItMeasures}
-      </p>
+      <HowToMeasure variable={variable} compact />
       <div className="field-row">
         <label className="field">
           <span>
@@ -273,6 +272,7 @@ function SelfReportForm({
       <p className="muted small">
         <VariableTerm variable="selfReport" /> — como você está agora? Escala de 1 a 5.
       </p>
+      <HowToMeasure variable="selfReport" compact />
       {SELF_REPORT_DIMENSIONS.map((d) => (
         <fieldset key={d.method} className="scale">
           <legend>{d.label}</legend>

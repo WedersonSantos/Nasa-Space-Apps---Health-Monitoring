@@ -2,7 +2,9 @@ import { useEffect, useRef, useState } from 'react';
 import type { AstronautState } from '../types/contract';
 import { SEVERITY_META } from '../config/display';
 import { useOnline, type Theme } from '../lib/theme';
-import { Moon, Satellite, SeverityIcon, Sun } from './Icons';
+import { Moon, Satellite, SeverityIcon, StatusIcon, Sun } from './Icons';
+import { assessmentSummary } from '../lib/coverage';
+import { BASELINE } from '../engine';
 
 interface Props {
   state: AstronautState;
@@ -27,6 +29,7 @@ export function MissionBar({ state, asOf, missionDay, theme, onToggleTheme, onSh
   const { date, time } = gmt(asOf);
   const count = state.alerts.length;
   const meta = SEVERITY_META[state.overall];
+  const { unassessed: partial, none } = assessmentSummary(state);
 
   // Anuncia ao leitor de tela só quando o estado geral muda (não a cada dia da trilha).
   const [announcement, setAnnouncement] = useState('');
@@ -49,8 +52,8 @@ export function MissionBar({ state, asOf, missionDay, theme, onToggleTheme, onSh
           <h1 className="brand__name">Vigília</h1>
         </div>
 
-        <div className="met" aria-label={`Dia de missão ${missionDay}, ${date} às ${time} GMT`}>
-          <span className="met__day">D+{missionDay}</span>
+        <div className="met" aria-label={missionDay >= 1 ? `Dia de missão ${missionDay}, ${date} às ${time} GMT` : `Pré-voo, dia ${missionDay + BASELINE.preflightDays} de ${BASELINE.preflightDays}, ${date} às ${time} GMT`}>
+          <span className="met__day">{missionDay >= 1 ? `D+${missionDay}` : `PV ${missionDay + BASELINE.preflightDays}/${BASELINE.preflightDays}`}</span>
           <span className="met__clock">
             {date} · {time} <abbr title="Greenwich Mean Time, horário de bordo da ISS">GMT</abbr>
           </span>
@@ -96,16 +99,23 @@ export function MissionBar({ state, asOf, missionDay, theme, onToggleTheme, onSh
             <div>
               <span className="annunciator__label">{meta.label}</span>
               <span className="annunciator__sub">
-                {count} alerta{count > 1 ? 's' : ''} ativo{count > 1 ? 's' : ''} · ver o que fazer
+                {count} alerta{count > 1 ? 's' : ''} ativo{count > 1 ? 's' : ''}
+                {partial.length > 0 && ` · ${partial.length} não avaliado${partial.length > 1 ? 's' : ''}`} · ver o que fazer
               </span>
             </div>
           </a>
         ) : (
-          <div className={`annunciator annunciator--${state.overall}`} key={state.overall}>
-            <SeverityIcon severity={state.overall} size={26} />
+          <div className={`annunciator annunciator--${partial.length ? 'unassessed' : state.overall}`} key={partial.length ? 'p' : state.overall}>
+            {partial.length ? <StatusIcon status="unassessed" size={26} /> : <SeverityIcon severity={state.overall} size={26} />}
             <div>
-              <span className="annunciator__label">{meta.label}</span>
-              <span className="annunciator__sub">Nenhum alerta ativo</span>
+              <span className="annunciator__label">{none ? 'Sem dados' : partial.length ? 'Avaliação parcial' : meta.label}</span>
+              <span className="annunciator__sub">
+                {none
+                  ? 'Nenhum sinal pôde ser avaliado'
+                  : partial.length
+                    ? `Sem alertas · ${partial.length} de 7 sinais não avaliados`
+                    : 'Nenhum alerta ativo'}
+              </span>
             </div>
           </div>
         )}

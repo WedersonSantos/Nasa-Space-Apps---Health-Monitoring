@@ -1,10 +1,11 @@
-import type { Alert, Baseline, Measurement, Severity, VariableId } from '../types/contract';
+import type { Alert, Baseline, Measurement, Severity, VariableCoverage, VariableId } from '../types/contract';
 import { SELF_REPORT_DIMENSIONS } from '../config/display';
 import { findOfficial } from '../config/sources';
 import { HAZARD_LABEL, VARIABLES } from '../config/variables';
 import { fmt, fmtDate, fmtPct, fmtSigned } from '../lib/format';
-import { ClassChip, OriginBadge, SeverityBadge } from './Badges';
+import { ClassChip, OriginBadge, StatusBadge } from './Badges';
 import { ChevronRight } from './Icons';
+import { HowToMeasure } from './HowToMeasure';
 import { TrendChart } from './TrendChart';
 import { VariableTerm } from './VariableTerm';
 import { latestSelfReport as latestSelfReportIndex } from '../lib/selfReport';
@@ -33,12 +34,16 @@ interface Props {
   /** row: dados à esquerda e gráfico à direita, para empilhar gráficos no mesmo eixo de tempo. */
   variant?: 'card' | 'row';
   cursorIso?: string;
+  /** Cobertura do motor: se a variável pôde ser avaliada. */
+  coverage?: VariableCoverage | null;
 }
 
-export function IndicatorCard({ variable, latest, baseline, alerts, measurements, launchDate, fromDay, variant = 'card', cursorIso }: Props) {
+export function IndicatorCard({ variable, latest, baseline, alerts, measurements, launchDate, fromDay, variant = 'card', cursorIso, coverage }: Props) {
   const meta = VARIABLES[variable];
   const related = alerts.filter((a) => a.variables.includes(variable));
-  const status = worstOf(related);
+  const sevStatus = worstOf(related);
+  const cov = coverage ?? null;
+  const status: Severity | 'unassessed' = sevStatus === 'normal' && cov && cov.status !== 'ok' ? 'unassessed' : sevStatus;
   const delta = latest && baseline ? latest.value - baseline.mean : null;
 
   return (
@@ -56,7 +61,7 @@ export function IndicatorCard({ variable, latest, baseline, alerts, measurements
           </h3>
           <ClassChip varClass={meta.varClass} />
         </div>
-        <SeverityBadge severity={status} />
+        <StatusBadge status={status} reason={cov?.reason} />
       </header>
 
       {latest ? (
@@ -83,6 +88,7 @@ export function IndicatorCard({ variable, latest, baseline, alerts, measurements
         <p className="muted">Sem medição registrada.</p>
       )}
 
+      {status === 'unassessed' && cov && <p className="indicator__unassessed">{cov.reason}</p>}
       {baseline && latest && variable !== 'selfReport' && (
         <p className="indicator__baseline">
           Baseline pré-voo{' '}
@@ -115,7 +121,7 @@ export function IndicatorCard({ variable, latest, baseline, alerts, measurements
       <details className="indicator__about">
         <summary>
           <ChevronRight size={14} className="disclosure-icon" />
-          O que mede e por que importa
+          O que mede, por que importa e como medir
         </summary>
         <p>
           <strong>Mede:</strong> {meta.whatItMeasures}
@@ -130,6 +136,7 @@ export function IndicatorCard({ variable, latest, baseline, alerts, measurements
         <p className="small">
           Regra: {meta.ruleSummary}
         </p>
+        <HowToMeasure variable={variable} compact />
         <p className="small">
           Fontes:{' '}
           {meta.sourceIds.map((id, i) => {

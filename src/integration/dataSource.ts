@@ -2,7 +2,7 @@
 // Cenários: src/data/scenarios · Motor: src/engine (evaluate, puro) · Persistência: src/storage.
 
 import type { AstronautState, Measurement } from '../types/contract';
-import type { ScenarioFile } from '../types/scenario';
+import type { AstronautProfile, ScenarioFile } from '../types/scenario';
 import { evaluate } from '../engine';
 import { SCENARIOS as SCENARIO_FILES, getScenario } from '../data/scenarios';
 import { MeasurementStore } from '../storage/measurementStore';
@@ -45,8 +45,14 @@ export function initialScenarioId(): ScenarioId {
   return saved && getScenario(saved) ? saved : DEFAULT_SCENARIO;
 }
 
-export function evaluateState(measurements: Measurement[], scenario: ScenarioFile, asOf: string): AstronautState {
-  return evaluate(measurements, scenario.profile.astronautId, asOf, scenario.profile);
+/** O que a avaliação precisa saber da missão: quem é e quando lançou. Um ScenarioFile satisfaz este tipo. */
+export interface MissionContext {
+  profile: AstronautProfile;
+  launchDate: string;
+}
+
+export function evaluateState(measurements: Measurement[], mission: MissionContext, asOf: string): AstronautState {
+  return evaluate(measurements, mission.profile.astronautId, asOf, mission.profile);
 }
 
 // ---------- relógio de missão ----------
