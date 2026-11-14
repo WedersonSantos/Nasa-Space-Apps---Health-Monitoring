@@ -5,7 +5,7 @@ Equipe Formandos UDI (Uberlândia) · Licença [Apache-2.0](LICENSE)
 
 > **Coletar → Interpretar → Orientar.** A Vigília não é um painel de sinais vitais. Ela compara cada medição com o *baseline individual* do astronauta, reconhece padrões entre sinais, mostra a conta por trás de cada alerta e diz o que fazer — inclusive quando acionar o oficial médico da tripulação. Funciona sem conexão com a Terra.
 
-- **Demo publicada:** _(link do deploy — preencher)_
+- **Demo publicada:** https://nasa-chi-ten.vercel.app — abre sem login e funciona offline depois da primeira visita
 - **Vídeo:** _(link — preencher)_
 
 ---
