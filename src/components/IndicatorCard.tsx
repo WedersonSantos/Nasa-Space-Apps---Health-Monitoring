@@ -1,0 +1,136 @@
+import type { Alert, Baseline, Measurement, Severity, VariableId } from '../types/contract';
+import { SELF_REPORT_DIMENSIONS } from '../config/display';
+import { findOfficial } from '../config/sources';
+import { HAZARD_LABEL, VARIABLES } from '../config/variables';
+import { fmt, fmtDate, fmtPct, fmtSigned } from '../lib/format';
+import { ClassChip, OriginBadge, SeverityBadge } from './Badges';
+import { TrendChart } from './TrendChart';
+import { VariableTerm } from './VariableTerm';
+
+function worstOf(alerts: Alert[]): Severity {
+  if (alerts.some((a) => a.severity === 'critical')) return 'critical';
+  if (alerts.some((a) => a.severity === 'attention')) return 'attention';
+  return 'normal';
+}
+
+function latestSelfReport(ms: Measurement[]) {
+  return SELF_REPORT_DIMENSIONS.map((d) => {
+    const s = ms.filter((m) => m.variable === 'selfReport' && m.method === d.method).sort((a, b) => a.timestamp.localeCompare(b.timestamp));
+    return { label: d.label, m: s.length ? s[s.length - 1] : null };
+  });
+}
+
+interface Props {
+  variable: VariableId;
+  latest: Measurement | null;
+  baseline?: Baseline;
+  alerts: Alert[];
+  measurements: Measurement[];
+  launchDate: string;
+  fromDay: number | null;
+}
+
+export function IndicatorCard({ variable, latest, baseline, alerts, measurements, launchDate, fromDay }: Props) {
+  const meta = VARIABLES[variable];
+  const related = alerts.filter((a) => a.variables.includes(variable));
+  const status = worstOf(related);
+  const delta = latest && baseline ? latest.value - baseline.mean : null;
+
+  return (
+    <article className={`indicator sev-border-${status}`} aria-labelledby={`ind-${variable}`}>
+      <header className="indicator__head">
+        <div>
+          <h3 id={`ind-${variable}`}>
+            <VariableTerm variable={variable} />
+          </h3>
+          <ClassChip varClass={meta.varClass} />
+        </div>
+        <SeverityBadge severity={status} />
+      </header>
+
+      {latest ? (
+        <div className="indicator__value">
+          {variable === 'selfReport' ? (
+            <div className="selfreport-values">
+              {latestSelfReport(measurements).map(({ label, m }) => (
+                <span key={label}>
+                  {label} <strong>{m ? m.value : '—'}</strong>/5
+                </span>
+              ))}
+            </div>
+          ) : (
+            <span className="big">
+              {fmt(latest.value, meta.decimals)}
+              {variable === 'bloodPressure' && latest.secondaryValue != null && `/${fmt(latest.secondaryValue, 0)}`}
+              <small> {meta.unit}</small>
+            </span>
+          )}
+          <OriginBadge origin={latest.origin} />
+          <span className="muted small">{fmtDate(latest.timestamp)}</span>
+        </div>
+      ) : (
+        <p className="muted">Sem medição registrada.</p>
+      )}
+
+      {baseline && latest && variable !== 'selfReport' && (
+        <p className="indicator__baseline">
+          Baseline pré-voo{' '}
+          <strong>
+            {fmt(baseline.mean, meta.decimals)} ± {fmt(baseline.stdDev, 1)} {meta.unit}
+          </strong>
+          {delta !== null && (
+            <>
+              {' · '}desvio {fmtSigned(delta, meta.decimals)} {meta.unit}
+              {variable === 'bodyMass' && ` (${fmtPct(delta / baseline.mean, true)})`}
+            </>
+          )}
+        </p>
+      )}
+      {variable === 'selfReport' && baseline && (
+        <p className="indicator__baseline">
+          Humor — baseline pré-voo <strong>{fmt(baseline.mean, 1)}/5</strong>
+        </p>
+      )}
+
+      <TrendChart
+        variable={variable}
+        measurements={measurements}
+        baseline={baseline}
+        alerts={alerts}
+        launchDate={launchDate}
+        fromDay={fromDay}
+      />
+
+      <details className="indicator__about">
+        <summary>O que mede e por que importa</summary>
+        <p>
+          <strong>Mede:</strong> {meta.whatItMeasures}
+        </p>
+        <p>
+          <strong>Em voo espacial:</strong> {meta.whyItMatters}
+        </p>
+        <p className="small">
+          Perigo NASA: {meta.hazards.map((h) => HAZARD_LABEL[h]).join(', ')} · Risco: {meta.nasaRisk} · Constante de tempo:{' '}
+          {meta.timeConstant}
+        </p>
+        <p className="small">
+          Regra: {meta.ruleSummary}
+        </p>
+        <p className="small">
+          Fontes:{' '}
+          {meta.sourceIds.map((id, i) => {
+            const s = findOfficial(id);
+            return s ? (
+              <span key={id}>
+                {i > 0 && ' · '}
+                <a href={s.url} target="_blank" rel="noreferrer">
+                  {s.agency} — {s.title}
+                </a>
+              </span>
+            ) : null;
+          })}
+        </p>
+      </details>
+    </article>
+  );
+}
