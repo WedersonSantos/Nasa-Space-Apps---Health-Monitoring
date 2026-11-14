@@ -155,6 +155,14 @@ Usamos ferramentas de IA generativa (Claude, da Anthropic) como assistentes de p
 
 ## 9. Créditos e referências
 
+**Equipe Formandos UDI**
+
+| Integrante | Responsabilidade |
+| --- | --- |
+| Moacir Nascimento | Bloco A: dados e motor de análise. Contrato de dados, pesquisa das referências NASA, dados sintéticos e cenários, baselines individuais, regras de alerta, cobertura de dados, persistência e testes |
+| Wederson Ferreira | Bloco B: interface e entrega. Telas, integração com o motor, modo "Minha missão", registro de medições, README e publicação |
+| Vivian Vitoria | Design: identidade visual, design system e paletas dos modos diurno e noturno |
+
 **Recursos oficiais do desafio**
 
 - NASA HRP — [5 Hazards of Human Spaceflight](https://www.nasa.gov/hrp/hazards/)
