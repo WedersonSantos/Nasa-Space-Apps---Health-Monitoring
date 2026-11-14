@@ -1,4 +1,5 @@
 import { SCENARIOS, type ScenarioId } from '../integration/dataSource';
+import { useT } from '../i18n';
 import { OriginBadge } from './Badges';
 import { ChevronLeft, ChevronRight } from './Icons';
 
@@ -11,13 +12,14 @@ interface Props {
 
 /** Demo controls in one row: synthetic data always labelled, scenario and keyboard shortcuts. */
 export function DemoBar({ current, onChange, onOwn }: Props) {
+  const t = useT();
   const selected = SCENARIOS.find((s) => s.id === current);
   return (
-    <section className="demo-bar" aria-label="Demo">
-      <span className="demo-bar__label">Demo</span>
+    <section className="demo-bar" aria-label={t({ en: 'Demo', pt: 'Demonstração' })}>
+      <span className="demo-bar__label">{t({ en: 'Demo', pt: 'Demonstração' })}</span>
       <OriginBadge origin="synthetic" />
-      <span className="demo-bar__note">no real astronaut telemetry</span>
-      <div className="demo-bar__scenarios" role="group" aria-label="Demo scenario">
+      <span className="demo-bar__note">{t({ en: 'no real astronaut telemetry', pt: 'sem telemetria real de astronauta' })}</span>
+      <div className="demo-bar__scenarios" role="group" aria-label={t({ en: 'Demo scenario', pt: 'Cenário de demonstração' })}>
         {SCENARIOS.map((s) => (
           <button
             key={s.id}
@@ -25,32 +27,32 @@ export function DemoBar({ current, onChange, onOwn }: Props) {
             className="console-btn"
             aria-pressed={s.id === current}
             onClick={() => onChange(s.id)}
-            title={s.description}
+            title={t(s.description)}
             aria-describedby={s.id === current ? 'demo-desc' : undefined}
           >
             <kbd>{s.number}</kbd>
-            {s.label}
+            {t(s.label)}
           </button>
         ))}
       </div>
       <button type="button" className="console-btn console-btn--own" onClick={onOwn}>
-        My mission
+        {t({ en: 'My mission', pt: 'Minha missão' })}
       </button>
       <span className="demo-bar__keys">
         <kbd>1</kbd>
         <kbd>2</kbd>
-        <kbd>3</kbd> scenario ·{' '}
-        <kbd aria-label="left arrow">
+        <kbd>3</kbd> {t({ en: 'scenario', pt: 'cenário' })} ·{' '}
+        <kbd aria-label={t({ en: 'left arrow', pt: 'seta para a esquerda' })}>
           <ChevronLeft size={11} />
         </kbd>
-        <kbd aria-label="right arrow">
+        <kbd aria-label={t({ en: 'right arrow', pt: 'seta para a direita' })}>
           <ChevronRight size={11} />
         </kbd>{' '}
-        day
+        {t({ en: 'day', pt: 'dia' })}
       </span>
       {selected && (
         <span id="demo-desc" className="visually-hidden">
-          {selected.description}
+          {t(selected.description)}
         </span>
       )}
     </section>

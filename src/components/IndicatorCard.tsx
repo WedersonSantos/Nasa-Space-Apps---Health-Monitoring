@@ -4,6 +4,7 @@ import { findOfficial } from '../config/sources';
 import { HAZARD_LABEL, VARIABLES } from '../config/variables';
 import { fmt, fmtDate, fmtPct, fmtSigned } from '../lib/format';
 import { ClassChip, OriginBadge, StatusBadge } from './Badges';
+import { useT } from '../i18n';
 import { ChevronRight } from './Icons';
 import { HowToMeasure } from './HowToMeasure';
 import { TrendChart } from './TrendChart';
@@ -39,6 +40,7 @@ interface Props {
 }
 
 export function IndicatorCard({ variable, latest, baseline, alerts, measurements, launchDate, fromDay, variant = 'card', cursorIso, coverage }: Props) {
+  const t = useT();
   const meta = VARIABLES[variable];
   const related = alerts.filter((a) => a.variables.includes(variable));
   const sevStatus = worstOf(related);
@@ -69,8 +71,8 @@ export function IndicatorCard({ variable, latest, baseline, alerts, measurements
           {variable === 'selfReport' ? (
             <div className="selfreport-values">
               {latestSelfReport(measurements).map(({ label, m }) => (
-                <span key={label}>
-                  {label} <strong>{m ? m.value : '—'}</strong>/5
+                <span key={label.en}>
+                  {t(label)} <strong>{m ? m.value : '—'}</strong>/5
                 </span>
               ))}
             </div>
@@ -85,19 +87,20 @@ export function IndicatorCard({ variable, latest, baseline, alerts, measurements
           <span className="indicator__date">{fmtDate(latest.timestamp)}</span>
         </div>
       ) : (
-        <p className="muted">No measurement logged.</p>
+        <p className="muted">{t({ en: 'No measurement logged.', pt: 'Sem medição registrada.' })}</p>
       )}
 
       {status === 'unassessed' && cov && <p className="indicator__unassessed">{cov.reason}</p>}
       {baseline && latest && variable !== 'selfReport' && (
         <p className="indicator__baseline">
-          Pre-flight baseline{' '}
+          {t({ en: 'Pre-flight baseline', pt: 'Baseline pré-voo' })}{' '}
           <strong>
             {fmt(baseline.mean, meta.decimals)} ± {fmt(baseline.stdDev, 1)} {meta.unit}
           </strong>
           {delta !== null && (
             <>
-              {' · '}deviation {fmtSigned(delta, meta.decimals)} {meta.unit}
+              {' · '}
+              {t({ en: 'deviation', pt: 'desvio' })} {fmtSigned(delta, meta.decimals)} {meta.unit}
               {variable === 'bodyMass' && ` (${fmtPct(delta / baseline.mean, true)})`}
             </>
           )}
@@ -107,9 +110,11 @@ export function IndicatorCard({ variable, latest, baseline, alerts, measurements
         const sr = latestSelfReportIndex(measurements);
         return (
           <p className="indicator__baseline">
-            Wellbeing index <strong>{sr.index != null ? `${fmt(sr.index, 1)}/5` : '—'}</strong> · pre-flight baseline{' '}
+            {t({ en: 'Wellbeing index', pt: 'Índice de bem-estar' })}{' '}
+            <strong>{sr.index != null ? `${fmt(sr.index, 1)}/5` : '—'}</strong> ·{' '}
+            {t({ en: 'pre-flight baseline', pt: 'baseline pré-voo' })}{' '}
             <strong>{fmt(baseline.mean, 1)}/5</strong>
-            {sr.index != null && <> · deviation {fmtSigned(sr.index - baseline.mean, 1)}</>}
+            {sr.index != null && <> · {t({ en: 'deviation', pt: 'desvio' })} {fmtSigned(sr.index - baseline.mean, 1)}</>}
           </p>
         );
       })()}
@@ -121,24 +126,25 @@ export function IndicatorCard({ variable, latest, baseline, alerts, measurements
       <details className="indicator__about">
         <summary>
           <ChevronRight size={14} className="disclosure-icon" />
-          What it measures, why it matters and how to measure
+          {t({ en: 'What it measures, why it matters and how to measure', pt: 'O que mede, por que importa e como medir' })}
         </summary>
         <p>
-          <strong>Measures:</strong> {meta.whatItMeasures}
+          <strong>{t({ en: 'Measures:', pt: 'Mede:' })}</strong> {t(meta.whatItMeasures)}
         </p>
         <p>
-          <strong>In spaceflight:</strong> {meta.whyItMatters}
+          <strong>{t({ en: 'In spaceflight:', pt: 'Em voo espacial:' })}</strong> {t(meta.whyItMatters)}
         </p>
         <p className="small">
-          NASA hazard: {meta.hazards.map((h) => HAZARD_LABEL[h]).join(', ')} · Risk: {meta.nasaRisk} · Time constant:{' '}
-          {meta.timeConstant}
+          {t({ en: 'NASA hazard:', pt: 'Perigo NASA:' })} {meta.hazards.map((h) => t(HAZARD_LABEL[h])).join(', ')} ·{' '}
+          {t({ en: 'Risk:', pt: 'Risco:' })} {t(meta.nasaRisk)} · {t({ en: 'Time constant:', pt: 'Constante de tempo:' })}{' '}
+          {t(meta.timeConstant)}
         </p>
         <p className="small">
-          Rule: {meta.ruleSummary}
+          {t({ en: 'Rule:', pt: 'Regra:' })} {t(meta.ruleSummary)}
         </p>
         <HowToMeasure variable={variable} compact />
         <p className="small">
-          Sources:{' '}
+          {t({ en: 'Sources:', pt: 'Fontes:' })}{' '}
           {meta.sourceIds.map((id, i) => {
             const s = findOfficial(id);
             return s ? (

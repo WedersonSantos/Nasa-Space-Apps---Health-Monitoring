@@ -5,6 +5,7 @@ import { VARIABLES } from '../config/variables';
 import { PLAUSIBLE_RANGES } from '../engine';
 import { createMeasurement, createSelfReport } from '../data/createMeasurement';
 import { fmt, fmtDateTime } from '../lib/format';
+import { useLang, useT } from '../i18n';
 import { OriginBadge } from './Badges';
 import { HowToMeasure } from './HowToMeasure';
 import { VariableTerm } from './VariableTerm';
@@ -27,13 +28,17 @@ interface Props {
 }
 
 export function EntryPanel({ astronautId, nowIso, entries, onAdd, onRemove }: Props) {
+  const t = useT();
   const [status, setStatus] = useState('');
 
   return (
     <div className="stack">
       <p className="note">
-        Manual entries are marked as <OriginBadge origin="measured" />, saved on this device and re-evaluated immediately by
-        the rule engine. They do not depend on a connection to Earth.
+        {t({ en: 'Manual entries are marked as', pt: 'Entradas manuais são marcadas como' })} <OriginBadge origin="measured" />
+        {t({
+          en: ', saved on this device and re-evaluated immediately by the rule engine. They do not depend on a connection to Earth.',
+          pt: ', gravadas neste dispositivo e reavaliadas na hora pelo motor de regras. Não dependem de conexão com a Terra.',
+        })}
       </p>
       <div className="entry-grid">
         <MeasurementForm astronautId={astronautId} nowIso={nowIso} onAdd={onAdd} announce={setStatus} />
@@ -43,22 +48,22 @@ export function EntryPanel({ astronautId, nowIso, entries, onAdd, onRemove }: Pr
         {status}
       </p>
       <section className="panel" aria-labelledby="entries-title">
-        <h2 id="entries-title">Manual entries</h2>
+        <h2 id="entries-title">{t({ en: 'Manual entries', pt: 'Registros manuais' })}</h2>
         {entries.length === 0 ? (
-          <p className="muted">No manual entries in this scenario.</p>
+          <p className="muted">{t({ en: 'No manual entries in this scenario.', pt: 'Nenhum registro manual neste cenário.' })}</p>
         ) : (
           <div className="table-scroll">
             <table className="evidence">
               <thead>
                 <tr>
-                  <th scope="col">When</th>
-                  <th scope="col">Variable</th>
+                  <th scope="col">{t({ en: 'When', pt: 'Quando' })}</th>
+                  <th scope="col">{t({ en: 'Variable', pt: 'Variável' })}</th>
                   <th scope="col" className="num">
-                    Value
+                    {t({ en: 'Value', pt: 'Valor' })}
                   </th>
-                  <th scope="col">Origin</th>
+                  <th scope="col">{t({ en: 'Origin', pt: 'Origem' })}</th>
                   <th scope="col">
-                    <span className="visually-hidden">Actions</span>
+                    <span className="visually-hidden">{t({ en: 'Actions', pt: 'Ações' })}</span>
                   </th>
                 </tr>
               </thead>
@@ -67,8 +72,9 @@ export function EntryPanel({ astronautId, nowIso, entries, onAdd, onRemove }: Pr
                   <tr key={m.id}>
                     <td>{fmtDateTime(m.timestamp)}</td>
                     <td>
-                      {VARIABLES[m.variable].label}
-                      {m.variable === 'selfReport' && ` · ${SELF_REPORT_DIMENSIONS.find((d) => d.method === m.method)?.label ?? ''}`}
+                      {t(VARIABLES[m.variable].label)}
+                      {m.variable === 'selfReport' &&
+                        ` · ${t(SELF_REPORT_DIMENSIONS.find((d) => d.method === m.method)?.label ?? '')}`}
                     </td>
                     <td className="num">
                       {fmt(m.value, VARIABLES[m.variable].decimals)}
@@ -79,7 +85,7 @@ export function EntryPanel({ astronautId, nowIso, entries, onAdd, onRemove }: Pr
                     </td>
                     <td>
                       <button type="button" className="btn btn--small" onClick={() => onRemove(m.id)}>
-                        Remove
+                        {t({ en: 'Remove', pt: 'Remover' })}
                       </button>
                     </td>
                   </tr>
@@ -104,6 +110,8 @@ function MeasurementForm({
   onAdd: (ms: Measurement[]) => string | null;
   announce: (s: string) => void;
 }) {
+  const t = useT();
+  const { lang } = useLang();
   const uid = useId();
   const [variable, setVariable] = useState<VariableId>('restingHeartRate');
   const [value, setValue] = useState('');
@@ -117,36 +125,46 @@ function MeasurementForm({
   function submit(e: FormEvent) {
     e.preventDefault();
     const errs: Record<string, string> = {};
-    if (value.trim() === '') errs.value = 'Enter a value.';
-    if (meta.secondaryLabel && secondaryRequired && secondary.trim() === '')
-      errs.secondary = `Enter ${meta.secondaryLabel.toLowerCase()}.`;
+    if (value.trim() === '') errs.value = t({ en: 'Enter a value.', pt: 'Informe um valor.' });
+    if (meta.secondaryLabel && secondaryRequired && secondary.trim() === '') {
+      const name = t(meta.secondaryLabel).toLowerCase();
+      errs.secondary = t({ en: `Enter ${name}.`, pt: `Informe ${name}.` });
+    }
     const ts = when ? new Date(`${when}:00Z`) : null;
-    if (!ts || Number.isNaN(ts.getTime())) errs.when = 'Enter date and time.';
+    if (!ts || Number.isNaN(ts.getTime())) errs.when = t({ en: 'Enter date and time.', pt: 'Informe data e hora.' });
 
     if (!Object.keys(errs).length && ts) {
       // Range, unit and consistency validation: single engine rule (Bloco A).
-      const r = createMeasurement({
-        astronautId,
-        variable,
-        value,
-        secondaryValue: meta.secondaryLabel ? secondary : undefined,
-        timestamp: ts.toISOString(),
-        origin: 'measured',
-      });
+      const r = createMeasurement(
+        {
+          astronautId,
+          variable,
+          value,
+          secondaryValue: meta.secondaryLabel ? secondary : undefined,
+          timestamp: ts.toISOString(),
+          origin: 'measured',
+        },
+        lang,
+      );
       if (!r.ok) {
-        errs.value = `${r.error} Plausible range: ${range.min}–${range.max} ${meta.unit}.`;
+        errs.value = t({
+          en: `${r.error} Plausible range: ${range.min}–${range.max} ${meta.unit}.`,
+          pt: `${r.error} Faixa plausível: ${range.min}–${range.max} ${meta.unit}.`,
+        });
       } else {
         const storeError = onAdd([r.measurement]);
-        if (storeError) errs.when = `Not saved: ${storeError}.`;
+        if (storeError) errs.when = t({ en: `Not saved: ${storeError}.`, pt: `Não gravado: ${storeError}.` });
         else {
-          announce(`Logged: ${meta.label} ${fmt(r.measurement.value, meta.decimals)} ${meta.unit}. Status re-evaluated.`);
+          const shown = `${t(meta.label)} ${fmt(r.measurement.value, meta.decimals)} ${meta.unit}`;
+          announce(t({ en: `Logged: ${shown}. Status re-evaluated.`, pt: `Registrado: ${shown}. Estado reavaliado.` }));
           setValue('');
           setSecondary('');
         }
       }
     }
     setErrors(errs);
-    if (Object.keys(errs).length) announce('Entry not saved: fix the highlighted fields.');
+    if (Object.keys(errs).length)
+      announce(t({ en: 'Entry not saved: fix the highlighted fields.', pt: 'Registro não salvo: corrija os campos indicados.' }));
   }
 
   const err = (k: string) =>
@@ -158,9 +176,9 @@ function MeasurementForm({
 
   return (
     <form className="panel form" onSubmit={submit} noValidate aria-labelledby={`${uid}-title`}>
-      <h2 id={`${uid}-title`}>Log a measurement</h2>
+      <h2 id={`${uid}-title`}>{t({ en: 'Log a measurement', pt: 'Registrar medição' })}</h2>
       <label className="field">
-        <span>Variable</span>
+        <span>{t({ en: 'Variable', pt: 'Variável' })}</span>
         <select
           value={variable}
           onChange={(e) => {
@@ -171,7 +189,7 @@ function MeasurementForm({
         >
           {MANUAL_VARIABLES.map((id) => (
             <option key={id} value={id}>
-              {VARIABLES[id].label}
+              {t(VARIABLES[id].label)}
             </option>
           ))}
         </select>
@@ -180,7 +198,12 @@ function MeasurementForm({
       <div className="field-row">
         <label className="field">
           <span>
-            {variable === 'bloodPressure' ? 'Systolic' : variable === 'exerciseLoad' ? 'Completed' : 'Value'} ({meta.unit})
+            {variable === 'bloodPressure'
+              ? t({ en: 'Systolic', pt: 'Sistólica' })
+              : variable === 'exerciseLoad'
+                ? t({ en: 'Completed', pt: 'Completado' })
+                : t({ en: 'Value', pt: 'Valor' })}{' '}
+            ({meta.unit})
           </span>
           <input
             inputMode="decimal"
@@ -194,9 +217,9 @@ function MeasurementForm({
         {meta.secondaryLabel && (
           <label className="field">
             <span>
-              {meta.secondaryLabel}
+              {t(meta.secondaryLabel)}
               {meta.secondaryUnit && meta.secondaryUnit !== '/5' ? ` (${meta.secondaryUnit})` : ''}
-              {!secondaryRequired && ' — optional'}
+              {!secondaryRequired && t({ en: ' — optional', pt: ' — opcional' })}
             </span>
             <input
               inputMode="decimal"
@@ -210,7 +233,7 @@ function MeasurementForm({
         )}
       </div>
       <label className="field">
-        <span>Date and time of collection (UTC, onboard time)</span>
+        <span>{t({ en: 'Date and time of collection (UTC, onboard time)', pt: 'Data e hora da coleta (UTC, horário de bordo)' })}</span>
         <input
           type="datetime-local"
           value={when}
@@ -221,7 +244,7 @@ function MeasurementForm({
         {err('when')}
       </label>
       <button type="submit" className="btn btn--primary">
-        Log measurement
+        {t({ en: 'Log measurement', pt: 'Registrar medição' })}
       </button>
     </form>
   );
@@ -238,44 +261,53 @@ function SelfReportForm({
   onAdd: (ms: Measurement[]) => string | null;
   announce: (s: string) => void;
 }) {
+  const t = useT();
+  const { lang } = useLang();
   const uid = useId();
   const [values, setValues] = useState<Record<string, number | undefined>>({});
   const [error, setError] = useState('');
 
   function submit(e: FormEvent) {
     e.preventDefault();
-    const missing = SELF_REPORT_DIMENSIONS.filter((d) => values[d.method] == null).map((d) => d.label.toLowerCase());
+    const missing = SELF_REPORT_DIMENSIONS.filter((d) => values[d.method] == null).map((d) => t(d.label).toLowerCase());
     if (missing.length) {
-      setError(`Please answer: ${missing.join(', ')}.`);
-      announce('Self-report not saved: answers missing.');
+      const list = missing.join(', ');
+      setError(t({ en: `Please answer: ${list}.`, pt: `Responda: ${list}.` }));
+      announce(t({ en: 'Self-report not saved: answers missing.', pt: 'Autorrelato não salvo: faltam respostas.' }));
       return;
     }
-    const r = createSelfReport(astronautId, nowIso, {
-      mood: values['self-report:mood'] as number,
-      stress: values['self-report:stress'] as number,
-      fatigue: values['self-report:fatigue'] as number,
-    });
+    const r = createSelfReport(
+      astronautId,
+      nowIso,
+      {
+        mood: values['self-report:mood'] as number,
+        stress: values['self-report:stress'] as number,
+        fatigue: values['self-report:fatigue'] as number,
+      },
+      lang,
+    );
     const storeError = r.ok ? onAdd(r.measurements) : r.error;
     if (storeError) {
-      setError(`Not saved: ${storeError}.`);
-      announce('Self-report not saved.');
+      setError(t({ en: `Not saved: ${storeError}.`, pt: `Não gravado: ${storeError}.` }));
+      announce(t({ en: 'Self-report not saved.', pt: 'Autorrelato não salvo.' }));
       return;
     }
     setError('');
-    announce('Self-report logged. Status re-evaluated.');
+    announce(t({ en: 'Self-report logged. Status re-evaluated.', pt: 'Autorrelato registrado. Estado reavaliado.' }));
     setValues({});
   }
 
   return (
     <form className="panel form" onSubmit={submit} noValidate aria-labelledby={`${uid}-title`}>
-      <h2 id={`${uid}-title`}>Today’s self-report</h2>
+      <h2 id={`${uid}-title`}>{t({ en: 'Today’s self-report', pt: 'Autorrelato de hoje' })}</h2>
       <p className="muted small">
-        <VariableTerm variable="selfReport" /> — how are you right now? Scale of 1 to 5.
+        <VariableTerm variable="selfReport" />{' '}
+        {t({ en: '— how are you right now? Scale of 1 to 5.', pt: '— como você está agora? Escala de 1 a 5.' })}
       </p>
       <HowToMeasure variable="selfReport" compact />
       {SELF_REPORT_DIMENSIONS.map((d) => (
         <fieldset key={d.method} className="scale">
-          <legend>{d.label}</legend>
+          <legend>{t(d.label)}</legend>
           <div className="scale__options">
             {[1, 2, 3, 4, 5].map((n) => (
               <label key={n} className="scale__opt">
@@ -291,14 +323,14 @@ function SelfReportForm({
             ))}
           </div>
           <div className="scale__ends small muted">
-            <span>1 = {d.low}</span>
-            <span>5 = {d.high}</span>
+            <span>1 = {t(d.low)}</span>
+            <span>5 = {t(d.high)}</span>
           </div>
         </fieldset>
       ))}
       {error && <span className="field-error">{error}</span>}
       <button type="submit" className="btn btn--primary">
-        Log self-report
+        {t({ en: 'Log self-report', pt: 'Registrar autorrelato' })}
       </button>
     </form>
   );

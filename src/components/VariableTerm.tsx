@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useId, useRef, useState } from 'react';
 import type { VariableId } from '../types/contract';
 import { CLASS_LABEL, HAZARD_LABEL, VARIABLES } from '../config/variables';
+import { useT } from '../i18n';
 
 const WIDTH = 340;
 const GAP = 8;
@@ -11,6 +12,7 @@ const MARGIN = 12;
  * Esc closes it. The text comes from config/variables.ts — the same as "What it measures and why it matters".
  */
 export function VariableTerm({ variable, children }: { variable: VariableId; children?: React.ReactNode }) {
+  const t = useT();
   const meta = VARIABLES[variable];
   const id = useId();
   const anchor = useRef<HTMLButtonElement>(null);
@@ -61,7 +63,7 @@ export function VariableTerm({ variable, children }: { variable: VariableId; chi
         onBlur={close}
         onClick={() => (pos ? close() : open())}
       >
-        {children ?? meta.label}
+        {children ?? t(meta.label)}
         <svg className="term__icon" width="13" height="13" viewBox="0 0 24 24" aria-hidden="true">
           <circle cx="12" cy="12" r="9.5" fill="none" stroke="currentColor" strokeWidth="2" />
           <path d="M12 11v6M12 7.5v.1" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" />
@@ -77,18 +79,21 @@ export function VariableTerm({ variable, children }: { variable: VariableId; chi
           onMouseLeave={closeSoon}
         >
           <p className="term-pop__title">
-            {meta.label} <span className="term-pop__unit">{meta.unit === '/5' ? '1–5 scale' : meta.unit}</span>
+            {t(meta.label)}{' '}
+            <span className="term-pop__unit">{meta.unit === '/5' ? t({ en: '1–5 scale', pt: 'escala 1–5' }) : meta.unit}</span>
           </p>
           <p className="term-pop__kicker">
-            {CLASS_LABEL[meta.varClass]} · {HAZARD_LABEL[meta.hazards[0]]}
+            {t(CLASS_LABEL[meta.varClass])} · {t(HAZARD_LABEL[meta.hazards[0]])}
           </p>
           <p>
-            <strong>What it measures:</strong> {meta.whatItMeasures}
+            <strong>{t({ en: 'What it measures:', pt: 'O que mede:' })}</strong> {t(meta.whatItMeasures)}
           </p>
           <p>
-            <strong>Why it matters in space:</strong> {meta.whyItMatters}
+            <strong>{t({ en: 'Why it matters in space:', pt: 'Por que importa no espaço:' })}</strong> {t(meta.whyItMatters)}
           </p>
-          <p className="term-pop__foot">Alerts when: {meta.ruleSummary}</p>
+          <p className="term-pop__foot">
+            {t({ en: 'Alerts when:', pt: 'Alerta quando:' })} {t(meta.ruleSummary)}
+          </p>
         </div>
       )}
     </>

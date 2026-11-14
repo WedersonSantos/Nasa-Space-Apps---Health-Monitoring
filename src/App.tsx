@@ -2,7 +2,7 @@ import { useCallback, useDeferredValue, useEffect, useMemo, useRef, useState, ty
 import type { Alert, Measurement, VariableId } from './types/contract';
 import { SEVERITY_META } from './config/display';
 import { CLASS_ROLE, VARIABLES } from './config/variables';
-import { BASELINE, DISCLAIMER } from './engine';
+import { BASELINE, DISCLAIMER_BY_LOCALE } from './engine';
 import {
   SCENARIOS,
   endOfMissionDay,
@@ -42,14 +42,15 @@ import { MissionBar } from './components/MissionBar';
 import { MissionTrack, type ChartWindow } from './components/MissionTrack';
 import { OwnMissionBar, OwnMissionSetup } from './components/OwnMission';
 import { VitalsStrip } from './components/VitalsStrip';
+import { useLang, useT, type L10n } from './i18n';
 
 type Tab = 'overview' | 'countermeasure' | 'entry' | 'about';
 
-const TABS: { id: Tab; label: string }[] = [
-  { id: 'overview', label: 'Overview' },
-  { id: 'countermeasure', label: 'Countermeasure' },
-  { id: 'entry', label: 'Log data' },
-  { id: 'about', label: 'About & sources' },
+const TABS: { id: Tab; label: L10n }[] = [
+  { id: 'overview', label: { en: 'Overview', pt: 'Visão geral' } },
+  { id: 'countermeasure', label: { en: 'Countermeasure', pt: 'Contramedida' } },
+  { id: 'entry', label: { en: 'Log data', pt: 'Registrar' } },
+  { id: 'about', label: { en: 'About & sources', pt: 'Sobre e fontes' } },
 ];
 
 /** The three fast signals read together by the composite rule: stacked on the same time axis. */
@@ -65,6 +66,8 @@ const nowIso = () => new Date().toISOString();
 
 export default function App() {
   const [theme, setTheme] = useTheme();
+  const { lang } = useLang();
+  const t = useT();
   const [colors, setColors] = useState<ChartColors | null>(null);
 
   // ---------- mode: demo or own mission ----------
@@ -91,8 +94,8 @@ export default function App() {
 
   useEffect(() => {
     if (!isOwn) return;
-    const t = window.setInterval(() => setClock(nowIso()), CLOCK_TICK_MS);
-    return () => window.clearInterval(t);
+    const timer = window.setInterval(() => setClock(nowIso()), CLOCK_TICK_MS);
+    return () => window.clearInterval(timer);
   }, [isOwn]);
 
   const scenario = useMemo(() => scenarioFile(scenarioId), [scenarioId]);
@@ -125,7 +128,12 @@ export default function App() {
       const manual = demoMeasurements.filter((m) => m.origin !== 'synthetic').length;
       if (
         (manual > 0 || actionLog.entries.length > 0) &&
-        !window.confirm('Switching scenario erases the manual entries and logged actions in the demo. Continue?')
+        !window.confirm(
+          t({
+            en: 'Switching scenario erases the manual entries and logged actions in the demo. Continue?',
+            pt: 'Trocar de cenário apaga os registros manuais e as ações registradas na demonstração. Continuar?',
+          }),
+        )
       )
         return;
       setDemoMeasurements(store.reset(scenarioFile(id), nowIso()));
@@ -133,7 +141,7 @@ export default function App() {
       setScenarioId(id);
       setSelectedDay(null);
     },
-    [scenarioId, demoMeasurements, actionLog],
+    [scenarioId, demoMeasurements, actionLog, t],
   );
 
   const goOwn = useCallback(() => {
@@ -159,13 +167,17 @@ export default function App() {
   );
   const eraseOwn = useCallback(() => {
     if (!ownProfile) return;
-    if (!window.confirm(`Erase ${ownProfile.name}’s mission and all entries and actions on this device? This cannot be undone.`)) return;
+    const msg = t({
+      en: `Erase ${ownProfile.name}’s mission and all entries and actions on this device? This cannot be undone.`,
+      pt: `Apagar a missão de ${ownProfile.name} e todos os registros e ações deste dispositivo? Não dá para desfazer.`,
+    });
+    if (!window.confirm(msg)) return;
     store.clear(ownProfile.astronautId, nowIso());
     actionLog.clear();
     saveOwnProfile(null);
     setOwnProfile(null);
     setOwnMeasurements([]);
-  }, [ownProfile, actionLog]);
+  }, [ownProfile, actionLog, t]);
 
   // ---------- mission clock ----------
   const maxDay = useMemo(() => {
@@ -181,13 +193,18 @@ export default function App() {
   /** Default time for a new entry: the end of the assessed day, never later than now. */
   const entryNow = isOwn && asOf > clock ? clock : asOf;
   /** "day 113" in flight; "pre-flight day 2 of 7" before launch. */
-  const dayText = inFlight ? `day ${day}` : `pre-flight day ${day + BASELINE.preflightDays} of ${BASELINE.preflightDays}`;
+  const dayText = inFlight
+    ? t({ en: `day ${day}`, pt: `dia ${day}` })
+    : t({
+        en: `pre-flight day ${day + BASELINE.preflightDays} of ${BASELINE.preflightDays}`,
+        pt: `dia ${day + BASELINE.preflightDays} de ${BASELINE.preflightDays} do pré-voo`,
+      });
 
   // Shortcuts: 1/2/3 switch scenario (demo only); ← → move one day.
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
-      const t = e.target as HTMLElement;
-      if (e.ctrlKey || e.metaKey || e.altKey || t.closest('input, select, textarea, button, [role=tab], [role=tooltip]')) return;
+      const target = e.target as HTMLElement;
+      if (e.ctrlKey || e.metaKey || e.altKey || target.closest('input, select, textarea, button, [role=tab], [role=tooltip]')) return;
       const s = SCENARIOS.find((x) => String(x.number) === e.key);
       if (s && !isOwn) switchScenario(s.id);
       if (e.key === 'ArrowLeft') setSelectedDay(Math.max(minDay, day - 1));
@@ -198,11 +215,11 @@ export default function App() {
   }, [switchScenario, day, minDay, maxDay, isOwn]);
 
   // ---------- evaluation (pure engine function) ----------
-  const state = useMemo(() => evaluateState(measurements, mission, asOf), [measurements, mission, asOf]);
+  const state = useMemo(() => evaluateState(measurements, mission, asOf, lang), [measurements, mission, asOf, lang]);
   const deferredMeasurements = useDeferredValue(measurements);
   const history = useMemo(
-    () => computeMissionHistory(deferredMeasurements, mission, maxDay),
-    [deferredMeasurements, mission, maxDay],
+    () => computeMissionHistory(deferredMeasurements, mission, maxDay, lang),
+    [deferredMeasurements, mission, maxDay, lang],
   );
   const visible = useMemo(() => measurements.filter((m) => m.timestamp <= asOf), [measurements, asOf]);
   const alerts = useMemo(
@@ -237,7 +254,7 @@ export default function App() {
     (ms: Measurement[]): string | null => {
       let latest: Measurement[] | null = null;
       for (const m of ms) {
-        const r = store.append(m, nowIso());
+        const r = store.append(m, nowIso(), lang);
         if (!r.ok) return r.error;
         latest = r.measurements;
       }
@@ -245,7 +262,7 @@ export default function App() {
       if (isOwn) setClock(nowIso());
       return null;
     },
-    [setMeasurements, isOwn],
+    [setMeasurements, isOwn, lang],
   );
   const removeEntry = useCallback(
     (id: string) => {
@@ -273,7 +290,7 @@ export default function App() {
 
   // Tabs follow the keyboard pattern: arrows, Home and End move the selection.
   const onTabKey = (e: ReactKeyboardEvent) => {
-    const i = TABS.findIndex((t) => t.id === tab);
+    const i = TABS.findIndex((x) => x.id === tab);
     let next = -1;
     if (e.key === 'ArrowRight') next = (i + 1) % TABS.length;
     if (e.key === 'ArrowLeft') next = (i - 1 + TABS.length) % TABS.length;
@@ -309,7 +326,7 @@ export default function App() {
   return (
     <ChartColorsContext.Provider value={colors}>
       <a className="skip-link" href="#main">
-        Skip to content
+        {t({ en: 'Skip to content', pt: 'Pular para o conteúdo' })}
       </a>
 
       <div className="shell">
@@ -317,6 +334,7 @@ export default function App() {
           state={state}
           asOf={asOf}
           missionDay={day}
+          crewName={isOwn && ownProfile ? ownProfile.name : t({ en: 'Astronaut A (fictional)', pt: 'Astronauta A (fictício)' })}
           theme={theme}
           onToggleTheme={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
           onShowAlerts={showAlerts}
@@ -336,11 +354,15 @@ export default function App() {
                 onWindowChange={setChartWindow}
               />
             ) : (
-              <section className="track preflight-track" aria-label="Pre-flight">
-                <h2 className="track__title">Pre-flight</h2>
+              <section className="track preflight-track" aria-label={t({ en: 'Pre-flight', pt: 'Pré-voo' })}>
+                <h2 className="track__title">{t({ en: 'Pre-flight', pt: 'Pré-voo' })}</h2>
                 <p className="track__now">
-                  Day <strong>{day + BASELINE.preflightDays}</strong> of {BASELINE.preflightDays} · {preflightDaysLogged} day(s)
-                  with data. The baseline forms from these days; assessment starts on flight day 1.
+                  {t({ en: 'Day', pt: 'Dia' })} <strong>{day + BASELINE.preflightDays}</strong> {t({ en: 'of', pt: 'de' })}{' '}
+                  {BASELINE.preflightDays} ·{' '}
+                  {t({
+                    en: `${preflightDaysLogged} day(s) with data. The baseline forms from these days; assessment starts on flight day 1.`,
+                    pt: `${preflightDaysLogged} dia(s) com registro. O baseline se forma com esses dias; a avaliação começa no dia 1 de voo.`,
+                  })}
                 </p>
                 <ol className="preflight-steps" aria-hidden="true">
                   {Array.from({ length: BASELINE.preflightDays }, (_, i) => (
@@ -376,24 +398,24 @@ export default function App() {
           <>
             <VitalsStrip state={state} measurements={visible} />
 
-            <div className="tabs" role="tablist" aria-label="Sections" onKeyDown={onTabKey}>
-              {TABS.map((t) => (
+            <div className="tabs" role="tablist" aria-label={t({ en: 'Sections', pt: 'Seções' })} onKeyDown={onTabKey}>
+              {TABS.map((x) => (
                 <button
-                  key={t.id}
+                  key={x.id}
                   ref={(el) => {
-                    tabRefs.current[t.id] = el;
+                    tabRefs.current[x.id] = el;
                   }}
                   type="button"
                   role="tab"
-                  id={`tab-${t.id}`}
-                  aria-selected={tab === t.id}
-                  aria-controls={`panel-${t.id}`}
-                  tabIndex={tab === t.id ? 0 : -1}
+                  id={`tab-${x.id}`}
+                  aria-selected={tab === x.id}
+                  aria-controls={`panel-${x.id}`}
+                  tabIndex={tab === x.id ? 0 : -1}
                   className="tab"
-                  onClick={() => setTab(t.id)}
+                  onClick={() => setTab(x.id)}
                 >
-                  {t.label}
-                  {t.id === 'overview' && alerts.length > 0 && (
+                  {t(x.label)}
+                  {x.id === 'overview' && alerts.length > 0 && (
                     <span className={`tab__count tab__count--${state.overall}`}>
                       <SeverityIcon severity={state.overall} size={12} />
                       {alerts.length}
@@ -409,15 +431,20 @@ export default function App() {
                   <div className="stack">
                     <section aria-labelledby="alerts-title">
                       <h2 id="alerts-title" className="section-title">
-                        Active alerts
+                        {t({ en: 'Active alerts', pt: 'Alertas ativos' })}
                       </h2>
                       {alerts.length === 0 ? (
                         assessment.unassessed.length === 0 ? (
                           <div className="all-clear">
                             <CheckCircle size={28} />
                             <div>
-                              <strong>No active alerts on {dayText}.</strong>
-                              <span>All seven signals were assessed and are within the individual baseline.</span>
+                              <strong>{t({ en: `No active alerts on ${dayText}.`, pt: `Nenhum alerta ativo no ${dayText}.` })}</strong>
+                              <span>
+                                {t({
+                                  en: 'All seven signals were assessed and are within the individual baseline.',
+                                  pt: 'Os sete sinais foram avaliados e estão dentro do baseline individual.',
+                                })}
+                              </span>
                             </div>
                           </div>
                         ) : (
@@ -426,19 +453,27 @@ export default function App() {
                             <div>
                               <strong>
                                 {assessment.none
-                                  ? `Not enough data to assess ${dayText}.`
-                                  : `No alerts, but ${assessment.unassessed.length} of 7 signals could not be assessed on ${dayText}.`}
+                                  ? t({ en: `Not enough data to assess ${dayText}.`, pt: `Sem dados suficientes para avaliar o ${dayText}.` })
+                                  : t({
+                                      en: `No alerts, but ${assessment.unassessed.length} of 7 signals could not be assessed on ${dayText}.`,
+                                      pt: `Nenhum alerta, mas ${assessment.unassessed.length} de 7 sinais não puderam ser avaliados no ${dayText}.`,
+                                    })}
                               </strong>
-                              <span>No alert does not mean everything is normal. Data is missing for:</span>
+                              <span>
+                                {t({
+                                  en: 'No alert does not mean everything is normal. Data is missing for:',
+                                  pt: 'Ausência de alerta não significa que está tudo normal. Faltam dados para:',
+                                })}
+                              </span>
                               <ul>
                                 {assessment.unassessed.map((c) => (
                                   <li key={c.variable}>
-                                    <strong>{VARIABLES[c.variable].label}:</strong> {c.reason}
+                                    <strong>{t(VARIABLES[c.variable].label)}:</strong> {c.reason}
                                   </li>
                                 ))}
                               </ul>
                               <button type="button" className="btn btn--small" onClick={() => setTab('entry')}>
-                                Log a measurement
+                                {t({ en: 'Log a measurement', pt: 'Registrar medição' })}
                               </button>
                             </div>
                           </div>
@@ -460,12 +495,20 @@ export default function App() {
 
                     <section aria-labelledby="group-signal" className="group">
                       <h2 id="group-signal" className="section-title">
-                        Signals <ClassChip varClass="signal" /> <span className="section-sub">{CLASS_ROLE.signal}</span>
+                        {t({ en: 'Signals', pt: 'Sinais' })} <ClassChip varClass="signal" />{' '}
+                        <span className="section-sub">{t(CLASS_ROLE.signal)}</span>
                       </h2>
                       <div className="cluster" role="group" aria-labelledby="cluster-title">
                         <div className="cluster__head">
-                          <h3 id="cluster-title">Fast cluster: sleep, HRV and resting HR</h3>
-                          <p>Same time axis. The composite rule reads all three together: two or more deviating in the same window suggest overload.</p>
+                          <h3 id="cluster-title">
+                            {t({ en: 'Fast cluster: sleep, HRV and resting HR', pt: 'Cluster rápido: sono, HRV e FC de repouso' })}
+                          </h3>
+                          <p>
+                            {t({
+                              en: 'Same time axis. The composite rule reads all three together: two or more deviating in the same window suggest overload.',
+                              pt: 'Mesmo eixo de tempo. A regra composta lê os três juntos: dois ou mais em desvio na mesma janela indicam sobrecarga.',
+                            })}
+                          </p>
                         </div>
                         {FAST_CLUSTER.map((v) => card(v, 'row'))}
                       </div>
@@ -474,7 +517,13 @@ export default function App() {
 
                     <section aria-labelledby="group-accum" className="group">
                       <h2 id="group-accum" className="section-title">
-                        Accumulator and countermeasure <span className="section-sub">long-term consequence and the action that closes the loop</span>
+                        {t({ en: 'Accumulator and countermeasure', pt: 'Acumulador e contramedida' })}{' '}
+                        <span className="section-sub">
+                          {t({
+                            en: 'long-term consequence and the action that closes the loop',
+                            pt: 'consequência de longo prazo e a ação que fecha o ciclo',
+                          })}
+                        </span>
                       </h2>
                       <div className="grid-2">
                         {card('bodyMass')}
@@ -514,15 +563,21 @@ export default function App() {
         )}
 
         <footer className="app-foot">
-          <p>{DISCLAIMER} If in doubt, contact the crew medical officer or ground control.</p>
+          <p>
+            {DISCLAIMER_BY_LOCALE[lang]}{' '}
+            {t({
+              en: 'If in doubt, contact the crew medical officer or ground control.',
+              pt: 'Em caso de dúvida, acione o oficial médico da tripulação ou o controle em Terra.',
+            })}
+          </p>
           <p className="muted small">
-            NASA Space Apps Challenge 2026 · Challenge 05 · Formandos UDI ·{' '}
+            NASA Space Apps Challenge 2026 · {t({ en: 'Challenge 05', pt: 'Desafio 05' })} · Formandos UDI ·{' '}
             <a href={LICENSE_URL} target="_blank" rel="noreferrer">
-              Apache-2.0 license
+              {t({ en: 'Apache-2.0 license', pt: 'Licença Apache-2.0' })}
             </a>{' '}
             ·{' '}
             <a href={REPO_URL} target="_blank" rel="noreferrer">
-              Source code
+              {t({ en: 'Source code', pt: 'Código-fonte' })}
             </a>
           </p>
         </footer>

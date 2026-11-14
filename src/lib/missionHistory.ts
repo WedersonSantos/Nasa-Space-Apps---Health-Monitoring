@@ -3,6 +3,7 @@
 
 import type { Measurement, Severity } from '../types/contract';
 import { endOfMissionDay, evaluateState, missionDayOf, type MissionContext } from '../integration/dataSource';
+import type { Lang } from '../i18n';
 
 export interface DayStatus {
   day: number;
@@ -27,11 +28,12 @@ export function computeMissionHistory(
   measurements: Measurement[],
   scenario: MissionContext,
   maxDay: number,
+  lang: Lang = 'en',
 ): MissionHistory {
   const days: DayStatus[] = [];
   const onsets = new Map<string, AlertOnset>();
   for (let day = 1; day <= maxDay; day++) {
-    const state = evaluateState(measurements, scenario, endOfMissionDay(day, scenario.launchDate));
+    const state = evaluateState(measurements, scenario, endOfMissionDay(day, scenario.launchDate), lang);
     days.push({ day, overall: state.overall });
     for (const a of state.alerts) {
       const prev = onsets.get(a.id);

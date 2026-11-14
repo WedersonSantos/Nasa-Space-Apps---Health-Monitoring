@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react';
 import type { Alert, Evidence } from '../types/contract';
 import { fmt, fmtDate, fmtPct, fmtSigned } from '../lib/format';
+import { useT } from '../i18n';
 import { SeverityBadge } from './Badges';
 import { Phone } from './Icons';
 import { SourceRef } from './SourceRef';
@@ -52,6 +53,7 @@ interface Props {
  * Every contract field is shown; none is hidden.
  */
 export function AlertCard({ alert, missionDay, variant = 'full', actionId, followUp }: Props) {
+  const t = useT();
   const composite = alert.variables.length > 1;
   const titleId = `${alert.id}-${variant}-title`;
 
@@ -59,9 +61,11 @@ export function AlertCard({ alert, missionDay, variant = 'full', actionId, follo
     <article className={`alert alert--${alert.severity} alert--${variant}`} aria-labelledby={titleId}>
       <header className="alert__head">
         <SeverityBadge severity={alert.severity} />
-        {composite && <span className="tag tag--strong">Composite alert · {alert.variables.length} signals</span>}
+        {composite && <span className="tag tag--strong">
+            {t({ en: `Composite alert · ${alert.variables.length} signals`, pt: `Alerta composto · ${alert.variables.length} sinais` })}
+          </span>}
         {variant === 'full' && (
-          <ul className="alert__vars" aria-label="Variables involved">
+          <ul className="alert__vars" aria-label={t({ en: 'Variables involved', pt: 'Variáveis envolvidas' })}>
             {alert.variables.map((v) => (
               <li key={v} className="tag">
                 <VariableTerm variable={v} />
@@ -70,7 +74,8 @@ export function AlertCard({ alert, missionDay, variant = 'full', actionId, follo
           </ul>
         )}
         <span className="alert__when">
-          Pattern began: {missionDay != null ? `day ${missionDay} · ` : ''}
+          {t({ en: 'Pattern began:', pt: 'Início do padrão:' })}{' '}
+          {missionDay != null ? t({ en: `day ${missionDay} · `, pt: `dia ${missionDay} · ` }) : ''}
           {fmtDate(alert.raisedAt)}
         </span>
       </header>
@@ -78,13 +83,17 @@ export function AlertCard({ alert, missionDay, variant = 'full', actionId, follo
       <h3 id={titleId} className="alert__title">
         {alert.title}
       </h3>
-      <section className="alert__action" aria-label="What to do now" id={actionId} tabIndex={actionId ? -1 : undefined}>
-        <h4>What to do now</h4>
+      <section className="alert__action" aria-label={t({ en: 'What to do now', pt: 'O que fazer agora' })} id={actionId} tabIndex={actionId ? -1 : undefined}>
+        <h4>{t({ en: 'What to do now', pt: 'O que fazer agora' })}</h4>
         {alert.escalate && (
           <p className="escalate">
             <Phone size={20} />
             <span>
-              <strong>Contact the crew medical officer</strong> and inform ground control at the next communication window.
+              <strong>{t({ en: 'Contact the crew medical officer', pt: 'Acione o oficial médico da tripulação' })}</strong>{' '}
+              {t({
+                en: 'and inform ground control at the next communication window.',
+                pt: 'e comunique o controle em Terra na próxima janela de comunicação.',
+              })}
             </span>
           </p>
         )}
@@ -95,26 +104,26 @@ export function AlertCard({ alert, missionDay, variant = 'full', actionId, follo
       {variant === 'full' ? (
         <div className="alert__why">
           <section>
-            <h4>Why</h4>
+            <h4>{t({ en: 'Why', pt: 'Por que' })}</h4>
             <p className="alert__explanation">{alert.explanation}</p>
           </section>
           <section>
-            <h4>How it was calculated</h4>
+            <h4>{t({ en: 'How it was calculated', pt: 'Como foi calculado' })}</h4>
             <p className="arithmetic">{alert.arithmetic}</p>
             <div className="table-scroll">
               <table className="data-table">
-                <caption className="visually-hidden">Alert evidence</caption>
+                <caption className="visually-hidden">{t({ en: 'Alert evidence', pt: 'Evidências do alerta' })}</caption>
                 <thead>
                   <tr>
-                    <th scope="col">Measure</th>
+                    <th scope="col">{t({ en: 'Measure', pt: 'Medida' })}</th>
                     <th scope="col" className="num">
-                      Current
+                      {t({ en: 'Current', pt: 'Atual' })}
                     </th>
                     <th scope="col" className="num">
-                      Reference
+                      {t({ en: 'Reference', pt: 'Referência' })}
                     </th>
                     <th scope="col" className="num">
-                      Deviation
+                      {t({ en: 'Deviation', pt: 'Desvio' })}
                     </th>
                   </tr>
                 </thead>
@@ -129,14 +138,14 @@ export function AlertCard({ alert, missionDay, variant = 'full', actionId, follo
         </div>
       ) : (
         <section className="alert__compact-calc">
-          <h4>How it was calculated</h4>
+          <h4>{t({ en: 'How it was calculated', pt: 'Como foi calculado' })}</h4>
           <p className="arithmetic">{alert.arithmetic}</p>
         </section>
       )}
 
       <footer className="alert__foot">
         <SourceRef refText={alert.sourceRef} />
-        <span className="muted">Supporting guidance, not a diagnosis.</span>
+        <span className="muted">{t({ en: 'Supporting guidance, not a diagnosis.', pt: 'Orientação de apoio, não diagnóstico.' })}</span>
       </footer>
     </article>
   );

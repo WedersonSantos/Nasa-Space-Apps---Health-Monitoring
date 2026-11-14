@@ -2,13 +2,14 @@
 // Stays on the device (localStorage with in-memory fallback), separate from measurements: it does not change the engine's evaluation.
 
 import { useCallback, useEffect, useState } from 'react';
+import type { L10n } from '../i18n';
 
 export type ActionKind = 'repeated-measurement' | 'cmo-contacted' | 'action-done';
 
-export const ACTION_LABEL: Record<ActionKind, string> = {
-  'repeated-measurement': 'Measurement repeated',
-  'cmo-contacted': 'CMO contacted',
-  'action-done': 'Action completed',
+export const ACTION_LABEL: Record<ActionKind, L10n> = {
+  'repeated-measurement': { en: 'Measurement repeated', pt: 'Medição repetida' },
+  'cmo-contacted': { en: 'CMO contacted', pt: 'Oficial médico acionado' },
+  'action-done': { en: 'Action completed', pt: 'Ação concluída' },
 };
 
 export interface ActionEntry {

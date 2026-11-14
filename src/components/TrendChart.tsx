@@ -17,6 +17,9 @@ import { VARIABLES } from '../config/variables';
 import { missionPos } from '../integration/dataSource';
 import { fmt, fmtDateTime } from '../lib/format';
 import { useChartColors, type ChartColors } from '../lib/theme';
+import { useT, type L10n } from '../i18n';
+
+type T = (s: L10n | string) => string;
 
 interface Row {
   x: number;
@@ -58,20 +61,20 @@ function buildRows(variable: VariableId, ms: Measurement[], launch: string, from
   return [...byTs.values()];
 }
 
-function seriesFor(variable: VariableId, c: ChartColors): SeriesDef[] {
+function seriesFor(variable: VariableId, c: ChartColors, t: T): SeriesDef[] {
   const meta = VARIABLES[variable];
   if (variable === 'bloodPressure') {
     return [
-      { key: 'value', name: 'Systolic', color: c.accent, unit: 'mmHg' },
-      { key: 'secondary', name: 'Diastolic', color: c.secondary, dash: '5 3', unit: 'mmHg' },
+      { key: 'value', name: t({ en: 'Systolic', pt: 'Sistólica' }), color: c.accent, unit: 'mmHg' },
+      { key: 'secondary', name: t({ en: 'Diastolic', pt: 'Diastólica' }), color: c.secondary, dash: '5 3', unit: 'mmHg' },
     ];
   }
   if (variable === 'selfReport') {
     const colors = [c.accent, c.secondary, c.tertiary];
     const dashes = [undefined, '6 3', '2 3'];
-    return SELF_REPORT_DIMENSIONS.map((d, i) => ({ key: d.method, name: d.label, color: colors[i], dash: dashes[i], unit: '/5' }));
+    return SELF_REPORT_DIMENSIONS.map((d, i) => ({ key: d.method, name: t(d.label), color: colors[i], dash: dashes[i], unit: '/5' }));
   }
-  return [{ key: 'value', name: meta.label, color: c.accent, unit: meta.unit }];
+  return [{ key: 'value', name: t(meta.label), color: c.accent, unit: meta.unit }];
 }
 
 /**
@@ -90,9 +93,9 @@ function OriginDot(props: { cx?: number; cy?: number; payload?: Row; stroke?: st
   return null;
 }
 
-function dayLabel(x: number): string {
+function dayLabel(x: number, t: T): string {
   const d = Math.floor(x);
-  return d <= 0 ? `Pre-flight (${d})` : `Day ${d}`;
+  return d <= 0 ? t({ en: `Pre-flight (${d})`, pt: `Pré-voo (${d})` }) : t({ en: `Day ${d}`, pt: `Dia ${d}` });
 }
 
 function ChartTooltip({
@@ -108,12 +111,13 @@ function ChartTooltip({
   decimals: number;
   extra?: (row: Row) => string | null;
 }) {
+  const t = useT();
   if (!active || !payload?.length) return null;
   const row = payload[0].payload;
   return (
     <div className="chart-tip">
       <div className="chart-tip__head">
-        {dayLabel(row.x)} · {fmtDateTime(row.ts)}
+        {dayLabel(row.x, t)} · {fmtDateTime(row.ts)}
       </div>
       {series.map((s) =>
         typeof row[s.key] === 'number' ? (
@@ -125,7 +129,7 @@ function ChartTooltip({
       )}
       {extra?.(row) && <div className="chart-tip__row">{extra(row)}</div>}
       <div className="chart-tip__origin">
-        Origin: {ORIGIN_META[row.origin].label} · {row.method}
+        {t({ en: 'Origin:', pt: 'Origem:' })} {t(ORIGIN_META[row.origin].label)} · {row.method}
       </div>
     </div>
   );
@@ -133,7 +137,7 @@ function ChartTooltip({
 
 // Recharts only sees ReferenceLine as a direct child of the chart: that is why these are functions, not components.
 // Every chart shows the onset of all active alerts (strong when it involves this variable) and the assessed day.
-function alertMarkers(alerts: Alert[], relatedIds: Set<string>, launch: string, c: ChartColors, minX: number) {
+function alertMarkers(alerts: Alert[], relatedIds: Set<string>, launch: string, c: ChartColors, minX: number, t: T) {
   return alerts
     .filter((a) => missionPos(a.raisedAt, launch) >= minX)
     .map((a) => {
@@ -148,7 +152,7 @@ function alertMarkers(alerts: Alert[], relatedIds: Set<string>, launch: string, 
           strokeOpacity={own ? 1 : 0.6}
           strokeDasharray={own ? '4 3' : '2 4'}
           ifOverflow="extendDomain"
-          label={own ? { value: 'onset', position: 'insideTopRight', fill: color, fontSize: 11, fontWeight: 700 } : undefined}
+          label={own ? { value: t({ en: 'onset', pt: 'início' }), position: 'insideTopRight', fill: color, fontSize: 11, fontWeight: 700 } : undefined}
         />
       );
     });
@@ -187,20 +191,21 @@ interface TrendChartProps {
 
 export function TrendChart({ variable, measurements, baseline, alerts, launchDate, fromDay, cursorIso, height = 170 }: TrendChartProps) {
   const c = useChartColors();
+  const t = useT();
   if (variable === 'exerciseLoad') {
     return <ExerciseChart measurements={measurements} alerts={alerts} launchDate={launchDate} fromDay={fromDay} cursorIso={cursorIso} height={height} />;
   }
   const meta = VARIABLES[variable];
   const rows = buildRows(variable, measurements, launchDate, fromDay);
   const minX = rows.length ? rows[0].x : 0;
-  const series = seriesFor(variable, c);
+  const series = seriesFor(variable, c, t);
   const related = alerts.filter((a) => a.variables.includes(variable));
   const showBand = baseline && variable !== 'selfReport';
   const domainY: [number | string, number | string] = variable === 'selfReport' ? [1, 5] : ['auto', 'auto'];
   const preflightEnd = baseline ? missionPos(baseline.windowEnd, launchDate) + 0.5 : null;
 
   return (
-    <div className="chart" role="img" aria-label={chartLabel(meta.label, rows.length, baseline, related.length)}>
+    <div className="chart" role="img" aria-label={chartLabel(t(meta.label), rows.length, baseline, related.length, t)}>
       <ResponsiveContainer width="100%" height={height}>
         <LineChart data={rows} margin={{ top: 16, right: 12, bottom: 0, left: -12 }}>
           <CartesianGrid stroke={c.grid} vertical={false} />
@@ -210,7 +215,7 @@ export function TrendChart({ variable, measurements, baseline, alerts, launchDat
               x2={preflightEnd}
               fill={c.preflight}
               fillOpacity={1}
-              label={{ value: 'pre-flight', position: 'insideTopLeft', fill: c.muted, fontSize: 11 }}
+              label={{ value: t({ en: 'pre-flight', pt: 'pré-voo' }), position: 'insideTopLeft', fill: c.muted, fontSize: 11 }}
             />
           )}
           {showBand && (
@@ -245,7 +250,7 @@ export function TrendChart({ variable, measurements, baseline, alerts, launchDat
               <ChartTooltip
                 series={series}
                 decimals={meta.decimals}
-                extra={variable === 'sleep' ? (r) => (typeof r.secondary === 'number' ? `Quality: ${r.secondary}/5` : null) : undefined}
+                extra={variable === 'sleep' ? (r) => (typeof r.secondary === 'number' ? t({ en: `Quality: ${r.secondary}/5`, pt: `Qualidade: ${r.secondary}/5` }) : null) : undefined}
               />
             }
           />
@@ -263,7 +268,7 @@ export function TrendChart({ variable, measurements, baseline, alerts, launchDat
               isAnimationActive={false}
             />
           ))}
-          {alertMarkers(alerts, new Set(related.map((a) => a.id)), launchDate, c, minX)}
+          {alertMarkers(alerts, new Set(related.map((a) => a.id)), launchDate, c, minX, t)}
           {dayCursor(cursorIso, launchDate, c)}
         </LineChart>
       </ResponsiveContainer>
@@ -283,10 +288,10 @@ export function TrendChart({ variable, measurements, baseline, alerts, launchDat
   );
 }
 
-function chartLabel(label: string, n: number, baseline: Baseline | undefined, alertCount: number) {
+function chartLabel(label: string, n: number, baseline: Baseline | undefined, alertCount: number, t: T) {
   const b = baseline ? `, baseline ${fmt(baseline.mean, 1)} ± ${fmt(baseline.stdDev, 1)}` : '';
-  const a = alertCount ? `, ${alertCount} alert(s) marked` : '';
-  return `${label} chart: ${n} measurements${b}${a}.`;
+  const a = alertCount ? t({ en: `, ${alertCount} alert(s) marked`, pt: `, ${alertCount} alerta(s) marcado(s)` }) : '';
+  return t({ en: `${label} chart: ${n} measurements${b}${a}.`, pt: `Gráfico de ${label}: ${n} medições${b}${a}.` });
 }
 
 export function ExerciseChart({
@@ -305,15 +310,21 @@ export function ExerciseChart({
   height?: number;
 }) {
   const c = useChartColors();
+  const t = useT();
+  const completed = t({ en: 'Completed', pt: 'Completado' });
+  const prescribed = t({ en: 'Prescribed', pt: 'Prescrito' });
   const rows = buildRows('exerciseLoad', measurements, launchDate, fromDay);
   const minX = rows.length ? rows[0].x : 0;
   const related = alerts.filter((a) => a.variables.includes('exerciseLoad'));
   const series: SeriesDef[] = [
-    { key: 'value', name: 'Completed', color: c.accent, unit: 'min' },
-    { key: 'secondary', name: 'Prescribed', color: c.muted, dash: '4 3', unit: 'min' },
+    { key: 'value', name: completed, color: c.accent, unit: 'min' },
+    { key: 'secondary', name: prescribed, color: c.muted, dash: '4 3', unit: 'min' },
   ];
   return (
-    <div className="chart" role="img" aria-label={`Exercise chart: minutes completed versus prescribed over ${rows.length} days.`}>
+    <div className="chart" role="img" aria-label={t({
+        en: `Exercise chart: minutes completed versus prescribed over ${rows.length} days.`,
+        pt: `Gráfico de exercício: minutos completados versus prescritos em ${rows.length} dias.`,
+      })}>
       <ResponsiveContainer width="100%" height={height}>
         <ComposedChart data={rows} margin={{ top: 16, right: 12, bottom: 0, left: -12 }}>
           <CartesianGrid stroke={c.grid} vertical={false} />
@@ -328,9 +339,9 @@ export function ExerciseChart({
           />
           <YAxis tick={{ fill: c.muted, fontSize: 11 }} stroke={c.grid} width={48} domain={[0, 'auto']} />
           <Tooltip content={<ChartTooltip series={series} decimals={0} />} />
-          <Bar dataKey="value" name="Completed" fill={c.accent} maxBarSize={8} isAnimationActive={false} />
-          <Line dataKey="secondary" name="Prescribed" type="stepAfter" stroke={c.text} strokeWidth={1.5} strokeDasharray="4 3" dot={false} isAnimationActive={false} />
-          {alertMarkers(alerts, new Set(related.map((a) => a.id)), launchDate, c, minX)}
+          <Bar dataKey="value" name={completed} fill={c.accent} maxBarSize={8} isAnimationActive={false} />
+          <Line dataKey="secondary" name={prescribed} type="stepAfter" stroke={c.text} strokeWidth={1.5} strokeDasharray="4 3" dot={false} isAnimationActive={false} />
+          {alertMarkers(alerts, new Set(related.map((a) => a.id)), launchDate, c, minX, t)}
           {dayCursor(cursorIso, launchDate, c)}
         </ComposedChart>
       </ResponsiveContainer>
@@ -339,13 +350,13 @@ export function ExerciseChart({
           <svg width="12" height="10" aria-hidden="true">
             <rect width="12" height="10" fill={c.accent} />
           </svg>
-          Completed
+          {completed}
         </li>
         <li>
           <svg width="22" height="8" aria-hidden="true">
             <line x1="0" y1="4" x2="22" y2="4" stroke={c.text} strokeWidth="1.5" strokeDasharray="4 3" />
           </svg>
-          Prescribed
+          {prescribed}
         </li>
       </ul>
     </div>

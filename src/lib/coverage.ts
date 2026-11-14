@@ -3,15 +3,16 @@
 
 import type { AstronautState, DataStatus, Severity, VariableCoverage, VariableId } from '../types/contract';
 import { VARIABLE_IDS } from '../types/contract';
+import type { L10n } from '../i18n';
 
 /** Displayed status per variable: the alert severity, or "not assessed" when data is missing. */
 export type DisplayStatus = Severity | 'unassessed';
 
-export const DATA_STATUS_LABEL: Record<DataStatus, string> = {
-  ok: 'Enough data',
-  'no-data': 'No data',
-  'no-baseline': 'Baseline forming',
-  stale: 'Not enough data',
+export const DATA_STATUS_LABEL: Record<DataStatus, L10n> = {
+  ok: { en: 'Enough data', pt: 'Dados suficientes' },
+  'no-data': { en: 'No data', pt: 'Sem dados' },
+  'no-baseline': { en: 'Baseline forming', pt: 'Baseline em formação' },
+  stale: { en: 'Not enough data', pt: 'Dados insuficientes' },
 };
 
 export function coverageOf(state: AstronautState, v: VariableId): VariableCoverage | null {

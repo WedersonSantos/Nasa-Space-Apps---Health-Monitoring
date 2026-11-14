@@ -2,6 +2,8 @@ import { useEffect, useRef, useState } from 'react';
 import type { AstronautState } from '../types/contract';
 import { SEVERITY_META } from '../config/display';
 import { useOnline, type Theme } from '../lib/theme';
+import { LANG_LABEL, useLang, useT, type Lang } from '../i18n';
+import { fmtDate } from '../lib/format';
 import { Moon, Satellite, SeverityIcon, StatusIcon, Sun } from './Icons';
 import { assessmentSummary } from '../lib/coverage';
 import { BASELINE } from '../engine';
@@ -14,32 +16,64 @@ interface Props {
   onToggleTheme: () => void;
   /** Goes to the action of the most severe alert (Overview tab). */
   onShowAlerts: () => void;
+  /** Crew member name already localized by the caller. */
+  crewName: string;
 }
 
-function gmt(iso: string) {
-  const d = new Date(iso);
-  const date = d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', timeZone: 'UTC' });
-  const time = d.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hourCycle: 'h23', timeZone: 'UTC' });
-  return { date, time };
+function gmtTime(iso: string) {
+  return new Date(iso).toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit', hourCycle: 'h23', timeZone: 'UTC' });
 }
 
-/** Mission bar: identity, mission clock, crew member, link with Earth and the overall-status annunciator. */
-export function MissionBar({ state, asOf, missionDay, theme, onToggleTheme, onShowAlerts }: Props) {
+/** EN | PT switch: the site starts in English; Portuguese on demand. */
+function LangToggle() {
+  const { lang, setLang } = useLang();
+  return (
+    <div className="lang-toggle" role="group" aria-label="Language / Idioma">
+      {(['en', 'pt'] as Lang[]).map((l) => (
+        <button
+          key={l}
+          type="button"
+          lang={l === 'pt' ? 'pt-BR' : 'en'}
+          aria-pressed={lang === l}
+          aria-label={LANG_LABEL[l].name}
+          title={LANG_LABEL[l].name}
+          onClick={() => setLang(l)}
+        >
+          {LANG_LABEL[l].code}
+        </button>
+      ))}
+    </div>
+  );
+}
+
+/** Mission bar: identity, mission clock, crew member, link with Earth, language, theme and the overall-status annunciator. */
+export function MissionBar({ state, asOf, missionDay, theme, onToggleTheme, onShowAlerts, crewName }: Props) {
+  const t = useT();
   const online = useOnline();
-  const { date, time } = gmt(asOf);
+  const date = fmtDate(asOf);
+  const time = gmtTime(asOf);
   const count = state.alerts.length;
-  const meta = SEVERITY_META[state.overall];
+  const sevLabel = t(SEVERITY_META[state.overall].label);
   const { unassessed: partial, none } = assessmentSummary(state);
+  const pfDay = missionDay + BASELINE.preflightDays;
+  const total = BASELINE.preflightDays;
 
   // Announces to screen readers only when the overall status changes (not on every track day).
   const [announcement, setAnnouncement] = useState('');
   const prev = useRef(state.overall);
   useEffect(() => {
     if (prev.current !== state.overall) {
-      setAnnouncement(`Overall status changed to ${meta.label}. ${count} active alert${count === 1 ? '' : 's'}.`);
+      setAnnouncement(
+        t({
+          en: `Overall status changed to ${sevLabel}. ${count} active alert${count === 1 ? '' : 's'}.`,
+          pt: `Estado geral mudou para ${sevLabel}. ${count} alerta${count === 1 ? '' : 's'} ativo${count === 1 ? '' : 's'}.`,
+        }),
+      );
       prev.current = state.overall;
     }
-  }, [state.overall, meta.label, count]);
+  }, [state.overall, sevLabel, count, t]);
+
+  const plural = count > 1;
 
   return (
     <header className="mission-bar">
@@ -52,38 +86,61 @@ export function MissionBar({ state, asOf, missionDay, theme, onToggleTheme, onSh
           <h1 className="brand__name">Vigília</h1>
         </div>
 
-        <div className="met" aria-label={missionDay >= 1 ? `Mission day ${missionDay}, ${date} at ${time} GMT` : `Pre-flight, day ${missionDay + BASELINE.preflightDays} of ${BASELINE.preflightDays}, ${date} at ${time} GMT`}>
-          <span className="met__day">{missionDay >= 1 ? `D+${missionDay}` : `PF ${missionDay + BASELINE.preflightDays}/${BASELINE.preflightDays}`}</span>
+        <div
+          className="met"
+          aria-label={
+            missionDay >= 1
+              ? t({ en: `Mission day ${missionDay}, ${date} at ${time} GMT`, pt: `Dia de missão ${missionDay}, ${date} às ${time} GMT` })
+              : t({ en: `Pre-flight, day ${pfDay} of ${total}, ${date} at ${time} GMT`, pt: `Pré-voo, dia ${pfDay} de ${total}, ${date} às ${time} GMT` })
+          }
+        >
+          <span className="met__day">{missionDay >= 1 ? `D+${missionDay}` : `${t({ en: 'PF', pt: 'PV' })} ${pfDay}/${total}`}</span>
           <span className="met__clock">
-            {date} · {time} <abbr title="Greenwich Mean Time, ISS onboard time">GMT</abbr>
+            {date} · {time}{' '}
+            <abbr title={t({ en: 'Greenwich Mean Time, ISS onboard time', pt: 'Greenwich Mean Time, horário de bordo da ISS' })}>GMT</abbr>
           </span>
         </div>
 
         <dl className="crew">
           <div>
-            <dt>Crew member</dt>
-            <dd>{state.name}</dd>
+            <dt>{t({ en: 'Crew member', pt: 'Tripulante' })}</dt>
+            <dd>{crewName}</dd>
           </div>
           <div>
-            <dt>Link with Earth</dt>
-            <dd className="crew__link" title="The app runs entirely on this device. Having no link is an expected state, not an error.">
+            <dt>{t({ en: 'Link with Earth', pt: 'Link com a Terra' })}</dt>
+            <dd
+              className="crew__link"
+              title={t({
+                en: 'The app runs entirely on this device. Having no link is an expected state, not an error.',
+                pt: 'O app roda inteiro neste dispositivo. Ficar sem link é um estado esperado, não um erro.',
+              })}
+            >
               <Satellite size={15} />
-              {online ? 'Available' : 'No link · local operation'}
+              {online ? t({ en: 'Available', pt: 'Disponível' }) : t({ en: 'No link · local operation', pt: 'Sem link · operação local' })}
             </dd>
           </div>
         </dl>
 
-        <button
-          type="button"
-          className="shell-btn shell-btn--theme"
-          onClick={onToggleTheme}
-          aria-pressed={theme === 'dark'}
-          aria-label={theme === 'dark' ? 'Use day mode' : 'Use night mode'}
-          title={theme === 'dark' ? 'Back to day mode' : 'Night mode: dark, soft tones for low light'}
-        >
-          {theme === 'dark' ? <Sun size={15} /> : <Moon size={15} />}
-          <span className="shell-btn__text">{theme === 'dark' ? 'Day mode' : 'Night mode'}</span>
-        </button>
+        <div className="bar-controls">
+          <LangToggle />
+          <button
+            type="button"
+            className="shell-btn shell-btn--theme"
+            onClick={onToggleTheme}
+            aria-pressed={theme === 'dark'}
+            aria-label={theme === 'dark' ? t({ en: 'Use day mode', pt: 'Usar modo dia' }) : t({ en: 'Use night mode', pt: 'Usar modo noturno' })}
+            title={
+              theme === 'dark'
+                ? t({ en: 'Back to day mode', pt: 'Voltar ao modo dia' })
+                : t({ en: 'Night mode: dark, soft tones for low light', pt: 'Modo noturno: tons escuros e suaves para pouca luz' })
+            }
+          >
+            {theme === 'dark' ? <Sun size={15} /> : <Moon size={15} />}
+            <span className="shell-btn__text">
+              {theme === 'dark' ? t({ en: 'Day mode', pt: 'Modo dia' }) : t({ en: 'Night mode', pt: 'Modo noturno' })}
+            </span>
+          </button>
+        </div>
 
         {count > 0 ? (
           <a
@@ -97,10 +154,12 @@ export function MissionBar({ state, asOf, missionDay, theme, onToggleTheme, onSh
           >
             <SeverityIcon severity={state.overall} size={26} />
             <div>
-              <span className="annunciator__label">{meta.label}</span>
+              <span className="annunciator__label">{sevLabel}</span>
               <span className="annunciator__sub">
-                {count} active alert{count > 1 ? 's' : ''}
-                {partial.length > 0 && ` · ${partial.length} not assessed`} · see what to do
+                {t({
+                  en: `${count} active alert${plural ? 's' : ''}${partial.length ? ` · ${partial.length} not assessed` : ''} · see what to do`,
+                  pt: `${count} alerta${plural ? 's' : ''} ativo${plural ? 's' : ''}${partial.length ? ` · ${partial.length} não avaliado${partial.length > 1 ? 's' : ''}` : ''} · ver o que fazer`,
+                })}
               </span>
             </div>
           </a>
@@ -108,13 +167,22 @@ export function MissionBar({ state, asOf, missionDay, theme, onToggleTheme, onSh
           <div className={`annunciator annunciator--${partial.length ? 'unassessed' : state.overall}`} key={partial.length ? 'p' : state.overall}>
             {partial.length ? <StatusIcon status="unassessed" size={26} /> : <SeverityIcon severity={state.overall} size={26} />}
             <div>
-              <span className="annunciator__label">{none ? 'No data' : partial.length ? 'Partial assessment' : meta.label}</span>
+              <span className="annunciator__label">
+                {none
+                  ? t({ en: 'No data', pt: 'Sem dados' })
+                  : partial.length
+                    ? t({ en: 'Partial assessment', pt: 'Avaliação parcial' })
+                    : sevLabel}
+              </span>
               <span className="annunciator__sub">
                 {none
-                  ? 'No signal could be assessed'
+                  ? t({ en: 'No signal could be assessed', pt: 'Nenhum sinal pôde ser avaliado' })
                   : partial.length
-                    ? `No alerts · ${partial.length} of 7 signals not assessed`
-                    : 'No active alerts'}
+                    ? t({
+                        en: `No alerts · ${partial.length} of 7 signals not assessed`,
+                        pt: `Sem alertas · ${partial.length} de 7 sinais não avaliados`,
+                      })
+                    : t({ en: 'No active alerts', pt: 'Nenhum alerta ativo' })}
               </span>
             </div>
           </div>
