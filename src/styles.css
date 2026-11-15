@@ -1737,12 +1737,64 @@ table.evidence {
   max-width: 70ch;
 }
 .setup__form {
-  max-width: 420px;
+  max-width: 560px;
 }
 .setup__buttons {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
+}
+.own-bar__member select {
+  font: inherit;
+  font-size: 0.9rem;
+  font-weight: 700;
+  min-height: 30px;
+  padding: 2px 8px;
+  border-radius: 3px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--ink);
+  max-width: 100%;
+}
+.own-bar__member select:hover {
+  border-color: var(--ink);
+}
+.crew {
+  display: grid;
+  gap: 16px;
+}
+.crew__active {
+  display: inline-block;
+  margin-left: 8px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  font-stretch: var(--wide);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.crew td.own-bar__id {
+  white-space: nowrap;
+}
+.crew__row-actions {
+  display: flex;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.crew__remove:hover {
+  border-color: var(--critical);
+  color: var(--critical);
+}
+.crew__form {
+  display: grid;
+  max-width: 640px;
+  border-top: 1px solid var(--hairline);
+  padding-top: 14px;
+}
+.crew__form h3 {
+  margin: 0;
+  font-size: 1rem;
 }
 .preflight-track {
   display: grid;

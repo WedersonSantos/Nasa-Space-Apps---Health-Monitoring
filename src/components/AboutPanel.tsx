@@ -190,8 +190,8 @@ export function AboutPanel() {
         <h2>{t({ en: 'Use of AI', pt: 'Uso de IA' })}</h2>
         <p>
           {t({
-            en: 'Generative AI tools were used as programming and writing assistants. AI plays no part in the alert engine: every decision comes from deterministic rules, with the formula visible in the alert itself.',
-            pt: 'Ferramentas de IA generativa foram usadas como assistentes de programação e redação. A IA não participa do motor de alertas: toda decisão sai de regras determinísticas, com a fórmula visível no próprio alerta.',
+            en: 'Generative AI tools (Claude, by Anthropic, and Codex, by OpenAI) were used as programming, writing and presentation-building assistants. AI plays no part in the alert engine: every decision comes from deterministic rules, with the formula visible in the alert itself.',
+            pt: 'Ferramentas de IA generativa (Claude, da Anthropic, e Codex, da OpenAI) foram usadas como assistentes de programação, redação e construção da apresentação. A IA não participa do motor de alertas: toda decisão sai de regras determinísticas, com a fórmula visível no próprio alerta.',
           })}
         </p>
       </section>

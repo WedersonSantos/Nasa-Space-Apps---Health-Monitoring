@@ -47,6 +47,17 @@ function write(key: string, entries: ActionEntry[]) {
   }
 }
 
+/** Erases the action log of any crew member (used when a member is removed from the roster). */
+export function clearActionLog(astronautId: string) {
+  const key = PREFIX + astronautId;
+  memory.delete(key);
+  try {
+    localStorage.removeItem(key);
+  } catch {
+    /* no persistent storage */
+  }
+}
+
 export function useActionLog(astronautId: string) {
   const key = PREFIX + astronautId;
   const [entries, setEntries] = useState<ActionEntry[]>(() => read(key));

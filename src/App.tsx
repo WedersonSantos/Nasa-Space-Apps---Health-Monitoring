@@ -14,18 +14,21 @@ import {
   type MissionContext,
   type ScenarioId,
 } from './integration/dataSource';
-import { useActionLog, type ActionKind } from './lib/actionLog';
+import { clearActionLog, useActionLog, type ActionKind } from './lib/actionLog';
 import { assessmentSummary, coverageOf } from './lib/coverage';
 import { computeMissionHistory } from './lib/missionHistory';
 import {
-  createOwnProfile,
+  CREW_ROLE_LABEL,
+  activeMember,
+  createCrewMember,
+  loadCrew,
   loadMode,
-  loadOwnProfile,
   ownLaunchDate,
+  saveCrew,
   saveMode,
-  saveOwnProfile,
   type AppMode,
-  type OwnProfile,
+  type Crew,
+  type CrewRole,
 } from './lib/ownMission';
 import { ChartColorsContext, readChartColors, useTheme, type ChartColors } from './lib/theme';
 import { AboutPanel, LICENSE_URL, REPO_URL } from './components/AboutPanel';
@@ -40,7 +43,7 @@ import { CheckCircle, SeverityIcon, StatusIcon } from './components/Icons';
 import { IndicatorCard } from './components/IndicatorCard';
 import { MissionBar } from './components/MissionBar';
 import { MissionTrack, type ChartWindow } from './components/MissionTrack';
-import { OwnMissionBar, OwnMissionSetup } from './components/OwnMission';
+import { CrewPanel, OwnMissionBar, OwnMissionSetup } from './components/OwnMission';
 import { VitalsStrip } from './components/VitalsStrip';
 import { useLang, useT, type L10n } from './i18n';
 
@@ -72,7 +75,13 @@ export default function App() {
 
   // ---------- mode: demo or own mission ----------
   const [mode, setModeState] = useState<AppMode>(loadMode);
-  const [ownProfile, setOwnProfile] = useState<OwnProfile | null>(loadOwnProfile);
+  const [crew, setCrewState] = useState<Crew | null>(loadCrew);
+  const ownProfile = activeMember(crew);
+  const [crewOpen, setCrewOpen] = useState(false);
+  const setCrew = useCallback((c: Crew | null) => {
+    saveCrew(c);
+    setCrewState(c);
+  }, []);
   const setMode = useCallback((m: AppMode) => {
     saveMode(m);
     setModeState(m);
@@ -83,7 +92,7 @@ export default function App() {
     store.loadOrSeed(scenarioFile(initialScenarioId()), nowIso()),
   );
   const [ownMeasurements, setOwnMeasurements] = useState<Measurement[]>(() => {
-    const p = loadOwnProfile();
+    const p = activeMember(loadCrew());
     return p ? (store.load(p.astronautId) ?? []) : [];
   });
   const [clock, setClock] = useState(nowIso);
@@ -156,28 +165,74 @@ export default function App() {
     setTab('overview');
   }, [setMode]);
   const createOwn = useCallback(
-    (name: string) => {
-      const p = createOwnProfile(name, nowIso());
-      saveOwnProfile(p);
-      setOwnProfile(p);
+    (missionName: string, name: string, role: CrewRole) => {
+      const p = createCrewMember(name, role, nowIso());
+      setCrew({ missionName, members: [p], activeId: p.astronautId });
       setOwnMeasurements(store.load(p.astronautId) ?? []);
       setTab('entry');
     },
-    [],
+    [setCrew],
+  );
+  /** Shows another crew member: their own measurements, baseline, mission clock and actions. */
+  const selectMember = useCallback(
+    (astronautId: string) => {
+      if (!crew || astronautId === crew.activeId) return;
+      setCrew({ ...crew, activeId: astronautId });
+      setOwnMeasurements(store.load(astronautId) ?? []);
+      setSelectedDay(null);
+      setClock(nowIso());
+    },
+    [crew, setCrew],
+  );
+  const addMember = useCallback(
+    (name: string, role: CrewRole) => {
+      if (!crew) return;
+      const p = createCrewMember(name, role, nowIso(), new Set(crew.members.map((m) => m.astronautId)));
+      setCrew({ ...crew, members: [...crew.members, p] });
+    },
+    [crew, setCrew],
+  );
+  const removeMember = useCallback(
+    (astronautId: string) => {
+      if (!crew) return;
+      const m = crew.members.find((x) => x.astronautId === astronautId);
+      if (!m || crew.members.length < 2) return;
+      const msg = t({
+        en: `Remove ${m.name} from the crew and erase all of their entries and actions on this device? This cannot be undone.`,
+        pt: `Remover ${m.name} da tripulação e apagar todos os registros e ações dessa pessoa neste dispositivo? Não dá para desfazer.`,
+      });
+      if (!window.confirm(msg)) return;
+      store.clear(astronautId, nowIso());
+      clearActionLog(astronautId);
+      const members = crew.members.filter((x) => x.astronautId !== astronautId);
+      const activeId = crew.activeId === astronautId ? members[0].astronautId : crew.activeId;
+      setCrew({ ...crew, members, activeId });
+      if (activeId !== crew.activeId) {
+        setOwnMeasurements(store.load(activeId) ?? []);
+        setSelectedDay(null);
+      }
+    },
+    [crew, setCrew, t],
+  );
+  const entriesOf = useCallback(
+    (id: string) => (id === crew?.activeId ? ownMeasurements.length : (store.load(id)?.length ?? 0)),
+    [crew?.activeId, ownMeasurements.length],
   );
   const eraseOwn = useCallback(() => {
-    if (!ownProfile) return;
+    if (!crew) return;
     const msg = t({
-      en: `Erase ${ownProfile.name}’s mission and all entries and actions on this device? This cannot be undone.`,
-      pt: `Apagar a missão de ${ownProfile.name} e todos os registros e ações deste dispositivo? Não dá para desfazer.`,
+      en: `Erase the mission, its ${crew.members.length} crew member(s) and all entries and actions on this device? This cannot be undone.`,
+      pt: `Apagar a missão, seus ${crew.members.length} tripulante(s) e todos os registros e ações deste dispositivo? Não dá para desfazer.`,
     });
     if (!window.confirm(msg)) return;
-    store.clear(ownProfile.astronautId, nowIso());
-    actionLog.clear();
-    saveOwnProfile(null);
-    setOwnProfile(null);
+    for (const m of crew.members) {
+      store.clear(m.astronautId, nowIso());
+      clearActionLog(m.astronautId);
+    }
+    setCrew(null);
+    setCrewOpen(false);
     setOwnMeasurements([]);
-  }, [ownProfile, actionLog, t]);
+  }, [crew, setCrew, t]);
 
   // ---------- mission clock ----------
   const maxDay = useMemo(() => {
@@ -334,7 +389,11 @@ export default function App() {
           state={state}
           asOf={asOf}
           missionDay={day}
-          crewName={isOwn && ownProfile ? ownProfile.name : t({ en: 'Astronaut A (fictional)', pt: 'Astronauta A (fictício)' })}
+          crewName={
+            isOwn && ownProfile
+              ? `${ownProfile.name} · ${t(CREW_ROLE_LABEL[ownProfile.role])}`
+              : t({ en: 'Astronaut A (fictional)', pt: 'Astronauta A (fictício)' })
+          }
           theme={theme}
           onToggleTheme={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
           onShowAlerts={showAlerts}
@@ -377,14 +436,31 @@ export default function App() {
 
       <div className="page">
         {isOwn ? (
+          crew &&
           ownProfile && (
-            <OwnMissionBar
-              profile={ownProfile}
-              preflightDaysLogged={preflightDaysLogged}
-              inFlight={inFlight}
-              onDemo={goDemo}
-              onErase={eraseOwn}
-            />
+            <>
+              <OwnMissionBar
+                crew={crew}
+                member={ownProfile}
+                preflightDaysLogged={preflightDaysLogged}
+                inFlight={inFlight}
+                crewOpen={crewOpen}
+                onSelect={selectMember}
+                onToggleCrew={() => setCrewOpen((o) => !o)}
+                onDemo={goDemo}
+                onErase={eraseOwn}
+              />
+              {crewOpen && (
+                <CrewPanel
+                  crew={crew}
+                  entriesOf={entriesOf}
+                  onSelect={selectMember}
+                  onAdd={addMember}
+                  onRemove={removeMember}
+                  onClose={() => setCrewOpen(false)}
+                />
+              )}
+            </>
           )
         ) : (
           <DemoBar current={scenarioId} onChange={switchScenario} onOwn={goOwn} />
