@@ -1737,12 +1737,20 @@ table.evidence {
   max-width: 70ch;
 }
 .setup__form {
+  display: grid;
+  gap: 16px;
   max-width: 560px;
+  margin-top: 6px;
+}
+.setup__form .field-row,
+.crew__form .field-row {
+  align-items: start;
 }
 .setup__buttons {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
+  margin-top: 4px;
 }
 .own-bar__member select {
   font: inherit;
@@ -1788,6 +1796,7 @@ table.evidence {
 }
 .crew__form {
   display: grid;
+  gap: 16px;
   max-width: 640px;
   border-top: 1px solid var(--hairline);
   padding-top: 14px;
