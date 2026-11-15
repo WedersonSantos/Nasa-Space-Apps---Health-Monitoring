@@ -5,12 +5,22 @@ import { VARIABLES } from '../config/variables';
 import { PLAUSIBLE_RANGES } from '../engine';
 import { createMeasurement, createSelfReport } from '../data/createMeasurement';
 import { fmt, fmtDateTime } from '../lib/format';
-import { useLang, useT } from '../i18n';
+import { useLang, useT, type L10n } from '../i18n';
 import { OriginBadge } from './Badges';
 import { HowToMeasure } from './HowToMeasure';
 import { VariableTerm } from './VariableTerm';
 
 const MANUAL_VARIABLES: VariableId[] = ['restingHeartRate', 'hrv', 'bloodPressure', 'sleep', 'bodyMass', 'exerciseLoad'];
+
+// Store both variants so existing feedback follows the language toggle without
+// submitting again, resetting the form or writing the measurement a second time.
+function saveError(error: string): L10n {
+  const duplicate = error === 'duplicate measurement' || error === 'medição duplicada';
+  return {
+    en: `Not saved: ${duplicate ? 'duplicate measurement' : error}.`,
+    pt: `Não gravado: ${duplicate ? 'medição duplicada' : error}.`,
+  };
+}
 
 /** ISO -> <input type="datetime-local"> value, in UTC (ISS onboard time). */
 function toLocalInput(iso: string): string {
@@ -29,7 +39,7 @@ interface Props {
 
 export function EntryPanel({ astronautId, nowIso, entries, onAdd, onRemove }: Props) {
   const t = useT();
-  const [status, setStatus] = useState('');
+  const [status, setStatus] = useState<L10n | string>('');
 
   return (
     <div className="stack">
@@ -45,7 +55,7 @@ export function EntryPanel({ astronautId, nowIso, entries, onAdd, onRemove }: Pr
         <SelfReportForm astronautId={astronautId} nowIso={nowIso} onAdd={onAdd} announce={setStatus} />
       </div>
       <p className="sr-status" role="status" aria-live="polite">
-        {status}
+        {t(status)}
       </p>
       <section className="panel" aria-labelledby="entries-title">
         <h2 id="entries-title">{t({ en: 'Manual entries', pt: 'Registros manuais' })}</h2>
@@ -108,7 +118,7 @@ function MeasurementForm({
   astronautId: string;
   nowIso: string;
   onAdd: (ms: Measurement[]) => string | null;
-  announce: (s: string) => void;
+  announce: (s: L10n) => void;
 }) {
   const t = useT();
   const { lang } = useLang();
@@ -117,21 +127,23 @@ function MeasurementForm({
   const [value, setValue] = useState('');
   const [secondary, setSecondary] = useState('');
   const [when, setWhen] = useState(() => toLocalInput(nowIso));
-  const [errors, setErrors] = useState<Record<string, string>>({});
+  const [errors, setErrors] = useState<Record<string, L10n>>({});
   const meta = VARIABLES[variable];
   const range = PLAUSIBLE_RANGES[variable];
   const secondaryRequired = range.secondary?.required ?? false;
 
   function submit(e: FormEvent) {
     e.preventDefault();
-    const errs: Record<string, string> = {};
-    if (value.trim() === '') errs.value = t({ en: 'Enter a value.', pt: 'Informe um valor.' });
+    const errs: Record<string, L10n> = {};
+    if (value.trim() === '') errs.value = { en: 'Enter a value.', pt: 'Informe um valor.' };
     if (meta.secondaryLabel && secondaryRequired && secondary.trim() === '') {
-      const name = t(meta.secondaryLabel).toLowerCase();
-      errs.secondary = t({ en: `Enter ${name}.`, pt: `Informe ${name}.` });
+      errs.secondary = {
+        en: `Enter ${meta.secondaryLabel.en.toLowerCase()}.`,
+        pt: `Informe ${meta.secondaryLabel.pt.toLowerCase()}.`,
+      };
     }
     const ts = when ? new Date(`${when}:00Z`) : null;
-    if (!ts || Number.isNaN(ts.getTime())) errs.when = t({ en: 'Enter date and time.', pt: 'Informe data e hora.' });
+    if (!ts || Number.isNaN(ts.getTime())) errs.when = { en: 'Enter date and time.', pt: 'Informe data e hora.' };
 
     if (!Object.keys(errs).length && ts) {
       // Range, unit and consistency validation: single engine rule (Bloco A).
@@ -147,16 +159,27 @@ function MeasurementForm({
         lang,
       );
       if (!r.ok) {
-        errs.value = t({
-          en: `${r.error} Plausible range: ${range.min}–${range.max} ${meta.unit}.`,
-          pt: `${r.error} Faixa plausível: ${range.min}–${range.max} ${meta.unit}.`,
-        });
+        const validationError = (locale: 'en' | 'pt') => {
+          const result = createMeasurement({ astronautId, variable, value,
+            secondaryValue: meta.secondaryLabel ? secondary : undefined,
+            timestamp: ts.toISOString(), origin: 'measured' }, locale);
+          return result.ok ? '' : result.error;
+        };
+        errs.value = {
+          en: `${validationError('en')} Plausible range: ${range.min}–${range.max} ${meta.unit}.`,
+          pt: `${validationError('pt')} Faixa plausível: ${range.min}–${range.max} ${meta.unit}.`,
+        };
       } else {
         const storeError = onAdd([r.measurement]);
-        if (storeError) errs.when = t({ en: `Not saved: ${storeError}.`, pt: `Não gravado: ${storeError}.` });
+        if (storeError) errs.when = saveError(storeError);
         else {
-          const shown = `${t(meta.label)} ${fmt(r.measurement.value, meta.decimals)} ${meta.unit}`;
-          announce(t({ en: `Logged: ${shown}. Status re-evaluated.`, pt: `Registrado: ${shown}. Estado reavaliado.` }));
+          const number = (locale: string) => r.measurement.value.toLocaleString(locale, {
+            minimumFractionDigits: meta.decimals, maximumFractionDigits: meta.decimals,
+          });
+          announce({
+            en: `Logged: ${meta.label.en} ${number('en-US')} ${meta.unit}. Status re-evaluated.`,
+            pt: `Registrado: ${meta.label.pt} ${number('pt-BR')} ${meta.unit}. Estado reavaliado.`,
+          });
           setValue('');
           setSecondary('');
         }
@@ -164,13 +187,13 @@ function MeasurementForm({
     }
     setErrors(errs);
     if (Object.keys(errs).length)
-      announce(t({ en: 'Entry not saved: fix the highlighted fields.', pt: 'Registro não salvo: corrija os campos indicados.' }));
+      announce({ en: 'Entry not saved: fix the highlighted fields.', pt: 'Registro não salvo: corrija os campos indicados.' });
   }
 
   const err = (k: string) =>
     errors[k] ? (
       <span id={`${uid}-${k}-err`} className="field-error">
-        {errors[k]}
+        {t(errors[k])}
       </span>
     ) : null;
 
@@ -259,21 +282,23 @@ function SelfReportForm({
   astronautId: string;
   nowIso: string;
   onAdd: (ms: Measurement[]) => string | null;
-  announce: (s: string) => void;
+  announce: (s: L10n) => void;
 }) {
   const t = useT();
   const { lang } = useLang();
   const uid = useId();
   const [values, setValues] = useState<Record<string, number | undefined>>({});
-  const [error, setError] = useState('');
+  const [error, setError] = useState<L10n | null>(null);
 
   function submit(e: FormEvent) {
     e.preventDefault();
-    const missing = SELF_REPORT_DIMENSIONS.filter((d) => values[d.method] == null).map((d) => t(d.label).toLowerCase());
+    const missing = SELF_REPORT_DIMENSIONS.filter((d) => values[d.method] == null);
     if (missing.length) {
-      const list = missing.join(', ');
-      setError(t({ en: `Please answer: ${list}.`, pt: `Responda: ${list}.` }));
-      announce(t({ en: 'Self-report not saved: answers missing.', pt: 'Autorrelato não salvo: faltam respostas.' }));
+      setError({
+        en: `Please answer: ${missing.map(d => d.label.en.toLowerCase()).join(', ')}.`,
+        pt: `Responda: ${missing.map(d => d.label.pt.toLowerCase()).join(', ')}.`,
+      });
+      announce({ en: 'Self-report not saved: answers missing.', pt: 'Autorrelato não salvo: faltam respostas.' });
       return;
     }
     const r = createSelfReport(
@@ -288,12 +313,12 @@ function SelfReportForm({
     );
     const storeError = r.ok ? onAdd(r.measurements) : r.error;
     if (storeError) {
-      setError(t({ en: `Not saved: ${storeError}.`, pt: `Não gravado: ${storeError}.` }));
-      announce(t({ en: 'Self-report not saved.', pt: 'Autorrelato não salvo.' }));
+      setError(saveError(storeError));
+      announce({ en: 'Self-report not saved.', pt: 'Autorrelato não salvo.' });
       return;
     }
-    setError('');
-    announce(t({ en: 'Self-report logged. Status re-evaluated.', pt: 'Autorrelato registrado. Estado reavaliado.' }));
+    setError(null);
+    announce({ en: 'Self-report logged. Status re-evaluated.', pt: 'Autorrelato registrado. Estado reavaliado.' });
     setValues({});
   }
 
@@ -328,7 +353,7 @@ function SelfReportForm({
           </div>
         </fieldset>
       ))}
-      {error && <span className="field-error">{error}</span>}
+      {error && <span className="field-error">{t(error)}</span>}
       <button type="submit" className="btn btn--primary">
         {t({ en: 'Log self-report', pt: 'Registrar autorrelato' })}
       </button>

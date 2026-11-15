@@ -36,6 +36,7 @@ export function LangProvider({ children }: { children: ReactNode }) {
   const setLang = useCallback((l: Lang) => setLangState(l), []);
   useEffect(() => {
     document.documentElement.lang = lang === 'pt' ? 'pt-BR' : 'en';
+    document.title = lang === 'pt' ? 'Vigília · Saúde da tripulação' : 'Vigília · Crew health';
   }, [lang]);
   const value = useMemo(() => ({ lang, setLang }), [lang, setLang]);
   return <LangContext.Provider value={value}>{children}</LangContext.Provider>;

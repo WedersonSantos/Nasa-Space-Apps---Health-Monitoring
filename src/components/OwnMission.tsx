@@ -1,7 +1,7 @@
 import { useId, useState, type FormEvent } from 'react';
 import { BASELINE } from '../engine';
 import type { OwnProfile } from '../lib/ownMission';
-import { useT } from '../i18n';
+import { useT, type L10n } from '../i18n';
 import { OriginBadge } from './Badges';
 
 /** "My mission" mode bar: who it is, how the baseline stands and the way back to the demo. */
@@ -54,12 +54,12 @@ export function OwnMissionSetup({ onCreate, onDemo }: { onCreate: (name: string)
   const t = useT();
   const id = useId();
   const [name, setName] = useState('');
-  const [error, setError] = useState('');
+  const [error, setError] = useState<L10n | null>(null);
 
   function submit(e: FormEvent) {
     e.preventDefault();
     if (name.trim().length < 2) {
-      setError(t({ en: 'Enter a nickname of at least 2 letters.', pt: 'Escreva um apelido com pelo menos 2 letras.' }));
+      setError({ en: 'Enter a nickname of at least 2 letters.', pt: 'Escreva um apelido com pelo menos 2 letras.' });
       return;
     }
     onCreate(name);
@@ -114,7 +114,7 @@ export function OwnMissionSetup({ onCreate, onDemo }: { onCreate: (name: string)
           </span>
           {error && (
             <span id={`${id}-err`} className="field-error">
-              {error}
+              {t(error)}
             </span>
           )}
         </label>

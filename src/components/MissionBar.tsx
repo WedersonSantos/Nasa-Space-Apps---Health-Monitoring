@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import type { AstronautState } from '../types/contract';
 import { SEVERITY_META } from '../config/display';
 import { useOnline, type Theme } from '../lib/theme';
-import { LANG_LABEL, useLang, useT, type Lang } from '../i18n';
+import { LANG_LABEL, useLang, useT, type Lang, type L10n } from '../i18n';
 import { fmtDate } from '../lib/format';
 import { Moon, Satellite, SeverityIcon, StatusIcon, Sun } from './Icons';
 import { assessmentSummary } from '../lib/coverage';
@@ -59,15 +59,15 @@ export function MissionBar({ state, asOf, missionDay, theme, onToggleTheme, onSh
   const total = BASELINE.preflightDays;
 
   // Announces to screen readers only when the overall status changes (not on every track day).
-  const [announcement, setAnnouncement] = useState('');
+  const [announcement, setAnnouncement] = useState<L10n | string>('');
   const prev = useRef(state.overall);
   useEffect(() => {
     if (prev.current !== state.overall) {
       setAnnouncement(
-        t({
-          en: `Overall status changed to ${sevLabel}. ${count} active alert${count === 1 ? '' : 's'}.`,
-          pt: `Estado geral mudou para ${sevLabel}. ${count} alerta${count === 1 ? '' : 's'} ativo${count === 1 ? '' : 's'}.`,
-        }),
+        {
+          en: `Overall status changed to ${SEVERITY_META[state.overall].label.en}. ${count} active alert${count === 1 ? '' : 's'}.`,
+          pt: `Estado geral mudou para ${SEVERITY_META[state.overall].label.pt}. ${count} alerta${count === 1 ? '' : 's'} ativo${count === 1 ? '' : 's'}.`,
+        },
       );
       prev.current = state.overall;
     }
@@ -189,7 +189,7 @@ export function MissionBar({ state, asOf, missionDay, theme, onToggleTheme, onSh
         )}
       </div>
       <p className="visually-hidden" role="status" aria-live="polite">
-        {announcement}
+        {t(announcement)}
       </p>
     </header>
   );
